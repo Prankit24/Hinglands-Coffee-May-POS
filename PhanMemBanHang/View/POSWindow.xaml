@@ -1,0 +1,476 @@
+﻿<Window x:Class="PhanMemBanHang.View.POSWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Highlands Coffee - Bán Hàng" 
+        Height="720" 
+        Width="1280"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
+
+    <Window.Resources>
+        <!-- Card chung -->
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.08"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Nút sản phẩm -->
+        <Style x:Key="ProductButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Height" Value="140"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFF3F3"/>
+                    <Setter Property="BorderBrush" Value="#B22222"/>
+                    <Setter Property="BorderThickness" Value="3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Nút loại -->
+        <Style x:Key="CategoryButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                Padding="18,0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#B22222"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Nút hành động -->
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#B22222"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="0,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Style cho RadioButton Size -->
+        <Style x:Key="SizeRadioButton" TargetType="RadioButton">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="border" 
+                                Background="White" 
+                                BorderBrush="#E0E0E0" 
+                                BorderThickness="1.5"
+                                CornerRadius="6"
+                                Padding="10,5"
+                                Margin="2,0">
+                            <TextBlock x:Name="text"
+                                       Text="{TemplateBinding Content}" 
+                                       FontSize="11" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#555"
+                                       HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#B22222"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#B22222"/>
+                                <Setter TargetName="text" Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#B22222"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <Border Grid.Row="0" Background="White" Padding="15,10">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.1"/>
+            </Border.Effect>
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Border Background="#B22222" CornerRadius="8" Width="40" Height="40" Margin="0,0,10,0">
+                        <TextBlock Text="☕" FontSize="20" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                   Foreground="White"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="HIGHLANDS COFFEE POS" 
+                                   FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                        <TextBlock Text="Màn hình bán hàng tại quầy" 
+                                   FontSize="11" Foreground="#7F8C8D"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Border Background="#E8F5E9" CornerRadius="8" Padding="10,6" Margin="0,0,8,0">
+                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="#2E7D32">
+                            <Run Text="{Binding TenNhanVien}"/>
+                            <Run Text=" | ⏰ Ca hiện tại"/>
+                        </TextBlock>
+                    </Border>
+                    <Button Background="#FFEBEE" Foreground="#C62828"
+                            BorderThickness="0" Padding="10,6" Height="35"
+                            FontSize="11" FontWeight="SemiBold"
+                            Cursor="Hand" Click="BtnQuayLai_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="8"
+                                        Padding="{TemplateBinding Padding}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="←" FontSize="13" Margin="0,0,4,0"/>
+                                        <TextBlock Text="Về màn quản lý" FontSize="11" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- NỘI DUNG CHÍNH -->
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT: DANH SÁCH SẢN PHẨM -->
+            <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- ô tìm kiếm -->
+                    <Border Grid.Row="0" BorderBrush="#E0E0E0" BorderThickness="1.5"
+                            CornerRadius="10" Margin="0,0,0,10">
+                        <Grid>
+                            <TextBox Height="40" BorderThickness="0"
+                                     VerticalContentAlignment="Center"
+                                     Padding="15,0" FontSize="13"
+                                     Text="{Binding TuKhoaTimKiem, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="🔍 Tìm sản phẩm theo tên..." 
+                                       FontSize="13" Foreground="#999"
+                                       IsHitTestVisible="False" Padding="15,0"
+                                       VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TuKhoaTimKiem}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+
+                    <!-- loại sản phẩm -->
+                    <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+                        <Button Content="☕ Tất cả" Style="{StaticResource CategoryButton}"
+                                Command="{Binding LocTheoLoaiCommand}"
+                                CommandParameter="{x:Null}"/>
+                        <Button Content="Cà phê" Style="{StaticResource CategoryButton}"
+                                Command="{Binding LocTheoLoaiCommand}"
+                                CommandParameter="3"/>
+                        <Button Content="Trà" Style="{StaticResource CategoryButton}"
+                                Command="{Binding LocTheoLoaiCommand}"
+                                CommandParameter="1"/>
+                        <Button Content="Freeze" Style="{StaticResource CategoryButton}"
+                                Command="{Binding LocTheoLoaiCommand}"
+                                CommandParameter="2"/>
+                        <Button Content="Bánh" Style="{StaticResource CategoryButton}"
+                                Command="{Binding LocTheoLoaiCommand}"
+                                CommandParameter="4"/>
+                    </WrapPanel>
+
+                    <!-- lưới sản phẩm -->
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding DanhSachSanPham}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource ProductButton}"
+                                            Width="170"
+                                            Command="{Binding DataContext.ChonSanPhamCommand,
+                                                              RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}">
+                                        <StackPanel>
+                                            <Border Background="#FFF3E0" CornerRadius="8"
+                                                    Width="60" Height="60" Margin="0,0,0,5">
+                                                <TextBlock Text="🥤" FontSize="30"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding TenSP}" 
+                                                       FontSize="11" FontWeight="Bold"
+                                                       Foreground="#2C3E50"
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Center"
+                                                       Margin="0,0,0,6"/>
+
+                                            <!-- RADIO BUTTONS CHO SIZE -->
+                                            <StackPanel Orientation="Horizontal" 
+                                                        HorizontalAlignment="Center"
+                                                        Margin="0,4,0,4">
+                                                <RadioButton Content="S" 
+                                                 Style="{StaticResource SizeRadioButton}"
+                                                 GroupName="{Binding MaSP}"
+                                                 Checked="RadioButton_SizeChanged"
+                                                 Tag="{Binding}"/>
+
+                                                <RadioButton Content="M" 
+                                                             Style="{StaticResource SizeRadioButton}"
+                                                             GroupName="{Binding MaSP}"
+                                                             IsChecked="True"
+                                                             Checked="RadioButton_SizeChanged"
+                                                             Tag="{Binding}"/>
+                                                
+                                                <RadioButton Content="L" 
+                                                             Style="{StaticResource SizeRadioButton}"
+                                                             GroupName="{Binding MaSP}"
+                                                             Checked="RadioButton_SizeChanged"
+                                                             Tag="{Binding}"/>
+                                            </StackPanel>
+
+                                            <!-- Hiển thị giá theo size đã chọn -->
+                                            <TextBlock Text="{Binding GiaTheoSize, StringFormat={}{0:N0} ₫}"
+                                                       FontSize="12" FontWeight="Bold" 
+                                                       Foreground="#B22222"
+                                                       TextAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- RIGHT: ĐƠN HÀNG HIỆN TẠI -->
+            <Border Grid.Column="1" Style="{StaticResource CardBorder}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- tiêu đề -->
+                    <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                        <TextBlock Text="ĐƠN HÀNG HIỆN TẠI" 
+                                   FontSize="15" FontWeight="Bold" Foreground="#2C3E50"
+                                   Margin="0,0,0,6"/>
+                        <Border Background="#F5F5F5" CornerRadius="8" Padding="10">
+                            <Grid>
+                                <TextBlock Text="{Binding ThongTinDonHang}" 
+                                           FontSize="11" FontWeight="SemiBold"
+                                           Foreground="#555"/>
+                                <TextBlock Text="{Binding GioHienTai}" FontSize="10"
+                                           Foreground="#888" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- danh sách món trong giỏ -->
+                    <Border Grid.Row="1" BorderBrush="#E0E0E0" BorderThickness="1.5"
+                            CornerRadius="10" Padding="0" Margin="0,0,0,10">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding GioHang}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#F0F0F0" BorderThickness="0,0,0,1"
+                                                Padding="10">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel Grid.Column="0">
+                                                    <TextBlock Text="{Binding TenHienThi}" 
+                                                               FontSize="12" FontWeight="SemiBold"
+                                                               Foreground="#2C3E50"/>
+                                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                                        <Button Content="−" Width="26" Height="26"
+                                                                Background="#F5F5F5" BorderThickness="0"
+                                                                Cursor="Hand" Margin="0,0,4,0"
+                                                                Command="{Binding DataContext.GiamSoLuongCommand,
+                                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                CommandParameter="{Binding}"/>
+                                                        <TextBox Text="{Binding SoLuong}" Width="35" Height="26"
+                                                                 TextAlignment="Center"
+                                                                 VerticalContentAlignment="Center"
+                                                                 BorderBrush="#E0E0E0" FontSize="12" IsReadOnly="True"/>
+                                                        <Button Content="+" Width="26" Height="26"
+                                                                Background="#F5F5F5" BorderThickness="0"
+                                                                Cursor="Hand" Margin="4,0,0,0"
+                                                                Command="{Binding DataContext.TangSoLuongCommand,
+                                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                CommandParameter="{Binding}"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                                    <TextBlock Text="{Binding ThanhTien, StringFormat={}{0:N0} ₫}" 
+                                                               FontSize="13" FontWeight="Bold"
+                                                               Foreground="#B22222" HorizontalAlignment="Right"/>
+                                                    <Button Content="🗑️" Width="26" Height="26"
+                                                            Background="Transparent" BorderThickness="0"
+                                                            Cursor="Hand" Margin="0,4,0,0"
+                                                            Command="{Binding DataContext.XoaKhoiGioCommand,
+                                                                             RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            CommandParameter="{Binding}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- tổng tiền -->
+                    <Border Grid.Row="2" Background="#F8F9FA" CornerRadius="10"
+                            Padding="12" Margin="0,0,0,10">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,6">
+                                <TextBlock Text="Tạm tính" FontSize="12" Foreground="#555"/>
+                                <TextBlock Text="{Binding TamTinh, StringFormat={}{0:N0} ₫}" 
+                                           FontSize="12" FontWeight="SemiBold"
+                                           Foreground="#2C3E50" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,6">
+                                <TextBlock Text="Giảm giá" FontSize="12" Foreground="#555"/>
+                                <TextBlock Text="{Binding GiamGia, StringFormat={}{0:N0} ₫}" 
+                                           FontSize="12" FontWeight="SemiBold"
+                                           Foreground="#2C3E50" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Separator Margin="0,6"/>
+                            <Grid Margin="0,6,0,0">
+                                <TextBlock Text="TỔNG CỘNG" FontSize="14" FontWeight="Bold"
+                                           Foreground="#2C3E50"/>
+                                <TextBlock Text="{Binding TongThanhToan, StringFormat={}{0:N0} ₫}" 
+                                           FontSize="18" FontWeight="Bold"
+                                           Foreground="#B22222" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- nút hành động -->
+                    <StackPanel Grid.Row="3">
+                        <Button Content="💳 THANH TOÁN" Style="{StaticResource ActionButton}"
+                                Command="{Binding ThanhToanCommand}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Content="🗑️ HỦY ĐƠN" Grid.Column="0"
+                                    Background="#FFEBEE" Foreground="#C62828" Height="38"
+                                    Margin="0,4" FontSize="13" FontWeight="SemiBold"
+                                    Cursor="Hand"
+                                    Command="{Binding HuyDonCommand}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <Button Content="💾 LƯU TẠM" Grid.Column="2"
+                                    Background="#E8F5E9" Foreground="#2E7D32" Height="38"
+                                    Margin="0,4" FontSize="13" FontWeight="SemiBold"
+                                    Cursor="Hand"
+                                    Command="{Binding LuuTamCommand}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

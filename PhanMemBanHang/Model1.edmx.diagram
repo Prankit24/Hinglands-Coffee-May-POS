@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="46cca0b7ca6742cf9926f575e025b009" Name="Diagram1" ZoomLevel="72">
+        <EntityTypeShape EntityType="HighlandsCoffeeDBModel.ChiTietHoaDon" Width="1.5" PointX="7.875" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HighlandsCoffeeDBModel.HoaDon" Width="1.5" PointX="5.625" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HighlandsCoffeeDBModel.KhachHang" Width="1.5" PointX="3.375" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HighlandsCoffeeDBModel.LoaiSanPham" Width="1.5" PointX="8.5" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HighlandsCoffeeDBModel.NhanVien" Width="1.5" PointX="6.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HighlandsCoffeeDBModel.Pager" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HighlandsCoffeeDBModel.SanPham" Width="1.5" PointX="10.625" PointY="3.25" IsExpanded="true" />
+        <AssociationConnector Association="HighlandsCoffeeDBModel.FK_ChiTietHoaDon_HoaDon" ManuallyRouted="false" />
+        <AssociationConnector Association="HighlandsCoffeeDBModel.FK_ChiTietHoaDon_SanPham" ManuallyRouted="false" />
+        <AssociationConnector Association="HighlandsCoffeeDBModel.FK_HoaDon_KhachHang" ManuallyRouted="false" />
+        <AssociationConnector Association="HighlandsCoffeeDBModel.FK_HoaDon_NhanVien" ManuallyRouted="false" />
+        <AssociationConnector Association="HighlandsCoffeeDBModel.FK_HoaDon_Pager" ManuallyRouted="false" />
+        <AssociationConnector Association="HighlandsCoffeeDBModel.FK_SanPham_LoaiSanPham" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
