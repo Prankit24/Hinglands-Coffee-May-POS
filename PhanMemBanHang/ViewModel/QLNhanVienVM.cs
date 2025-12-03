@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using PhanMemBanHang.Model;
@@ -10,20 +11,17 @@ namespace PhanMemBanHang.ViewModel
 {
     public class QLNhanVienVM : BaseViewModel, IDisposable
     {
-        private readonly HighlandsCoffeeDBEntities _context;
-        private ObservableCollection<NhanVien> _danhSachNhanVien;
-        private ObservableCollection<NhanVien> _danhSachNhanVienGoc;
-        private NhanVien _nhanVienDangChon;
-        private string _tuKhoaTimKiem;
-        private string _vaiTroLoc;
-        private string _chucVuLoc;
-        private string _matKhauMoi;
+        public readonly HighlandsCoffeeDBEntities db;
+        public ObservableCollection<NhanVien> danhSachNhanVien;
+        public ObservableCollection<NhanVien> danhSachNhanVienGoc;
+        public NhanVien nv;
+        public string tuKhoaTimKiem;
+        public string vaiTroLoc;
+        public string chucVuLoc;
 
         public QLNhanVienVM()
         {
-            _context = new HighlandsCoffeeDBEntities();
-
-            // Khởi tạo danh sách
+            db = new HighlandsCoffeeDBEntities();
             DanhSachGioiTinh = new ObservableCollection<string> { "Nam", "Nữ", "Khác" };
             DanhSachVaiTro = new ObservableCollection<string>
             {
@@ -35,7 +33,6 @@ namespace PhanMemBanHang.ViewModel
             };
             DanhSachChucVu = new ObservableCollection<string> { "Nhân viên", "Quản lý" };
 
-            // Danh sách lọc
             DanhSachLocVaiTro = new ObservableCollection<string> { "Tất cả vai trò" };
             foreach (var vaiTro in DanhSachVaiTro)
             {
@@ -48,52 +45,39 @@ namespace PhanMemBanHang.ViewModel
                 DanhSachLocChucVu.Add(chucVu);
             }
 
-            // Khởi tạo Commands
-            ThemMoiCommand = new RelayCommand(p => ThemMoi(p), p => CanThemMoi(p));
-            CapNhatCommand = new RelayCommand(p => CapNhat(p), p => CanCapNhat(p));
-            XoaCommand = new RelayCommand(p => Xoa(p), p => CanXoa(p));
-            LamMoiCommand = new RelayCommand(p => LamMoi(p));
-            
-            // Load dữ liệu
             LoadDanhSachNhanVien();
-            LamMoi(null);
-            // Mặc định lọc
-            _vaiTroLoc = "Tất cả vai trò";
-            _chucVuLoc = "Tất cả chức vụ";
+            LamMoi();
+            vaiTroLoc = "Tất cả vai trò";
+            chucVuLoc = "Tất cả chức vụ";
         }
-
-        #region Properties
-
         public ObservableCollection<NhanVien> DanhSachNhanVien
         {
-            get => _danhSachNhanVien;
+            get => danhSachNhanVien;
             set
             {
-                _danhSachNhanVien = value;
+                danhSachNhanVien = value;
                 OnPropertyChanged();
                 CapNhatThongKe();
             }
         }
-
         public NhanVien NhanVienDangChon
         {
-            get => _nhanVienDangChon;
+            get => nv;
             set
             {
-                _nhanVienDangChon = value;
+                nv = value;
                 OnPropertyChanged();
 
-                // Cập nhật trạng thái các nút
                 CommandManager.InvalidateRequerySuggested();
             }
         }
 
         public string TuKhoaTimKiem
         {
-            get => _tuKhoaTimKiem;
+            get => tuKhoaTimKiem;
             set
             {
-                _tuKhoaTimKiem = value;
+                tuKhoaTimKiem = value;
                 OnPropertyChanged();
                 TimKiem();
             }
@@ -101,82 +85,57 @@ namespace PhanMemBanHang.ViewModel
 
         public string VaiTroLoc
         {
-            get => _vaiTroLoc;
+            get => vaiTroLoc;
             set
             {
-                _vaiTroLoc = value;
+                vaiTroLoc = value;
                 OnPropertyChanged();
             }
         }
 
         public string ChucVuLoc
         {
-            get => _chucVuLoc;
+            get => chucVuLoc;
             set
             {
-                _chucVuLoc = value;
+                chucVuLoc = value;
                 OnPropertyChanged();
             }
         }
 
-        public string MatKhauMoi
-        {
-            get => _matKhauMoi;
-            set
-            {
-                _matKhauMoi = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Danh sách cho ComboBox
         public ObservableCollection<string> DanhSachGioiTinh { get; set; }
         public ObservableCollection<string> DanhSachVaiTro { get; set; }
         public ObservableCollection<string> DanhSachChucVu { get; set; }
         public ObservableCollection<string> DanhSachLocVaiTro { get; set; }
         public ObservableCollection<string> DanhSachLocChucVu { get; set; }
 
-        // Thống kê
-        private int _tongSoNhanVien;
+        public int _tongSoNhanVien;
         public int TongSoNhanVien
         {
             get => _tongSoNhanVien;
             set { _tongSoNhanVien = value; OnPropertyChanged(); }
         }
 
-        private int _soNVDangHoatDong;
+        public int _soNVDangHoatDong;
         public int SoNVDangHoatDong
         {
             get => _soNVDangHoatDong;
             set { _soNVDangHoatDong = value; OnPropertyChanged(); }
         }
 
-        private int _soNVNgungHoatDong;
+        public int _soNVNgungHoatDong;
         public int SoNVNgungHoatDong
         {
             get => _soNVNgungHoatDong;
             set { _soNVNgungHoatDong = value; OnPropertyChanged(); }
         }
 
-        #endregion
-
-        #region Commands
-
-        public ICommand ThemMoiCommand { get; }
-        public ICommand CapNhatCommand { get; }
-        public ICommand XoaCommand { get; }
-        public ICommand LamMoiCommand { get; }
-
-        #endregion
-
-        #region Methods
-
-        private void LoadDanhSachNhanVien()
+        public void LoadDanhSachNhanVien()
         {
             try
             {
-                var list = _context.NhanVien.ToList();
-                _danhSachNhanVienGoc = new ObservableCollection<NhanVien>(list);
+                var list = db.NhanVien.ToList();
+                danhSachNhanVienGoc = new ObservableCollection<NhanVien>(list);
                 DanhSachNhanVien = new ObservableCollection<NhanVien>(list);
                 CapNhatThongKe();
             }
@@ -187,18 +146,16 @@ namespace PhanMemBanHang.ViewModel
             }
         }
 
-        private void TimKiem()
+        public void TimKiem()
         {
-            if (_danhSachNhanVienGoc == null) return;
+            if (danhSachNhanVienGoc == null) return;
 
-            var ketQua = _danhSachNhanVienGoc.AsEnumerable();
+            var ketQua = danhSachNhanVienGoc.AsEnumerable();
 
-            // Lọc theo từ khóa
             if (!string.IsNullOrWhiteSpace(TuKhoaTimKiem))
             {
                 var keyword = TuKhoaTimKiem.ToLower();
                 ketQua = ketQua.Where(nv =>
-                    (!string.IsNullOrEmpty(nv.HoTen) && nv.HoTen.ToLower().Contains(keyword)) ||
                     (!string.IsNullOrEmpty(nv.HoTen) && nv.HoTen.ToLower().Contains(keyword)) ||
                     (!string.IsNullOrEmpty(nv.SoDienThoai) && nv.SoDienThoai.Contains(keyword)) ||
                     (!string.IsNullOrEmpty(nv.Email) && nv.Email.ToLower().Contains(keyword)) ||
@@ -206,13 +163,11 @@ namespace PhanMemBanHang.ViewModel
                 );
             }
 
-            // Lọc theo vai trò
             if (!string.IsNullOrEmpty(VaiTroLoc) && VaiTroLoc != "Tất cả vai trò")
             {
                 ketQua = ketQua.Where(nv => nv.VaiTro == VaiTroLoc);
             }
 
-            // Lọc theo chức vụ
             if (!string.IsNullOrEmpty(ChucVuLoc) && ChucVuLoc != "Tất cả chức vụ")
             {
                 ketQua = ketQua.Where(nv => nv.ChucVu == ChucVuLoc);
@@ -231,35 +186,35 @@ namespace PhanMemBanHang.ViewModel
             TimKiem();
         }
 
-        private void CapNhatThongKe()
+        public void CapNhatThongKe()
         {
-            if (_danhSachNhanVienGoc == null) return;
+            if (danhSachNhanVienGoc == null) return;
 
-            TongSoNhanVien = _danhSachNhanVienGoc.Count;
-            SoNVDangHoatDong = _danhSachNhanVienGoc.Count(nv => nv.TrangThai);
-            SoNVNgungHoatDong = _danhSachNhanVienGoc.Count(nv => !nv.TrangThai);
+            TongSoNhanVien = danhSachNhanVienGoc.Count;
+            SoNVDangHoatDong = danhSachNhanVienGoc.Count(nv => nv.TrangThai);
+            SoNVNgungHoatDong = danhSachNhanVienGoc.Count(nv => !nv.TrangThai);
         }
 
-        private void ThemMoi(object parameter)
+        public void ThemMoiVM()
         {
             try
             {
-                // Validate
                 if (string.IsNullOrWhiteSpace(NhanVienDangChon?.HoTen))
                 {
-                    MessageBox.Show("Vui lòng nhập tên nhân viên!", "Thông báo",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Vui lòng nhập tên nhân viên, không thể để trống",
+                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 if (string.IsNullOrWhiteSpace(NhanVienDangChon?.TaiKhoan))
                 {
-                    MessageBox.Show("Vui lòng nhập tài khoản!", "Thông báo",
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Vui lòng tạo tài khoản cho nhân viên, không thể để trống",
+                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
-                if (string.IsNullOrWhiteSpace(MatKhauMoi))
+                // Nếu bạn dùng TextBox binding trực tiếp vào NhanVienDangChon.MatKhau
+                if (string.IsNullOrWhiteSpace(NhanVienDangChon?.MatKhau))
                 {
                     MessageBox.Show("Vui lòng nhập mật khẩu!", "Thông báo",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -272,29 +227,22 @@ namespace PhanMemBanHang.ViewModel
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
-                // Validate số điện thoại nếu có
                 if (!string.IsNullOrWhiteSpace(NhanVienDangChon.SoDienThoai))
                 {
-                    if (NhanVienDangChon.SoDienThoai.Length < 10 ||
-                        !NhanVienDangChon.SoDienThoai.All(char.IsDigit))
+                    if (!Regex.IsMatch(NhanVienDangChon.SoDienThoai ?? "", @"^0[0-9]{9}$"))
                     {
-                        MessageBox.Show("Số điện thoại phải có ít nhất 10 chữ số!", "Thông báo",
+                        MessageBox.Show("Không đúng định dạng số điện thoại", "Thông báo",
                             MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                 }
-
-                // Validate lương
                 if (NhanVienDangChon.Luong.HasValue && NhanVienDangChon.Luong < 0)
                 {
                     MessageBox.Show("Lương phải lớn hơn hoặc bằng 0!", "Thông báo",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
-                // Kiểm tra tài khoản đã tồn tại
-                var taiKhoanTonTai = _context.NhanVien.Any(nv => nv.TaiKhoan == NhanVienDangChon.TaiKhoan);
+                var taiKhoanTonTai = db.NhanVien.Any(nv => nv.TaiKhoan == NhanVienDangChon.TaiKhoan);
                 if (taiKhoanTonTai)
                 {
                     MessageBox.Show("Tài khoản đã tồn tại!", "Thông báo",
@@ -302,19 +250,13 @@ namespace PhanMemBanHang.ViewModel
                     return;
                 }
 
-                // Mã hóa mật khẩu
-                NhanVienDangChon.MatKhau = MaHoaMatKhau(MatKhauMoi);
-
-                // Thêm vào database
-                _context.NhanVien.Add(NhanVienDangChon);
-                int result = _context.SaveChanges();
-
-                if (result > 0)
+                db.NhanVien.Add(NhanVienDangChon);
+                if (db.SaveChanges() > 0)
                 {
                     MessageBox.Show("Thêm nhân viên thành công!", "Thông báo",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     LoadDanhSachNhanVien();
-                    LamMoi(null);
+                    LamMoi();
                 }
                 else
                 {
@@ -329,12 +271,7 @@ namespace PhanMemBanHang.ViewModel
             }
         }
 
-        private bool CanThemMoi(object parameter)
-        {
-            return NhanVienDangChon != null;
-        }
-
-        private void CapNhat(object parameter)
+        public void CapNhatVM()
         {
             try
             {
@@ -345,7 +282,6 @@ namespace PhanMemBanHang.ViewModel
                     return;
                 }
 
-                // Validate tương tự như ThemMoi
                 if (string.IsNullOrWhiteSpace(NhanVienDangChon?.HoTen))
                 {
                     MessageBox.Show("Vui lòng nhập tên nhân viên!", "Thông báo",
@@ -367,19 +303,16 @@ namespace PhanMemBanHang.ViewModel
                     return;
                 }
 
-                // Validate số điện thoại
                 if (!string.IsNullOrWhiteSpace(NhanVienDangChon.SoDienThoai))
                 {
-                    if (NhanVienDangChon.SoDienThoai.Length < 10 ||
-                        !NhanVienDangChon.SoDienThoai.All(char.IsDigit))
+                    if (!Regex.IsMatch(NhanVienDangChon.SoDienThoai ?? "", @"^0[0-9]{9}$"))
                     {
-                        MessageBox.Show("Số điện thoại phải có ít nhất 10 chữ số!", "Thông báo",
+                        MessageBox.Show("Số điện thoại phải có 10 chữ số, bắt đầu bằng 0!", "Thông báo",
                             MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                 }
 
-                // Validate lương
                 if (NhanVienDangChon.Luong.HasValue && NhanVienDangChon.Luong < 0)
                 {
                     MessageBox.Show("Lương phải lớn hơn hoặc bằng 0!", "Thông báo",
@@ -387,27 +320,18 @@ namespace PhanMemBanHang.ViewModel
                     return;
                 }
 
-                // Nếu có mật khẩu mới thì cập nhật
-                if (!string.IsNullOrWhiteSpace(MatKhauMoi))
-                {
-                    NhanVienDangChon.MatKhau = MaHoaMatKhau(MatKhauMoi);
-                }
-
                 var result = MessageBox.Show("Bạn có chắc chắn muốn cập nhật thông tin nhân viên này?",
                     "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
                 if (result == MessageBoxResult.Yes)
                 {
-                    // Đánh dấu entity đã thay đổi
-                    _context.Entry(NhanVienDangChon).State = EntityState.Modified;
-                    int saveResult = _context.SaveChanges();
+                    db.Entry(NhanVienDangChon).State = EntityState.Modified;
+                    int saveResult = db.SaveChanges();
 
                     if (saveResult > 0)
                     {
                         MessageBox.Show("Cập nhật nhân viên thành công!", "Thông báo",
                             MessageBoxButton.OK, MessageBoxImage.Information);
                         LoadDanhSachNhanVien();
-                        MatKhauMoi = string.Empty;
                     }
                     else
                     {
@@ -423,12 +347,7 @@ namespace PhanMemBanHang.ViewModel
             }
         }
 
-        private bool CanCapNhat(object parameter)
-        {
-            return NhanVienDangChon != null && NhanVienDangChon.MaNV > 0;
-        }
-
-        private void Xoa(object parameter)
+        public void XoaVM()
         {
             try
             {
@@ -448,18 +367,18 @@ namespace PhanMemBanHang.ViewModel
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    var nhanVien = _context.NhanVien.Find(NhanVienDangChon.MaNV);
+                    var nhanVien = db.NhanVien.Find(NhanVienDangChon.MaNV);
                     if (nhanVien != null)
                     {
-                        _context.NhanVien.Remove(nhanVien);
-                        int saveResult = _context.SaveChanges();
+                        db.NhanVien.Remove(nhanVien);
+                        int saveResult = db.SaveChanges();
 
                         if (saveResult > 0)
                         {
                             MessageBox.Show("Xóa nhân viên thành công!", "Thông báo",
                                 MessageBoxButton.OK, MessageBoxImage.Information);
                             LoadDanhSachNhanVien();
-                            LamMoi(null);
+                            LamMoi();
                         }
                         else
                         {
@@ -477,50 +396,25 @@ namespace PhanMemBanHang.ViewModel
             }
         }
 
-        private bool CanXoa(object parameter)
-        {
-            return NhanVienDangChon != null && NhanVienDangChon.MaNV > 0;
-        }
-
-        private void LamMoi(object parameter)
+        public void LamMoi()
         {
             NhanVienDangChon = new NhanVien
             {
                 GioiTinh = "Nữ",
-                TrangThai = true, // Mặc định là đang hoạt động
+                TrangThai = true,
                 NgayVaoLam = DateTime.Now,
                 VaiTro = "Phục vụ",
-                ChucVu = "Nhân viên"
+                ChucVu = "Nhân viên",
+                MatKhau = string.Empty
             };
-            MatKhauMoi = string.Empty;
             TuKhoaTimKiem = string.Empty;
             VaiTroLoc = "Tất cả vai trò";
             ChucVuLoc = "Tất cả chức vụ";
         }
 
-        // Hàm mã hóa mật khẩu đơn giản (nên dùng BCrypt.Net trong thực tế)
-        private string MaHoaMatKhau(string matKhau)
-        {
-            // Trong thực tế, nên dùng BCrypt.Net-Next
-            // return BCrypt.Net.BCrypt.HashPassword(matKhau);
-
-            // Tạm thời dùng cách đơn giản (KHÔNG AN TOÀN cho production)
-            using (var sha256 = System.Security.Cryptography.SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(matKhau));
-                return Convert.ToBase64String(hashedBytes);
-            }
-        }
-
-        #endregion
-
-        #region IDisposable
-
         public void Dispose()
         {
-            _context?.Dispose();
+            db?.Dispose();
         }
-
-        #endregion
     }
 }
