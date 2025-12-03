@@ -1,0 +1,17 @@
+# SQL Server database files
+*.mdf
+*.ldf
+
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# Temp files
+*.log
+*.tmp
