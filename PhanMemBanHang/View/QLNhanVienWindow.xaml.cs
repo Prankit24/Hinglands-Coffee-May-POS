@@ -8,55 +8,52 @@ namespace PhanMemBanHang.View
 {
     public partial class QLNhanVienWindow : Window
     {
-        private readonly QLNhanVienVM _viewModel;
-
+        QLNhanVienVM nvVM = new QLNhanVienVM();
         public QLNhanVienWindow()
         {
             InitializeComponent();
-            _viewModel = new QLNhanVienVM();
-            DataContext = _viewModel;
+            DataContext = nvVM;
         }
 
-        // Nút quay lại màn quản lý (Admin / QuanLyWindow)
         private void BtnQuayLai_Click(object sender, RoutedEventArgs e)
         {
-            var ql = new AdminWindow();
+            AdminWindow ql = new AdminWindow();
             ql.Show();
             Close();
         }
 
-        // Combobox lọc vai trò
-        private void ComboBox_VaiTroLoc_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            _viewModel.LocTheoVaiTro();
-        }
-
-        // Combobox lọc chức vụ
-        private void ComboBox_ChucVuLoc_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            _viewModel.LocTheoChucVu();
-        }
-
-        // Xử lý khi nhập mật khẩu
-        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            var passwordBox = sender as PasswordBox;
-            if (passwordBox != null && _viewModel != null)
-            {
-                _viewModel.MatKhauMoi = passwordBox.Password;
-            }
-        }
-
-        // Đóng window -> nếu ViewModel có IDisposable thì dispose luôn
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (_viewModel is IDisposable d)
+            if (nvVM is IDisposable d)
             {
                 d.Dispose();
             }
             base.OnClosing(e);
         }
 
-       
+        private void ThemMoi(object sender, RoutedEventArgs e)
+        {
+            nvVM.ThemMoiVM();
+        }
+
+        private void Sua(object sender, RoutedEventArgs e)
+        {
+            nvVM.CapNhatVM();
+        }
+
+        private void Xoa(object sender, RoutedEventArgs e)
+        {
+            nvVM.XoaVM();
+        }
+
+        private void LocChucVu(object sender, SelectionChangedEventArgs e)
+        {
+            nvVM.LocTheoChucVu();
+        }
+
+        private void LocVaiTro(object sender, SelectionChangedEventArgs e)
+        {
+            nvVM.LocTheoVaiTro();
+        }
     }
 }

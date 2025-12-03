@@ -233,52 +233,50 @@
 
                         <TextBlock Text="Mã nhân viên" 
                                    FontSize="12" Foreground="#555" Margin="0,5,0,5"/>
-                        <TextBox Style="{StaticResource InputTextBox}"
+                        <TextBox Style="{StaticResource InputTextBox}" x:Name="txtMaNV"
                                  Text="{Binding NhanVienDangChon.MaNV, Mode=TwoWay}"
                                  IsEnabled="False"
                                  Background="#F5F5F5"/>
                         <TextBlock Text="Họ và tên nhân viên *" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <TextBox Style="{StaticResource InputTextBox}"
-                                 Text="{Binding NhanVienDangChon.TenNV, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Style="{StaticResource InputTextBox}" x:Name="txtHoTen"
+                                 Text="{Binding NhanVienDangChon.HoTen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="Tài khoản *" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <TextBox Style="{StaticResource InputTextBox}"
+                        <TextBox Style="{StaticResource InputTextBox}" x:Name="txtTaiKhoan"
                                  Text="{Binding NhanVienDangChon.TaiKhoan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="Mật khẩu *" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <TextBox Style="{StaticResource InputTextBox}"
-                         Text="{Binding MatKhauMoi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Style="{StaticResource InputTextBox}" x:Name="txtMatKhau"
+                         Text="{Binding NhanVienDangChon.MatKhau, Mode=TwoWay}"/>
                         <TextBlock Text="Vai trò *" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <ComboBox Style="{StaticResource InputComboBox}"
+                        <ComboBox Style="{StaticResource InputComboBox}" x:Name="cbVaiTro"
                                   ItemsSource="{Binding DanhSachVaiTro}"
-                                  SelectedIndex="0"
                                   SelectedItem="{Binding NhanVienDangChon.VaiTro, Mode=TwoWay}"/>
                         <TextBlock Text="Giới tính" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <ComboBox Style="{StaticResource InputComboBox}"
+                        <ComboBox Style="{StaticResource InputComboBox}" x:Name="cbGioiTinh"
                                   ItemsSource="{Binding DanhSachGioiTinh}"
-                                  SelectedIndex="1"
                                   SelectedItem="{Binding NhanVienDangChon.GioiTinh, Mode=TwoWay}"/>
                         <TextBlock Text="Ngày sinh" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <DatePicker Height="40" 
+                        <DatePicker Height="40"  x:Name="dpNgaySinh"
                                     FontSize="13"
                                     SelectedDate="{Binding NhanVienDangChon.NgaySinh, Mode=TwoWay}"/>
                         <TextBlock Text="Số điện thoại" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <TextBox Style="{StaticResource InputTextBox}"
+                        <TextBox Style="{StaticResource InputTextBox}" x:Name="txtSDT"
                                  Text="{Binding NhanVienDangChon.SoDienThoai, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  MaxLength="15"/>
                         <TextBlock Text="Email" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <TextBox Style="{StaticResource InputTextBox}"
+                        <TextBox Style="{StaticResource InputTextBox}" x:Name="txtEmail"
                                  Text="{Binding NhanVienDangChon.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="Địa chỉ" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <TextBox Style="{StaticResource InputTextBox}"
-                                 Height="60"
+                        <TextBox Style="{StaticResource InputTextBox}" x:Name="txtDiaChi"
+                                 Height="60" 
                                  TextWrapping="Wrap"
                                  AcceptsReturn="True"
                                  VerticalContentAlignment="Top"
@@ -286,35 +284,27 @@
                                  Text="{Binding NhanVienDangChon.DiaChi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="Chức vụ" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <ComboBox Style="{StaticResource InputComboBox}"
+                        <ComboBox Style="{StaticResource InputComboBox}" x:Name="cbChucVu"
                                   ItemsSource="{Binding DanhSachChucVu}"
-                                  SelectedIndex="0"
                                   SelectedItem="{Binding NhanVienDangChon.ChucVu, Mode=TwoWay}"/>
                         <TextBlock Text="Ngày vào làm" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <DatePicker Height="40" 
+                        <DatePicker Height="40"  x:Name="dpNgayVaoLam"
                                     FontSize="13"
                                     SelectedDate="{Binding NhanVienDangChon.NgayVaoLam, Mode=TwoWay}"/>
-
-                        <!-- Lương -->
                         <TextBlock Text="Lương" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <TextBox Style="{StaticResource InputTextBox}"
+                        <TextBox Style="{StaticResource InputTextBox}" x:Name="txtLuong"
                                  Text="{Binding NhanVienDangChon.Luong, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"/>
-
-                        <!-- Trạng thái -->
                         <TextBlock Text="Trạng thái" 
                                    FontSize="12" Foreground="#555" Margin="0,10,0,5"/>
-                        <CheckBox Content="Đang hoạt động" 
+                        <CheckBox Content="Đang hoạt động" x:Name="checkBTrangThai"
                                   FontSize="13"
                                   IsChecked="{Binding NhanVienDangChon.TrangThai, Mode=TwoWay}"
                                   VerticalAlignment="Center"
                                   Margin="0,5"/>
 
                         <Separator Margin="0,20,0,15"/>
-
-                        <!-- Không còn nút ở đây, đã chuyển lên phía trên DataGrid -->
-
                     </StackPanel>
                 </ScrollViewer>
             </Border>
@@ -368,13 +358,13 @@
                                   Style="{StaticResource InputComboBox}"
                                   ItemsSource="{Binding DanhSachLocVaiTro}"
                                   SelectedItem="{Binding VaiTroLoc}"
-                                  SelectionChanged="ComboBox_VaiTroLoc_Changed"/>
+                                  SelectionChanged="LocVaiTro"/>
 
                         <ComboBox Grid.Column="4" 
                                   Style="{StaticResource InputComboBox}"
                                   ItemsSource="{Binding DanhSachLocChucVu}"
                                   SelectedItem="{Binding ChucVuLoc}"
-                                  SelectionChanged="ComboBox_ChucVuLoc_Changed"/>
+                                  SelectionChanged="LocChucVu"/>
                     </Grid>
                 </Border>
 
@@ -432,20 +422,20 @@
                                 <!-- Thêm -->
                                 <Button Content="➕ Thêm" 
                                 Style="{StaticResource ActionButton}"
-                                Command="{Binding ThemMoiCommand}"/>
+                                Click="ThemMoi"/>
 
-                                                        <!-- Sửa -->
-                                                        <Button Content="✏️ Sửa" 
+                                <!-- Sửa -->
+                                <Button Content="✏️ Sửa" 
                                 Style="{StaticResource SecondaryButton}"
-                                Command="{Binding CapNhatCommand}"/>
+                                Click="Sua"/>
 
-                                                        <!-- Xóa -->
-                                                        <Button Content="🗑️ Xóa" 
+                                <!-- Xóa -->
+                                <Button Content="🗑️ Xóa" 
                                 Style="{StaticResource DeleteButton}"
-                                Command="{Binding XoaCommand}"/>
+                                Click="Xoa"/>
 
-                                                        <!-- Làm mới -->
-                                                        <Button Content="🔄 Làm mới" 
+                                <!-- Làm mới -->
+                                <Button Content="🔄 Làm mới" 
                                 Style="{StaticResource SecondaryButton}"
                                 Command="{Binding LamMoiCommand}"/>
 
@@ -611,9 +601,9 @@
                 <!-- Footer Info -->
                 <Border Grid.Row="3" Style="{StaticResource CardBorder}" Padding="15">
                     <TextBlock FontSize="12" Foreground="#555">
-                        <Run Text="Hiển thị:"/>
-                        <Run Text="{Binding DanhSachNhanVien.Count, Mode=OneWay}" FontWeight="SemiBold"/>
-                        <Run Text=" nhân viên"/>
+                        <Run Text="Đang chọn : "/>
+                        <Run Text="{Binding NhanVienDangChon.HoTen, Mode=OneWay}" FontWeight="SemiBold"/>
+                        <Run Text="{Binding NhanVienDangChon.VaiTro, Mode=OneWay}"/>
                     </TextBlock>
                 </Border>
             </Grid>
