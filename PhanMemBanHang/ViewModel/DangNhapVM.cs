@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Input;
 using PhanMemBanHang.Model;
 
 namespace PhanMemBanHang.ViewModel
@@ -16,96 +15,32 @@ namespace PhanMemBanHang.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
+
         private readonly HighlandsCoffeeDBEntities db = new HighlandsCoffeeDBEntities();
+
+        // ===== THUỘC TÍNH =====
+        public string TaiKhoan { get => taiKhoan; set { taiKhoan = value; OnPropertyChanged(); } }
         private string taiKhoan;
-        public string TaiKhoan
-        {
-            get => taiKhoan;
-            set
-            {
-                if (taiKhoan != value)
-                {
-                    taiKhoan = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
+        public string MatKhau { get => matKhau; set { matKhau = value; OnPropertyChanged(); } }
         private string matKhau;
-        public string MatKhau
-        {
-            get => matKhau;
-            set
-            {
-                if (matKhau != value)
-                {
-                    matKhau = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
+        public string MaXacNhan { get => _maXacNhan; set { _maXacNhan = value; OnPropertyChanged(); } }
         private string _maXacNhan;
-        public string MaXacNhan
-        {
-            get => _maXacNhan;
-            set
-            {
-                if (_maXacNhan != value)
-                {
-                    _maXacNhan = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
+        public string CurrentCaptcha { get => currentCaptcha; set { currentCaptcha = value; OnPropertyChanged(); } }
         private string currentCaptcha;
-        public string CurrentCaptcha
-        {
-            get => currentCaptcha;
-            set
-            {
-                if (currentCaptcha != value)
-                {
-                    currentCaptcha = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
-        private string vaiTro;
-        public string VaiTro
-        {
-            get => vaiTro;
-            set
-            {
-                if (vaiTro != value)
-                {
-                    vaiTro = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public ICommand DangNhapCommand { get; set; }
-        public ICommand RefreshCaptchaCommand { get; set; }
+        public string ChucVu { get => chucVu; set { chucVu = value; OnPropertyChanged(); } }
+        private string chucVu;
 
         public DangNhapVM()
         {
             TaoCaptcha();
-
-            RefreshCaptchaCommand = new RelayCommand(_ =>
-            {
-                TaoCaptcha();
-            });
-
-            DangNhapCommand = new RelayCommand(_ =>
-            {
-                DangNhap();
-            });
         }
-        
-        private void TaoCaptcha()
+
+        // ===== TẠO CAPTCHA =====
+        public void TaoCaptcha()
         {
             Random rd = new Random();
             int length = rd.Next(4, 5);
@@ -127,63 +62,64 @@ namespace PhanMemBanHang.ViewModel
                         break;
                 }
             } while (true);
+
             CurrentCaptcha = captcha;
             MaXacNhan = string.Empty;
         }
-        private void DangNhap()
+
+        // ===== ĐĂNG NHẬP =====
+        public void DangNhap()
         {
             if (string.IsNullOrWhiteSpace(TaiKhoan))
             {
-                MessageBox.Show("Vui lòng nhập tên đăng nhập!",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Vui lòng nhập tên đăng nhập!");
                 TaoCaptcha();
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(MatKhau))
             {
-                MessageBox.Show("Vui lòng nhập mật khẩu!",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Vui lòng nhập mật khẩu!");
                 TaoCaptcha();
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(MaXacNhan))
             {
-                MessageBox.Show("Vui lòng nhập mã xác nhận!",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Vui lòng nhập mã xác nhận!");
                 TaoCaptcha();
                 return;
             }
+
             if (!string.Equals(MaXacNhan, CurrentCaptcha, StringComparison.OrdinalIgnoreCase))
             {
-                MessageBox.Show("Mã xác nhận không đúng, vui lòng thử lại!",
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Mã xác nhận không đúng!");
                 TaoCaptcha();
                 return;
             }
+
             try
             {
                 NhanVien nv = db.NhanVien.FirstOrDefault(t => t.TaiKhoan == TaiKhoan && t.TrangThai == true);
+
                 if (nv == null)
                 {
-                    MessageBox.Show("Tài khoản không tồn tại",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Tài khoản không tồn tại!");
                     return;
                 }
 
                 if (nv.MatKhau != MatKhau)
                 {
-                    MessageBox.Show("Mật khẩu không đúng.",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Sai mật khẩu!");
                     return;
                 }
-                VaiTro = nv.VaiTro;
-                MessageBox.Show("Đăng nhập thành công! với vai trò: "+VaiTro,
-                                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                if (VaiTro == "NhanVien")
+
+                ChucVu = nv.ChucVu;
+                MessageBox.Show($"Đăng nhập thành công! Chức vụ: {ChucVu}");
+
+                if (ChucVu == "Nhân viên")
                 {
-                    var winNV = new POSWindow();
+                    POSWindow winNV = new POSWindow(nv.MaNV, nv.HoTen, nv.ChucVu);
                     winNV.Show();
                     Application.Current.MainWindow = winNV;
                 }
@@ -193,13 +129,13 @@ namespace PhanMemBanHang.ViewModel
                     winQL.Show();
                     Application.Current.MainWindow = winQL;
                 }
-                var loginWin = Application.Current.Windows.OfType<DangNhap>().FirstOrDefault();
-                loginWin.Close();
+
+
+                Application.Current.Windows.OfType<DangNhap>().FirstOrDefault()?.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi kết nối CSDL: " + ex.Message,
-                                "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Lỗi CSDL: " + ex.Message);
             }
         }
     }

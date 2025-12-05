@@ -6,32 +6,70 @@
         xmlns:local="clr-namespace:PhanMemBanHang.View"
         mc:Ignorable="d"
         Title="Highlands Coffee - Quản Lý" 
-        Height="700" 
-        Width="1150"
-        MinHeight="650"
-        MinWidth="1100"
+        Height="720" 
+        Width="1200"
+        MinHeight="680"
+        MinWidth="1150"
         WindowStartupLocation="CenterScreen"
-        Background="#F5F5F5"
+        Background="#F8F9FA"
         Closing="Window_Closing">
 
     <Window.Resources>
+        <!-- GroupBox Style -->
+        <Style TargetType="GroupBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="16"
+                                Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.06"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Background="#F5F5F5" 
+                                        CornerRadius="10" Padding="14,10" 
+                                        Margin="0,0,0,16">
+                                    <ContentPresenter ContentSource="Header"
+                                                      TextBlock.FontSize="14"
+                                                      TextBlock.FontWeight="Bold"
+                                                      TextBlock.Foreground="#212121"/>
+                                </Border>
+                                <ContentPresenter Grid.Row="1"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Menu Button Style -->
         <Style x:Key="MenuButton" TargetType="Button">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="#2C3E50"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Height" Value="100"/>
+            <Setter Property="Foreground" Value="#212121"/>
+            <Setter Property="FontSize" Value="13.5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="115"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Margin" Value="6"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                                CornerRadius="12"
-                                Padding="15">
+                                CornerRadius="12">
                             <Border.Effect>
-                                <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.08"/>
+                                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.08"/>
                             </Border.Effect>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -40,176 +78,183 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#B22222"/>
+                    <Setter Property="Background" Value="#D32F2F"/>
                     <Setter Property="Foreground" Value="White"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-        <!-- Stat Card Style -->
-        <Style x:Key="StatCard" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="15"/>
-            <Setter Property="Margin" Value="6"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.08"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
 
-    <Grid Margin="0">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="White" Padding="20,15">
+        <!-- HEADER -->
+        <Border Grid.Row="0" Background="White" Padding="28,18">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.1"/>
+                <DropShadowEffect BlurRadius="12" ShadowDepth="1" Opacity="0.08"/>
             </Border.Effect>
             <Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Border Background="#B22222" CornerRadius="10" Width="45" Height="45" Margin="0,0,12,0">
-                        <TextBlock Text="☕" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    <Border Background="#D32F2F" CornerRadius="12" Width="52" Height="52" Margin="0,0,16,0">
+                        <TextBlock Text="☕" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
                     </Border>
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="HIGHLANDS COFFEE" 
-                                   FontSize="18" 
-                                   FontWeight="Bold" 
-                                   Foreground="#2C3E50"/>
-                        <TextBlock Text="Hệ thống quản lý" 
-                                   FontSize="11" 
-                                   Foreground="#7F8C8D"/>
+                                   FontSize="20" FontWeight="Bold" Foreground="#212121"/>
+                        <TextBlock Text="Hệ thống quản lý toàn diện" 
+                                   FontSize="12" Foreground="#757575" Margin="0,2,0,0"/>
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Border Background="#E8F5E9" CornerRadius="8" Padding="12,8" Margin="0,0,10,0">
-                        <TextBlock FontSize="12" FontWeight="SemiBold" Foreground="#2E7D32">
+                    <Border Background="#E8F5E9" CornerRadius="10" Padding="16,10" Margin="0,0,12,0">
+                        <TextBlock FontSize="13" FontWeight="SemiBold" Foreground="#2E7D32">
                             <Run Text="👤"/>
                             <Run Text="{Binding TaiKhoan}"/>
                         </TextBlock>
                     </Border>
                     <Button Content="🚪 Đăng xuất" 
-                            Background="#FFEBEE" 
-                            Foreground="#C62828"
+                            Background="#F5F5F5" 
+                            Foreground="#424242"
                             BorderThickness="0"
-                            Padding="12,8"
-                            FontSize="12"
+                            Padding="16,10"
+                            FontSize="13"
                             FontWeight="SemiBold"
                             Cursor="Hand"
-                            Click="Btn_DangXuat">
+                            Click="DangXuat">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}" 
-                                        CornerRadius="8" 
+                                        CornerRadius="10" 
                                         Padding="{TemplateBinding Padding}">
                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FFEBEE"/>
+                                        <Setter Property="Foreground" Value="#C62828"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
                     </Button>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- Statistics Row -->
-        <Grid Grid.Row="1" Margin="10,12,10,8">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <!-- CONTENT: CHIA 2 HÀNG -->
+        <Grid Grid.Row="1" Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <!-- Doanh thu -->
-            <Border Grid.Column="0" Style="{StaticResource StatCard}">
-                <StackPanel>
-                    <TextBlock Text="💰" FontSize="28" Margin="0,0,0,6"/>
-                    <TextBlock Text="Doanh thu hôm nay" 
-                               FontSize="11" 
-                               Foreground="#888"
-                               Margin="0,0,0,4"/>
-                    <TextBlock Text="{Binding DoanhThu, StringFormat={}{0:N0}đ}" 
-                               FontSize="18" 
-                               FontWeight="Bold" 
-                               Foreground="#B22222"/>
-                </StackPanel>
-            </Border>
+            <!-- HÀNG 1: THỐNG KÊ -->
+            <GroupBox Grid.Row="0" Header="📊 Thống kê nhanh">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-            <!-- Đơn hàng -->
-            <Border Grid.Column="1" Style="{StaticResource StatCard}">
-                <StackPanel>
-                    <TextBlock Text="🛒" FontSize="28" Margin="0,0,0,6"/>
-                    <TextBlock Text="Số đơn hôm nay" 
-                               FontSize="11" 
-                               Foreground="#888"
-                               Margin="0,0,0,4"/>
-                    <TextBlock Text="{Binding SoLuongDonHang, StringFormat={}{0} đơn}" 
-                               FontSize="18" 
-                               FontWeight="Bold" 
-                               Foreground="#2E7D32"/>
-                </StackPanel>
-            </Border>
+                    <!-- Doanh thu -->
+                    <Border Grid.Column="0" Background="#FFEBEE" CornerRadius="12" 
+                            Padding="16" Margin="0,0,8,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Background="White" CornerRadius="10" 
+                                    Width="48" Height="48" Margin="0,0,12,0">
+                                <TextBlock Text="💰" FontSize="24" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Doanh thu hôm nay" FontSize="11" Foreground="#C62828"/>
+                                <TextBlock Text="{Binding DoanhThu, StringFormat={}{0:N0}đ}" 
+                                           FontSize="18" FontWeight="Bold" Foreground="#D32F2F" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-            <!-- Sản phẩm -->
-            <Border Grid.Column="2" Style="{StaticResource StatCard}">
-                <StackPanel>
-                    <TextBlock Text="📦" FontSize="28" Margin="0,0,0,6"/>
-                    <TextBlock Text="Tổng sản phẩm" 
-                               FontSize="11" 
-                               Foreground="#888"
-                               Margin="0,0,0,4"/>
-                    <TextBlock Text="{Binding SoLuongSanPham, StringFormat={}{0} mặt hàng}" 
-                               FontSize="18" 
-                               FontWeight="Bold" 
-                               Foreground="#F57C00"/>
-                </StackPanel>
-            </Border>
+                    <!-- Đơn hàng -->
+                    <Border Grid.Column="1" Background="#E8F5E9" CornerRadius="12" 
+                            Padding="16" Margin="4,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Background="White" CornerRadius="10" 
+                                    Width="48" Height="48" Margin="0,0,12,0">
+                                <TextBlock Text="🛒" FontSize="24" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Số đơn hôm nay" FontSize="11" Foreground="#2E7D32"/>
+                                <TextBlock Text="{Binding SoLuongDonHang, StringFormat={}{0} đơn}" 
+                                           FontSize="18" FontWeight="Bold" Foreground="#388E3C" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-            <!-- Nhân viên -->
-            <Border Grid.Column="3" Style="{StaticResource StatCard}">
-                <StackPanel>
-                    <TextBlock Text="👥" FontSize="28" Margin="0,0,0,6"/>
-                    <TextBlock Text="Nhân viên" 
-                               FontSize="11" 
-                               Foreground="#888"
-                               Margin="0,0,0,4"/>
-                    <TextBlock Text="{Binding SoLuongNhanVien, StringFormat={}{0} người}" 
-                               FontSize="18" 
-                               FontWeight="Bold" 
-                               Foreground="#1976D2"/>
-                </StackPanel>
-            </Border>
-        </Grid>
+                    <!-- Sản phẩm -->
+                    <Border Grid.Column="2" Background="#FFF3E0" CornerRadius="12" 
+                            Padding="16" Margin="4,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Background="White" CornerRadius="10" 
+                                    Width="48" Height="48" Margin="0,0,12,0">
+                                <TextBlock Text="📦" FontSize="24" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Tổng sản phẩm" FontSize="11" Foreground="#E65100"/>
+                                <TextBlock Text="{Binding SoLuongSanPham, StringFormat={}{0} mặt hàng}" 
+                                           FontSize="18" FontWeight="Bold" Foreground="#F57C00" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-        <!-- Menu Grid -->
-        <Border Grid.Row="2" 
-                Background="White" 
-                CornerRadius="12" 
-                Margin="10,8,10,10"
-                Padding="15">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.08"/>
-            </Border.Effect>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                    <!-- Nhân viên -->
+                    <Border Grid.Column="3" Background="#E3F2FD" CornerRadius="12" 
+                            Padding="16" Margin="8,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Background="White" CornerRadius="10" 
+                                    Width="48" Height="48" Margin="0,0,12,0">
+                                <TextBlock Text="👥" FontSize="24" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Nhân viên" FontSize="11" Foreground="#1565C0"/>
+                                <TextBlock Text="{Binding SoLuongNhanVien, StringFormat={}{0} người}" 
+                                           FontSize="18" FontWeight="Bold" Foreground="#1976D2" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </GroupBox>
 
-                <TextBlock Text="CHỨC NĂNG QUẢN LÝ" 
-                           FontSize="14" 
-                           FontWeight="Bold" 
-                           Foreground="#2C3E50"
-                           Margin="8,5,0,12"/>
-
-                <Grid Grid.Row="1">
+            <!-- HÀNG 2: MENU CHỨC NĂNG -->
+            <GroupBox Grid.Row="1" Header="⚙️ Chức năng quản lý">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -225,40 +270,52 @@
                     <Button Grid.Row="0" Grid.Column="0" 
                             x:Name="btnBanHang"
                             Style="{StaticResource MenuButton}"
-                            Click="BtnBanHang_Click">
+                            Click="BanHang">
                         <StackPanel>
-                            <TextBlock Text="🛍️" FontSize="30" Margin="0,0,0,6"/>
-                            <TextBlock Text="BÁN HÀNG" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="🛍️" FontSize="36" Margin="0,0,0,8"/>
+                            <TextBlock Text="BÁN HÀNG" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Quản lý bán hàng" 
+                                       FontSize="11" Foreground="#757575" 
+                                       Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
                     <Button Grid.Row="0" Grid.Column="1" 
                             x:Name="btnSanPham"
                             Style="{StaticResource MenuButton}"
-                            Click="BtnSanPham_Click">
+                            Click="QuanLySanPham">
                         <StackPanel>
-                            <TextBlock Text="📦" FontSize="30" Margin="0,0,0,6"/>
-                            <TextBlock Text="SẢN PHẨM" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="📦" FontSize="36" Margin="0,0,0,8"/>
+                            <TextBlock Text="SẢN PHẨM" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Quản lý kho sản phẩm" 
+                                       FontSize="11" Foreground="#757575" 
+                                       Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
                     <Button Grid.Row="0" Grid.Column="2" 
                             x:Name="btnNhanVien"
                             Style="{StaticResource MenuButton}"
-                            Click="BtnNhanVien_Click">
+                            Click="QuanLyNhanVien">
                         <StackPanel>
-                            <TextBlock Text="👥" FontSize="30" Margin="0,0,0,6"/>
-                            <TextBlock Text="NHÂN VIÊN" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="👥" FontSize="36" Margin="0,0,0,8"/>
+                            <TextBlock Text="NHÂN VIÊN" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Quản lý nhân sự" 
+                                       FontSize="11" Foreground="#757575" 
+                                       Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
                     <Button Grid.Row="0" Grid.Column="3" 
                             x:Name="btnBaoCao"
                             Style="{StaticResource MenuButton}"
-                            Click="BtnBaoCao_Click">
+                            Click="QuanLyBaoCao">
                         <StackPanel>
-                            <TextBlock Text="📊" FontSize="30" Margin="0,0,0,6"/>
-                            <TextBlock Text="BÁO CÁO" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="📊" FontSize="36" Margin="0,0,0,8"/>
+                            <TextBlock Text="BÁO CÁO" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Thống kê" 
+                                       FontSize="11" Foreground="#757575" 
+                                       Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
@@ -266,38 +323,50 @@
                     <Button Grid.Row="1" Grid.Column="0" 
                             x:Name="btnDonHang"
                             Style="{StaticResource MenuButton}"
-                            Click="BtnDonHang_Click">
+                            Click="QuanLyDonHang">
                         <StackPanel>
-                            <TextBlock Text="💳" FontSize="30" Margin="0,0,0,6"/>
-                            <TextBlock Text="ĐƠN HÀNG" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="💳" FontSize="36" Margin="0,0,0,8"/>
+                            <TextBlock Text="ĐƠN HÀNG" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Lịch sử đơn hàng" 
+                                       FontSize="11" Foreground="#757575" 
+                                       Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
-                    <Button Grid.Row="1" Grid.Column="1" 
+                    <Button Grid.Row="1" Grid.Column="1" Click="QuanLyKhoHang"
                             Style="{StaticResource MenuButton}">
                         <StackPanel>
-                            <TextBlock Text="🏪" FontSize="30" Margin="0,0,0,6"/>
-                            <TextBlock Text="KHO HÀNG" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="🏪" FontSize="36" Margin="0,0,0,8"/>
+                            <TextBlock Text="KHO HÀNG" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Quản lý tồn kho" 
+                                       FontSize="11" Foreground="#757575" 
+                                       Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
-                    <Button Grid.Row="1" Grid.Column="2" 
+                    <Button Grid.Row="1" Grid.Column="2" Click="QuanLyKhachHang"
                             Style="{StaticResource MenuButton}">
                         <StackPanel>
-                            <TextBlock Text="👤" FontSize="30" Margin="0,0,0,6"/>
-                            <TextBlock Text="KHÁCH HÀNG" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="👤" FontSize="36" Margin="0,0,0,8"/>
+                            <TextBlock Text="KHÁCH HÀNG" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Quản lý khách hàng" 
+                                       FontSize="11" Foreground="#757575" 
+                                       Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
-                    <Button Grid.Row="1" Grid.Column="3" 
+                    <Button Grid.Row="1" Grid.Column="3" Click="CaiDat"
                             Style="{StaticResource MenuButton}">
                         <StackPanel>
-                            <TextBlock Text="⚙️" FontSize="30" Margin="0,0,0,6"/>
-                            <TextBlock Text="CÀI ĐẶT" FontSize="13" FontWeight="Bold"/>
+                            <TextBlock Text="⚙️" FontSize="36" Margin="0,0,0,8"/>
+                            <TextBlock Text="CÀI ĐẶT" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="Cấu hình hệ thống" 
+                                       FontSize="11" Foreground="#757575" 
+                                       Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </Grid>
-            </Grid>
-        </Border>
+            </GroupBox>
+        </Grid>
     </Grid>
 </Window>

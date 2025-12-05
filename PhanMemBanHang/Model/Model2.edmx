@@ -31,7 +31,7 @@
           <Property Name="TrangThai" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="PhuongThucTT" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="ThoiGianGoi" Type="datetime" Nullable="false" />
-          <Property Name="LoaiDon" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="LoaiDon" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="KhachHang">
           <Key>
@@ -238,7 +238,7 @@
           <NavigationProperty Name="ChiTietHoaDon" Relationship="Self.FK_ChiTietHoaDon_HoaDon" FromRole="HoaDon" ToRole="ChiTietHoaDon" />
           <NavigationProperty Name="KhachHang" Relationship="Self.FK_HoaDon_KhachHang" FromRole="HoaDon" ToRole="KhachHang" />
           <Property Name="ThoiGianGoi" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LoaiDon" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="LoaiDon" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Pager" Relationship="HighlandsCoffeeDBModel.FK_HoaDon_Pager" FromRole="HoaDon" ToRole="Pager" />
           <NavigationProperty Name="NhanVien" Relationship="HighlandsCoffeeDBModel.FK_HoaDon_NhanVien" FromRole="HoaDon" ToRole="NhanVien" />
         </EntityType>

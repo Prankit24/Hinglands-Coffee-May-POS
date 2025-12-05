@@ -4,41 +4,44 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Highlands Coffee - Bán Hàng" 
-        Height="720" 
-        Width="1280"
+        Title="Highlands Coffee - Bán hàng"
+        Height="750" Width="1300"
+        MinHeight="700" MinWidth="1200"
         WindowStartupLocation="CenterScreen"
-        Background="#F5F5F5">
+        Background="#F8F9FA">
 
     <Window.Resources>
-        <!-- Card chung -->
         <Style x:Key="CardBorder" TargetType="Border">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="12"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,5"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.08"/>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.06" Color="#000000"/>
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <!-- Nút sản phẩm -->
-        <Style x:Key="ProductButton" TargetType="Button">
+        <Style x:Key="CategoryButton" TargetType="Button">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
-            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Foreground" Value="#5A5A5A"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="5,3"/>
+            <Setter Property="Padding" Value="20,0"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Height" Value="140"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#E8E8E8"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="12">
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -46,28 +49,48 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FFF3F3"/>
-                    <Setter Property="BorderBrush" Value="#B22222"/>
-                    <Setter Property="BorderThickness" Value="3"/>
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#D32F2F" Offset="0"/>
+                                <GradientStop Color="#C62828" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <!-- Nút loại -->
-        <Style x:Key="CategoryButton" TargetType="Button">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="#555"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Height" Value="38"/>
-            <Setter Property="Margin" Value="3"/>
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="Padding" Value="28,0"/>
+            <Setter Property="Margin" Value="5,0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#D32F2F" Offset="0"/>
+                        <GradientStop Color="#B71C1C" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.3" Color="#B71C1C"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                                CornerRadius="10"
-                                Padding="18,0">
+                                CornerRadius="14"
+                                Effect="{TemplateBinding Effect}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -75,66 +98,113 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#B22222"/>
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#E53935" Offset="0"/>
+                                <GradientStop Color="#C62828" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#616161"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="Padding" Value="22,0"/>
+            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="14">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                    <Setter Property="BorderBrush" Value="#BDBDBD"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="QtyButton" TargetType="Button">
+            <Setter Property="Background" Value="#F0F0F0"/>
+            <Setter Property="Foreground" Value="#424242"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#D32F2F"/>
                     <Setter Property="Foreground" Value="White"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <!-- Nút hành động -->
-        <Style x:Key="ActionButton" TargetType="Button">
-            <Setter Property="Background" Value="#B22222"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Height" Value="45"/>
-            <Setter Property="Margin" Value="0,4"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="12">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style TargetType="DataGrid">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#FAFAFA"/>
         </Style>
 
-        <!-- Style cho RadioButton Size -->
-        <Style x:Key="SizeRadioButton" TargetType="RadioButton">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RadioButton">
-                        <Border x:Name="border" 
-                                Background="White" 
-                                BorderBrush="#E0E0E0" 
-                                BorderThickness="1.5"
-                                CornerRadius="6"
-                                Padding="10,5"
-                                Margin="2,0">
-                            <TextBlock x:Name="text"
-                                       Text="{TemplateBinding Content}" 
-                                       FontSize="11" 
-                                       FontWeight="SemiBold"
-                                       Foreground="#555"
-                                       HorizontalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#B22222"/>
-                                <Setter TargetName="border" Property="BorderBrush" Value="#B22222"/>
-                                <Setter TargetName="text" Property="Foreground" Value="White"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#B22222"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="Foreground" Value="#424242"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Height" Value="60"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFF3E0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="#212121"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
 
@@ -144,333 +214,454 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- HEADER -->
-        <Border Grid.Row="0" Background="White" Padding="15,10">
+        <Border Grid.Row="0" Padding="25,18">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="White" Offset="0"/>
+                    <GradientStop Color="#FAFAFA" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
             <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.1"/>
+                <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.08"/>
             </Border.Effect>
             <Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Border Background="#B22222" CornerRadius="8" Width="40" Height="40" Margin="0,0,10,0">
-                        <TextBlock Text="☕" FontSize="20" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                   Foreground="White"/>
+                    <Border CornerRadius="12" Width="52" Height="52" Margin="0,0,15,0">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#D32F2F" Offset="0"/>
+                                <GradientStop Color="#B71C1C" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Text="☕" FontSize="26" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="HIGHLANDS COFFEE POS" 
-                                   FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                        <TextBlock Text="Màn hình bán hàng tại quầy" 
-                                   FontSize="11" Foreground="#7F8C8D"/>
+                                   FontSize="20" FontWeight="Bold" Foreground="#212121"
+                                   Margin="0,0,0,3"/>
+                        <TextBlock FontSize="12" Foreground="#757575">
+                            <Run Text="{Binding GioHienTai}"/>
+                        </TextBlock>
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Border Background="#E8F5E9" CornerRadius="8" Padding="10,6" Margin="0,0,8,0">
-                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="#2E7D32">
+                    <Border Background="#E8F5E9" CornerRadius="10" Padding="15,10" Margin="0,0,12,0.2" Width="208">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.05" Color="#2E7D32"/>
+                        </Border.Effect>
+                        <TextBlock FontSize="13" FontWeight="SemiBold" Foreground="#2E7D32" Margin="-5.2,0.4,-0.2,0">
+                            <Run Text="👤"/>
                             <Run Text="{Binding TenNhanVien}"/>
-                            <Run Text=" | ⏰ Ca hiện tại"/>
+                            <LineBreak/>
+                            <Run Text="{Binding caLam}"/>
                         </TextBlock>
                     </Border>
-                    <Button Background="#FFEBEE" Foreground="#C62828"
-                            BorderThickness="0" Padding="10,6" Height="35"
-                            FontSize="11" FontWeight="SemiBold"
-                            Cursor="Hand" Click="BtnQuayLai_Click">
+                    <Button Content="← Quay lại" 
+                            Background="#FFEBEE" 
+                            Foreground="#C62828"
+                            BorderThickness="0"
+                            Padding="18,10"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            Click="QuayLai">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" CornerRadius="8"
+                                <Border Background="{TemplateBinding Background}" 
+                                        CornerRadius="10" 
                                         Padding="{TemplateBinding Padding}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="←" FontSize="13" Margin="0,0,4,0"/>
-                                        <TextBlock Text="Về màn quản lý" FontSize="11" VerticalAlignment="Center"/>
-                                    </StackPanel>
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
+                        <Button.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.05" Color="#C62828"/>
+                        </Button.Effect>
                     </Button>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- NỘI DUNG CHÍNH -->
-        <Grid Grid.Row="1" Margin="10">
+        <Grid Grid.Row="1" Margin="15">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="12"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="1.2*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- LEFT: DANH SÁCH SẢN PHẨM -->
-            <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+            <!-- MÀN HÌNH SP TRÁI -->
+            <GroupBox Grid.Column="0"
+                      Header="DANH SÁCH SẢN PHẨM"
+                      FontSize="15"
+                      FontWeight="Bold"
+                      Foreground="#212121"
+                      Margin="0,0,8,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-
-                    <!-- ô tìm kiếm -->
-                    <Border Grid.Row="0" BorderBrush="#E0E0E0" BorderThickness="1.5"
-                            CornerRadius="10" Margin="0,0,0,10">
-                        <Grid>
-                            <TextBox Height="40" BorderThickness="0"
-                                     VerticalContentAlignment="Center"
-                                     Padding="15,0" FontSize="13"
-                                     Text="{Binding TuKhoaTimKiem, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Text="🔍 Tìm sản phẩm theo tên..." 
-                                       FontSize="13" Foreground="#999"
-                                       IsHitTestVisible="False" Padding="15,0"
-                                       VerticalAlignment="Center">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding TuKhoaTimKiem}" Value="">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Grid>
-                    </Border>
-
-                    <!-- loại sản phẩm -->
-                    <WrapPanel Grid.Row="1" Margin="0,0,0,10">
-                        <Button Content="☕ Tất cả" Style="{StaticResource CategoryButton}"
-                                Command="{Binding LocTheoLoaiCommand}"
-                                CommandParameter="{x:Null}"/>
-                        <Button Content="Cà phê" Style="{StaticResource CategoryButton}"
-                                Command="{Binding LocTheoLoaiCommand}"
-                                CommandParameter="3"/>
-                        <Button Content="Trà" Style="{StaticResource CategoryButton}"
-                                Command="{Binding LocTheoLoaiCommand}"
-                                CommandParameter="1"/>
-                        <Button Content="Freeze" Style="{StaticResource CategoryButton}"
-                                Command="{Binding LocTheoLoaiCommand}"
-                                CommandParameter="2"/>
-                        <Button Content="Bánh" Style="{StaticResource CategoryButton}"
-                                Command="{Binding LocTheoLoaiCommand}"
-                                CommandParameter="4"/>
-                    </WrapPanel>
-
-                    <!-- lưới sản phẩm -->
-                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding DanhSachSanPham}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Button Style="{StaticResource ProductButton}"
-                                            Width="170"
-                                            Command="{Binding DataContext.ChonSanPhamCommand,
-                                                              RelativeSource={RelativeSource AncestorType=Window}}"
-                                            CommandParameter="{Binding}">
-                                        <StackPanel>
-                                            <Border Background="#FFF3E0" CornerRadius="8"
-                                                    Width="60" Height="60" Margin="0,0,0,5">
-                                                <TextBlock Text="🥤" FontSize="30"
-                                                           HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"/>
-                                            </Border>
-                                            <TextBlock Text="{Binding TenSP}" 
-                                                       FontSize="11" FontWeight="Bold"
-                                                       Foreground="#2C3E50"
-                                                       TextWrapping="Wrap"
-                                                       TextAlignment="Center"
-                                                       Margin="0,0,0,6"/>
-
-                                            <!-- RADIO BUTTONS CHO SIZE -->
-                                            <StackPanel Orientation="Horizontal" 
-                                                        HorizontalAlignment="Center"
-                                                        Margin="0,4,0,4">
-                                                <RadioButton Content="S" 
-                                                 Style="{StaticResource SizeRadioButton}"
-                                                 GroupName="{Binding MaSP}"
-                                                 Checked="RadioButton_SizeChanged"
-                                                 Tag="{Binding}"/>
-
-                                                <RadioButton Content="M" 
-                                                             Style="{StaticResource SizeRadioButton}"
-                                                             GroupName="{Binding MaSP}"
-                                                             IsChecked="True"
-                                                             Checked="RadioButton_SizeChanged"
-                                                             Tag="{Binding}"/>
-                                                
-                                                <RadioButton Content="L" 
-                                                             Style="{StaticResource SizeRadioButton}"
-                                                             GroupName="{Binding MaSP}"
-                                                             Checked="RadioButton_SizeChanged"
-                                                             Tag="{Binding}"/>
-                                            </StackPanel>
-
-                                            <!-- Hiển thị giá theo size đã chọn -->
-                                            <TextBlock Text="{Binding GiaTheoSize, StringFormat={}{0:N0} ₫}"
-                                                       FontSize="12" FontWeight="Bold" 
-                                                       Foreground="#B22222"
-                                                       TextAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </Border>
-
-            <!-- RIGHT: ĐƠN HÀNG HIỆN TẠI -->
-            <Border Grid.Column="1" Style="{StaticResource CardBorder}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- tiêu đề -->
-                    <StackPanel Grid.Row="0" Margin="0,0,0,10">
-                        <TextBlock Text="ĐƠN HÀNG HIỆN TẠI" 
-                                   FontSize="15" FontWeight="Bold" Foreground="#2C3E50"
-                                   Margin="0,0,0,6"/>
-                        <Border Background="#F5F5F5" CornerRadius="8" Padding="10">
-                            <Grid>
-                                <TextBlock Text="{Binding ThongTinDonHang}" 
-                                           FontSize="11" FontWeight="SemiBold"
-                                           Foreground="#555"/>
-                                <TextBlock Text="{Binding GioHienTai}" FontSize="10"
-                                           Foreground="#888" HorizontalAlignment="Right"/>
-                            </Grid>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- danh sách món trong giỏ -->
-                    <Border Grid.Row="1" BorderBrush="#E0E0E0" BorderThickness="1.5"
-                            CornerRadius="10" Padding="0" Margin="0,0,0,10">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ItemsControl ItemsSource="{Binding GioHang}">
-                                <ItemsControl.ItemTemplate>
+                    <TextBlock Grid.Row="0"
+                               Text="Nhấn vào size  sản phẩm để thêm vào giỏ hàng" 
+                               FontSize="11" 
+                               FontStyle="Italic"
+                               Margin="0,0,0,6"/>
+                    <Grid Grid.Row="1" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,10.2,12.2" VerticalAlignment="Center">
+                            <Border BorderBrush="#D0D0D0"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Background="White"
+                                    Height="32"
+                                    VerticalAlignment="Center"
+                                    Width="180"
+                                    Margin="0,0,10,0">
+                                <Grid>
+                                    <TextBlock Text="🔍"
+                                       VerticalAlignment="Center"
+                                       Margin="6,0,0,0" />
+                                    <TextBox Text="{Binding TuKhoaTimKiem, UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             Margin="24,0,0,0"
+                                             FontSize="12"
+                                             VerticalContentAlignment="Center"/>
+                                    <TextBlock Text="Tìm kiếm..."
+                                               Foreground="#BEBEBE"
+                                               VerticalAlignment="Center"
+                                               Margin="24,0,0,0"
+                                               IsHitTestVisible="False">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding TuKhoaTimKiem}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <Button Content="Tất cả" Style="{StaticResource CategoryButton}" Tag="" Click="LocSanPham"/>
+                            <Button Content="Cà phê" Style="{StaticResource CategoryButton}" Tag="3" Click="LocSanPham" Width="84"/>
+                            <Button Content="Trà"     Style="{StaticResource CategoryButton}" Tag="1" Click="LocSanPham"/>
+                            <Button Content="Freeze"  Style="{StaticResource CategoryButton}" Tag="2" Click="LocSanPham"/>
+                            <Button Content="Bánh"    Style="{StaticResource CategoryButton}" Tag="4" Click="LocSanPham"/>
+                        </StackPanel>
+                    </Grid>
+                    <DataGrid x:Name="dgSanPham"
+                              Grid.Row="2"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              RowHeaderWidth="0"
+                              Margin="0,8,0,0">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Ảnh" Width="75">
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="#F0F0F0" BorderThickness="0,0,0,1"
-                                                Padding="10">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <StackPanel Grid.Column="0">
-                                                    <TextBlock Text="{Binding TenHienThi}" 
-                                                               FontSize="12" FontWeight="SemiBold"
-                                                               Foreground="#2C3E50"/>
-                                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                                                        <Button Content="−" Width="26" Height="26"
-                                                                Background="#F5F5F5" BorderThickness="0"
-                                                                Cursor="Hand" Margin="0,0,4,0"
-                                                                Command="{Binding DataContext.GiamSoLuongCommand,
-                                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                CommandParameter="{Binding}"/>
-                                                        <TextBox Text="{Binding SoLuong}" Width="35" Height="26"
-                                                                 TextAlignment="Center"
-                                                                 VerticalContentAlignment="Center"
-                                                                 BorderBrush="#E0E0E0" FontSize="12" IsReadOnly="True"/>
-                                                        <Button Content="+" Width="26" Height="26"
-                                                                Background="#F5F5F5" BorderThickness="0"
-                                                                Cursor="Hand" Margin="4,0,0,0"
-                                                                Command="{Binding DataContext.TangSoLuongCommand,
-                                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                CommandParameter="{Binding}"/>
-                                                    </StackPanel>
-                                                </StackPanel>
-
-                                                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                                                    <TextBlock Text="{Binding ThanhTien, StringFormat={}{0:N0} ₫}" 
-                                                               FontSize="13" FontWeight="Bold"
-                                                               Foreground="#B22222" HorizontalAlignment="Right"/>
-                                                    <Button Content="🗑️" Width="26" Height="26"
-                                                            Background="Transparent" BorderThickness="0"
-                                                            Cursor="Hand" Margin="0,4,0,0"
-                                                            Command="{Binding DataContext.XoaKhoiGioCommand,
-                                                                             RelativeSource={RelativeSource AncestorType=Window}}"
-                                                            CommandParameter="{Binding}"/>
-                                                </StackPanel>
-                                            </Grid>
+                                        <Border Width="50" Height="50"
+                                                CornerRadius="10"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                            <Border.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#FFF3E0" Offset="0"/>
+                                                    <GradientStop Color="#FFE0B2" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                            <TextBlock Text="🥤"
+                                                       FontSize="26"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
                                         </Border>
                                     </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Border>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                    <!-- tổng tiền -->
-                    <Border Grid.Row="2" Background="#F8F9FA" CornerRadius="10"
-                            Padding="12" Margin="0,0,0,10">
-                        <StackPanel>
-                            <Grid Margin="0,0,0,6">
-                                <TextBlock Text="Tạm tính" FontSize="12" Foreground="#555"/>
-                                <TextBlock Text="{Binding TamTinh, StringFormat={}{0:N0} ₫}" 
-                                           FontSize="12" FontWeight="SemiBold"
-                                           Foreground="#2C3E50" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Grid Margin="0,0,0,6">
-                                <TextBlock Text="Giảm giá" FontSize="12" Foreground="#555"/>
-                                <TextBlock Text="{Binding GiamGia, StringFormat={}{0:N0} ₫}" 
-                                           FontSize="12" FontWeight="SemiBold"
-                                           Foreground="#2C3E50" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <Separator Margin="0,6"/>
-                            <Grid Margin="0,6,0,0">
-                                <TextBlock Text="TỔNG CỘNG" FontSize="14" FontWeight="Bold"
-                                           Foreground="#2C3E50"/>
-                                <TextBlock Text="{Binding TongThanhToan, StringFormat={}{0:N0} ₫}" 
-                                           FontSize="18" FontWeight="Bold"
-                                           Foreground="#B22222" HorizontalAlignment="Right"/>
-                            </Grid>
-                        </StackPanel>
-                    </Border>
+                            <DataGridTextColumn Header="Sản phẩm"
+                                                Binding="{Binding TenSP}"
+                                                Width="*">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="FontSize" Value="13"/>
+                                        <Setter Property="Foreground" Value="#424242"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
 
-                    <!-- nút hành động -->
-                    <StackPanel Grid.Row="3">
-                        <Button Content="💳 THANH TOÁN" Style="{StaticResource ActionButton}"
-                                Command="{Binding ThanhToanCommand}"/>
+                            <DataGridTemplateColumn Header="Chọn size" Width="140">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Content="S"
+                                                            Width="30"
+                                                            Height="24"
+                                                            Margin="2,0"
+                                                            FontSize="11"
+                                                            Tag="S"
+                                                            Click="ChonSize"/>
+
+                                            <Button Content="M"
+                                                            Width="30"
+                                                            Height="24"
+                                                            Margin="2,0"
+                                                            FontSize="11"
+                                                            Tag="M"
+                                                            Click="ChonSize"/>
+
+                                            <Button Content="L"
+                                                            Width="30"
+                                                            Height="24"
+                                                            Margin="2,0"
+                                                            FontSize="11"
+                                                            Tag="L"
+                                                            Click="ChonSize"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </GroupBox>
+
+            <!-- MÀN HÌNH GIỎ HÀNG PHẢI-->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Grid.Row="0"
+                              Header="GIỎ HÀNG"
+                              FontSize="15"
+                              FontWeight="Bold"
+                              Foreground="#212121"
+                              Margin="0,0,0,5">
+                        <Border Style="{StaticResource CardBorder}" Padding="12" Margin="0,4,0,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0"
+                                           Text="{Binding ThongTinDonHang}"
+                                           FontSize="11"
+                                           Foreground="#9E9E9E"
+                                           Margin="0,0,30,4"/>
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding GioHang}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="#F5F5F5" 
+                                                        BorderThickness="0,0,0,1.5"
+                                                        Background="Transparent"
+                                                        Padding="12"
+                                                        Margin="0,0,0,8">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock Text="{Binding TenHienThi}" 
+                                                                       FontSize="13" 
+                                                                       FontWeight="SemiBold"
+                                                                       Foreground="#212121"
+                                                                       Margin="0,0,0,5"/>
+                                                            <TextBlock FontSize="11" 
+                                                                       Foreground="#757575" 
+                                                                       Margin="0,0,0,8">
+                                                                    <Run Text="Đơn giá:"/>
+                                                <Run Text="{Binding DonGia, StringFormat={}{0:N0}đ}" 
+                                                     FontWeight="SemiBold"
+                                                     Foreground="#616161"/>
+                                                            </TextBlock>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Button Content="−" 
+                                                                        Style="{StaticResource QtyButton}"
+                                                                        Click="GiamSPKhoiGioHang"
+                                                                        Tag="{Binding}"/>
+                                                                <TextBox Text="{Binding SoLuong}" 
+                                                                         Width="45" 
+                                                                         Height="32"
+                                                                         TextAlignment="Center"
+                                                                         VerticalContentAlignment="Center"
+                                                                         BorderBrush="#E0E0E0" 
+                                                                         BorderThickness="1"
+                                                                         FontSize="13"
+                                                                         FontWeight="SemiBold"
+                                                                         IsReadOnly="True"
+                                                                         Margin="6,0"/>
+                                                                <Button Content="+" 
+                                                                        Style="{StaticResource QtyButton}"
+                                                                        Click="ThemSPVaoGioHang"
+                                                                        Tag="{Binding}"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Column="1" 
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center">
+                                                            <TextBlock Text="{Binding ThanhTien, StringFormat={}{0:N0}đ}" 
+                                                                       FontSize="17" 
+                                                                       FontWeight="Bold"
+                                                                       Foreground="#D32F2F" 
+                                                                       HorizontalAlignment="Right"
+                                                                       Margin="0,0,0,10"/>
+                                                            <Button Content="🗑️ Xóa" 
+                                                                    Background="Transparent"
+                                                                    Foreground="#E53935"
+                                                                    BorderThickness="0"
+                                                                    FontSize="12"
+                                                                    FontWeight="SemiBold"
+                                                                    Cursor="Hand"
+                                                                    Click="Xoa"
+                                                                    Tag="{Binding}"
+                                                                    HorizontalAlignment="Right"
+                                                                    Padding="8,4">
+                                                                <Button.Style>
+                                                                    <Style TargetType="Button">
+                                                                        <Setter Property="Background" Value="Transparent"/>
+                                                                        <Style.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter Property="Background" Value="#FFEBEE"/>
+                                                                            </Trigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Button.Style>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
+                    </GroupBox>
+                </Grid>
+                <GroupBox Grid.Row="1"
+          Header="Thiết lập đơn hàng"
+          FontSize="14"
+          FontWeight="SemiBold"
+          Foreground="#212121"
+          Margin="0,5,0,0">
+                    <Border Style="{StaticResource CardBorder}" Padding="12" Margin="0,4,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="8"/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button Content="🗑️ HỦY ĐƠN" Grid.Column="0"
-                                    Background="#FFEBEE" Foreground="#C62828" Height="38"
-                                    Margin="0,4" FontSize="13" FontWeight="SemiBold"
-                                    Cursor="Hand"
-                                    Command="{Binding HuyDonCommand}">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <Button Content="💾 LƯU TẠM" Grid.Column="2"
-                                    Background="#E8F5E9" Foreground="#2E7D32" Height="38"
-                                    Margin="0,4" FontSize="13" FontWeight="SemiBold"
-                                    Cursor="Hand"
-                                    Command="{Binding LuuTamCommand}">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Phương thức thanh toán" 
+                           FontSize="12" 
+                           FontWeight="SemiBold"
+                           Foreground="#616161" 
+                           Margin="0,0,0,8"/>
+                                <ComboBox x:Name="cbPhuongThucTT"
+                          Height="42"
+                          FontSize="13"
+                          BorderBrush="#E0E0E0"
+                          BorderThickness="1.5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Loại đơn hàng" 
+                           FontSize="12" 
+                           FontWeight="SemiBold"
+                           Foreground="#616161" 
+                           Margin="0,0,0,8"/>
+                                <ComboBox x:Name="cbLoaiDon"
+                          Height="42"
+                          FontSize="13"
+                          BorderBrush="#E0E0E0"
+                          BorderThickness="1.5"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </GroupBox>
+                <Border Grid.Row="2" 
+                        Background="White" 
+                        CornerRadius="16"
+                        Padding="16"
+                        Margin="0,5">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="20" ShadowDepth="2" Opacity="0.1" Color="#D32F2F"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <Grid Margin="0,0,0,6">
+                            <TextBlock Text="Tạm tính" FontSize="12" Foreground="#616161"/>
+                            <TextBlock Text="{Binding TamTinh, StringFormat={}{0:N0}đ}" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#424242" 
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,6">
+                            <TextBlock Text="Giảm giá" FontSize="12" Foreground="#616161"/>
+                            <TextBlock Text="{Binding GiamGia, StringFormat={}{0:N0}đ}" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#FF6F00" 
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Separator Margin="0,8" Background="#F5F5F5" Height="2"/>
+                        <Grid Margin="0,8,0,0">
+                            <TextBlock Text="TỔNG THANH TOÁN" 
+                                       FontSize="14" 
+                                       FontWeight="Bold"
+                                       Foreground="#212121"/>
+                            <TextBlock Text="{Binding TongThanhToan, StringFormat={}{0:N0}đ}" 
+                                       FontSize="20" 
+                                       FontWeight="Bold"
+                                       Foreground="#D32F2F" 
+                                       HorizontalAlignment="Right"/>
                         </Grid>
                     </StackPanel>
+                </Border>
+                <Grid Grid.Row="3" Margin="0,8,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" 
+                            Content="💾 Lưu" 
+                            Style="{StaticResource SecondaryButton}"
+                            Click="LuuTam"/>
+
+                    <Button Grid.Column="1" 
+                            Content="🗑️ Hủy" 
+                            Style="{StaticResource SecondaryButton}"
+                            Click="HuyDon"/>
+
+                    <Button Grid.Column="2" 
+                            Content="💳 THANH TOÁN" 
+                            Style="{StaticResource ActionButton}"
+                            Click="ThanhToan"/>
                 </Grid>
-            </Border>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

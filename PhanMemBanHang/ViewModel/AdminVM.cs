@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using PhanMemBanHang.Model;
 
 namespace PhanMemBanHang.ViewModel
@@ -41,7 +40,6 @@ namespace PhanMemBanHang.ViewModel
             set => SetProperty(ref _doanhThu, value);
         }
 
-        // ⚠️ Dùng cho binding SẢN PHẨM trong XAML: SoLuongSanPham
         private int _soLuongSanPham;
         public int SoLuongSanPham
         {
@@ -77,26 +75,11 @@ namespace PhanMemBanHang.ViewModel
             set => SetProperty(ref _isLoading, value);
         }
 
-        // ================== COMMANDS ==================
-
-        public ICommand TaiLaiCommand { get; }
-        public ICommand LocTheoNgayCommand { get; }
-        public ICommand LocTheoTrangThaiCommand { get; }
-
-        // ================== CTOR ==================
-
         public AdminVM()
         {
-            // Khởi tạo command (dù XAML hiện tại chưa dùng cũng không sao)
-            TaiLaiCommand = new RelayCommand(_ => TaiLai());
-            LocTheoNgayCommand = new RelayCommand(param => LocTheoNgay(param));
-            LocTheoTrangThaiCommand = new RelayCommand(param => LocTheoTrangThai(param as string));
-
-            // Load dữ liệu ban đầu
-            TaiLai();
+            LoadThongTin();
+            LoadDanhSachDonHang();
         }
-
-        // ================== LOAD THỐNG KÊ ==================
 
         private void LoadThongTin()
         {
@@ -104,29 +87,16 @@ namespace PhanMemBanHang.ViewModel
             {
                 IsLoading = true;
 
-                // Lấy 1 quản lý bất kỳ
-                var nhanVien = db.NhanVien.FirstOrDefault(x => x.VaiTro == "QuanLy" && x.TrangThai == true);
+                var nhanVien = db.NhanVien.FirstOrDefault(x => x.ChucVu == "QuanLy" && x.TrangThai == true);
 
-                if (nhanVien != null)
-                {
-                    TaiKhoan = nhanVien.HoTen;
-                }
-                else
-                {
-                    TaiKhoan = "Quản lý";
-                }
+                TaiKhoan = nhanVien != null ? nhanVien.HoTen : "Quản lý";
 
-                // Đếm nhân viên
-                SoLuongNhanVien = db.NhanVien.Count(x => x.VaiTro == "NhanVien");
+                SoLuongNhanVien = db.NhanVien.Count(x => x.ChucVu == "NhanVien");
                 TongNhanVien = db.NhanVien.Count();
 
-                // Đếm sản phẩm
                 SoLuongSanPham = db.SanPham.Count();
+                SanPhamSapHet = 0; // TODO
 
-                // TODO: nếu có cột tồn kho thì tính SanPhamSapHet ở đây
-                SanPhamSapHet = 0;
-
-                // Đơn hàng & doanh thu hôm nay
                 var today = DateTime.Today;
                 var tomorrow = today.AddDays(1);
 
@@ -148,8 +118,6 @@ namespace PhanMemBanHang.ViewModel
                 IsLoading = false;
             }
         }
-
-        // ================== LOAD ĐƠN HÀNG ==================
 
         private void LoadDanhSachDonHang()
         {
@@ -176,9 +144,6 @@ namespace PhanMemBanHang.ViewModel
                 IsLoading = false;
             }
         }
-
-        // ================== LỌC ĐƠN HÀNG ==================
-
         public void LocDonHangTheoNgay(DateTime tuNgay, DateTime denNgay)
         {
             try
@@ -231,34 +196,6 @@ namespace PhanMemBanHang.ViewModel
                 IsLoading = false;
             }
         }
-
-        // ================== COMMAND HANDLERS ==================
-
-        public void TaiLai(object parameter = null)
-        {
-            LoadThongTin();
-            LoadDanhSachDonHang();
-        }
-
-        private void LocTheoNgay(object parameter)
-        {
-            if (parameter is Tuple<DateTime, DateTime> range)
-            {
-                LocDonHangTheoNgay(range.Item1, range.Item2);
-            }
-        }
-
-        private void LocTheoTrangThai(object parameter)
-        {
-            var trangThai = parameter as string;
-            if (!string.IsNullOrEmpty(trangThai))
-            {
-                LocDonHangTheoTrangThai(trangThai);
-            }
-        }
-
-        // ================== DISPOSE ==================
-
         public void Dispose()
         {
             db?.Dispose();

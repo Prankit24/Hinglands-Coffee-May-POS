@@ -1,10 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
+using System.Windows;          // vẫn dùng để MessageBox
+// using System.Windows.Input; // nếu không xài ICommand nữa thì bỏ luôn
 using PhanMemBanHang.Model;
 
 namespace PhanMemBanHang.ViewModel
@@ -43,6 +42,7 @@ namespace PhanMemBanHang.ViewModel
             set
             {
                 SetProperty(ref _tuKhoaTimKiem, value);
+                // vẫn cho auto lọc khi gõ
                 LocDonHang();
             }
         }
@@ -105,13 +105,9 @@ namespace PhanMemBanHang.ViewModel
             {
                 SetProperty(ref _donHangDangChon, value);
                 if (value != null)
-                {
                     LoadChiTiet(value.MaHD);
-                }
                 else
-                {
                     DanhSachChiTiet?.Clear();
-                }
             }
         }
 
@@ -164,12 +160,12 @@ namespace PhanMemBanHang.ViewModel
         public ObservableCollection<string> DanhSachLoaiDon { get; set; }
         public ObservableCollection<string> DanhSachSapXep { get; set; }
 
-        // ===== COMMANDS =====
-        public ICommand TimKiemCommand { get; set; }
-        public ICommand LamMoiCommand { get; set; }
-        public ICommand XuatExcelCommand { get; set; }
-        public ICommand CapNhatTrangThaiCommand { get; set; }
-        public ICommand InPhieuCommand { get; set; }
+        // ===== (BỎ) COMMANDS =====
+        // public ICommand TimKiemCommand { get; set; }
+        // public ICommand LamMoiCommand { get; set; }
+        // public ICommand XuatExcelCommand { get; set; }
+        // public ICommand CapNhatTrangThaiCommand { get; set; }
+        // public ICommand InPhieuCommand { get; set; }
 
         public QLDonHangVM()
         {
@@ -178,12 +174,9 @@ namespace PhanMemBanHang.ViewModel
             LoadDonHang();
             TinhThongKe();
 
-            // Commands
-            TimKiemCommand = new RelayCommand(p => LocDonHang());
-            LamMoiCommand = new RelayCommand(p => LamMoi());
-            XuatExcelCommand = new RelayCommand(p => XuatExcel());
-            CapNhatTrangThaiCommand = new RelayCommand(p => CapNhatTrangThai(), p => DonHangDangChon != null);
-            InPhieuCommand = new RelayCommand(p => InPhieu(), p => DonHangDangChon != null);
+            // ❌ KHÔNG KHỞI TẠO RelayCommand NỮA
+            // TimKiemCommand = new RelayCommand(p => LocDonHang());
+            // ...
         }
 
         private void InitializeData()
@@ -212,10 +205,17 @@ namespace PhanMemBanHang.ViewModel
         private void LoadNhanVien()
         {
             var list = _db.NhanVien.Where(nv => nv.TrangThai == true).ToList();
-            var all = new NhanVien { MaNV = 0, HoTen = "Tất cả nhân viên"};
+            var all = new NhanVien { MaNV = 0, HoTen = "Tất cả nhân viên" };
             list.Insert(0, all);
             DanhSachNhanVien = new ObservableCollection<NhanVien>(list);
         }
+        public void ChonDonHang(HoaDon hd)
+        {
+            if (hd == null) return;
+            DonHangDangChon = DanhSachDonHang
+                                .FirstOrDefault(x => x.MaHD == hd.MaHD);
+        }
+
 
         private void LoadDonHang()
         {
@@ -239,13 +239,17 @@ namespace PhanMemBanHang.ViewModel
                             PhuongThucTT = hd.PhuongThucTT,
                             LoaiDon = hd.LoaiDon,
                             MaNV = hd.MaNV,
-                            TongSoLuong = _db.ChiTietHoaDon.Where(ct => ct.MaHD == hd.MaHD).Sum(ct => (int?)ct.SoLuong) ?? 0
+                            TongSoLuong = _db.ChiTietHoaDon
+                                .Where(ct => ct.MaHD == hd.MaHD)
+                                .Sum(ct => (int?)ct.SoLuong) ?? 0
                         };
 
             DanhSachDonHang = new ObservableCollection<DonHangDTO>(query.ToList());
             TongSoDonHang = DanhSachDonHang.Count;
             TinhTongGiaTri();
         }
+
+        // ===== CÁC HÀM PUBLIC ĐỂ WINDOW GỌI =====
 
         public void LocDonHang()
         {
@@ -268,52 +272,45 @@ namespace PhanMemBanHang.ViewModel
                             hd.PhuongThucTT,
                             hd.LoaiDon,
                             hd.MaNV,
-                            TongSoLuong = _db.ChiTietHoaDon.Where(ct => ct.MaHD == hd.MaHD).Sum(ct => (int?)ct.SoLuong) ?? 0
+                            TongSoLuong = _db.ChiTietHoaDon
+                                .Where(ct => ct.MaHD == hd.MaHD)
+                                .Sum(ct => (int?)ct.SoLuong) ?? 0
                         };
 
-            // Lọc theo từ khóa
+            // lọc từ khóa
             if (!string.IsNullOrWhiteSpace(TuKhoaTimKiem))
             {
                 string keyword = TuKhoaTimKiem.ToLower();
                 query = query.Where(h => h.MaHD.ToString().Contains(keyword) ||
-                                        h.KhachHang.ToLower().Contains(keyword) ||
-                                        h.TenPager.ToLower().Contains(keyword));
+                                         h.KhachHang.ToLower().Contains(keyword) ||
+                                         h.TenPager.ToLower().Contains(keyword));
             }
 
-            // Lọc theo ngày
+            // lọc ngày
             if (TuNgay.HasValue)
-            {
                 query = query.Where(h => h.NgayLap >= TuNgay.Value);
-            }
+
             if (DenNgay.HasValue)
             {
                 var denNgayEnd = DenNgay.Value.Date.AddDays(1).AddTicks(-1);
                 query = query.Where(h => h.NgayLap <= denNgayEnd);
             }
 
-            // Lọc theo trạng thái
+            // trạng thái
             if (TrangThaiLoc != "Tất cả")
-            {
                 query = query.Where(h => h.TrangThai == TrangThaiLoc);
-            }
 
-            // Lọc theo phương thức thanh toán
+            // phương thức TT
             if (PhuongThucTTLoc != "Tất cả")
-            {
                 query = query.Where(h => h.PhuongThucTT == PhuongThucTTLoc);
-            }
 
-            // Lọc theo loại đơn
+            // loại đơn
             if (LoaiDonLoc != "Tất cả")
-            {
                 query = query.Where(h => h.LoaiDon == LoaiDonLoc);
-            }
 
-            // Lọc theo nhân viên
+            // nhân viên
             if (NhanVienLoc.HasValue && NhanVienLoc.Value > 0)
-            {
                 query = query.Where(h => h.MaNV == NhanVienLoc.Value);
-            }
 
             var list = query.ToList().Select(h => new DonHangDTO
             {
@@ -342,7 +339,7 @@ namespace PhanMemBanHang.ViewModel
         {
             if (DanhSachDonHang == null || !DanhSachDonHang.Any()) return;
 
-            List<DonHangDTO> sorted = null;
+            List<DonHangDTO> sorted;
 
             switch (SapXepTheo)
             {
@@ -390,18 +387,12 @@ namespace PhanMemBanHang.ViewModel
         {
             var today = DateTime.Today;
 
-            // Doanh thu hôm nay
             DoanhThuHomNay = _db.HoaDon
                 .Where(h => h.NgayLap >= today && h.TrangThai == "HoanThanh")
                 .Sum(h => (decimal?)h.ThanhTien) ?? 0;
 
-            // Số đơn hôm nay
             SoDonHomNay = _db.HoaDon.Count(h => h.NgayLap >= today);
-
-            // Đơn chờ xử lý
             DonChoXuLy = _db.HoaDon.Count(h => h.TrangThai == "ChoXuLy");
-
-            // Đơn đang làm
             DonDangLam = _db.HoaDon.Count(h => h.TrangThai == "DangLam");
         }
 
@@ -410,13 +401,7 @@ namespace PhanMemBanHang.ViewModel
             TongGiaTriHienThi = DanhSachDonHang?.Sum(h => h.TongTien) ?? 0;
         }
 
-        public void ChonDonHang(HoaDon hd)
-        {
-            if (hd == null) return;
-            LoadChiTiet(hd.MaHD);
-        }
-
-        private void LamMoi()
+        public void LamMoi()
         {
             TuKhoaTimKiem = string.Empty;
             TuNgay = null;
@@ -432,13 +417,13 @@ namespace PhanMemBanHang.ViewModel
             DonHangDangChon = null;
         }
 
-        private void XuatExcel()
+        public void XuatExcel()
         {
             MessageBox.Show("Chức năng xuất Excel đang được phát triển!", "Thông báo",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void CapNhatTrangThai()
+        public void CapNhatTrangThai()
         {
             if (DonHangDangChon == null)
             {
@@ -447,12 +432,11 @@ namespace PhanMemBanHang.ViewModel
                 return;
             }
 
-            // TODO: Implement cập nhật trạng thái
             MessageBox.Show($"Cập nhật trạng thái đơn #{DonHangDangChon.MaHD}", "Thông báo",
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void InPhieu()
+        public void InPhieu()
         {
             if (DonHangDangChon == null)
             {
@@ -470,7 +454,6 @@ namespace PhanMemBanHang.ViewModel
             _db?.Dispose();
         }
     }
-
     // ===== DTO CLASSES =====
     public class DonHangDTO
     {
