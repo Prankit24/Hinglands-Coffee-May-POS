@@ -12,13 +12,6 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
-
-    <Window.DataContext>
-        <vm:DangNhapVM/>
-    </Window.DataContext>
-    <Window.InputBindings>
-        <KeyBinding Key="Enter" Command="{Binding DangNhapCommand}" />
-    </Window.InputBindings>
     <Window.Resources>
         <!-- TextBox hiện đại với animation -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
@@ -204,8 +197,7 @@
                                    FontFamily="Segoe UI"
                                    Foreground="White" 
                                    HorizontalAlignment="Center" 
-                                   Margin="0,0,0,8"
-                                   />
+                                   Margin="0,0,0,8"/>
 
                         <TextBlock Text="COFFEE" 
                                    FontSize="32" 
@@ -213,12 +205,9 @@
                                    FontFamily="Segoe UI"
                                    Foreground="White" 
                                    HorizontalAlignment="Center" 
-                                   Margin="0,0,0,40"
-                                   />
+                                   Margin="0,0,0,40"/>
 
-                        <Border 
-                                CornerRadius="15" 
-                                Padding="30,20"
+                        <Border CornerRadius="15" Padding="30,20"
                                 Margin="40,0" Width="294">
                             <StackPanel>
                                 <TextBlock Text="Chào mừng bạn đến với" 
@@ -276,8 +265,7 @@
                                FontWeight="SemiBold"
                                FontFamily="Segoe UI"
                                Foreground="#5D6D7E"
-                               Margin="0,0,0,10"
-                               />
+                               Margin="0,0,0,10"/>
 
                     <TextBox x:Name="txtTenDangNhap"
                              Text="{Binding TaiKhoan, UpdateSourceTrigger=PropertyChanged}"
@@ -290,13 +278,14 @@
                                FontWeight="SemiBold"
                                FontFamily="Segoe UI"
                                Foreground="#5D6D7E"
-                               Margin="0,0,0,10"
-                               />
+                               Margin="0,0,0,10"/>
 
+                    <!-- Nếu muốn dùng PasswordBox thì thay TextBox này -->
                     <TextBox x:Name="txtMatKhau"
-                             Text="{Binding MatKhau, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource ModernTextBox}"
-                             Margin="0,0,0,25"/>
+                         Text="{Binding MatKhau, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource ModernTextBox}"
+                         Margin="0,0,0,25"/>
+
 
                     <!-- CAPTCHA -->
                     <TextBlock Text="MÃ XÁC NHẬN"
@@ -304,8 +293,7 @@
                                FontWeight="SemiBold"
                                FontFamily="Segoe UI"
                                Foreground="#5D6D7E"
-                               Margin="0,0,0,10"
-                               />
+                               Margin="0,0,0,10"/>
 
                     <Grid Height="50" Margin="0,0,0,35">
                         <Grid.ColumnDefinitions>
@@ -326,8 +314,7 @@
                                        FontSize="24"
                                        FontWeight="Bold"
                                        FontFamily="Courier New"
-                                       Foreground="#2C3E50"
-                                      />
+                                       Foreground="#2C3E50"/>
                         </Border>
 
                         <!-- CAPTCHA Input -->
@@ -341,14 +328,14 @@
                                  FontWeight="SemiBold"
                                  FontFamily="Courier New"/>
 
-                        <!-- Refresh Button -->
+                        <!-- Refresh Button (KHÔNG dùng Command nữa) -->
                         <Button Grid.Column="2"
                                 x:Name="btnRefreshCaptcha"
-                                Command="{Binding RefreshCaptchaCommand}"
                                 Width="55"
                                 Height="50"
                                 Style="{StaticResource RefreshButton}"
-                                ToolTip="Tạo mã mới">
+                                ToolTip="Tạo mã mới"
+                                Click="Btn_RefreshCaptcha_Click">
                             <Viewbox Width="26" Height="26">
                                 <Canvas Width="24" Height="24">
                                     <Path Data="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
@@ -360,12 +347,12 @@
 
                     <!-- Login Button -->
                     <Button Content="ĐĂNG NHẬP"
-                            Command="{Binding DangNhapCommand}"
                             Style="{StaticResource ModernButton}"
                             Height="55"
                             FontSize="15"
                             Margin="0,0,0,25"
-                            IsDefault="True"/>
+                            IsDefault="True"
+                            Click="Btn_DangNhap_Click"/>
 
                     <!-- Forgot Password -->
                     <Label MouseDoubleClick="QuenMatKhau">

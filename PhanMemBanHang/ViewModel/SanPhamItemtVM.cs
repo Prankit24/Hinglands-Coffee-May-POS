@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
 using PhanMemBanHang.Model;
 
 namespace PhanMemBanHang.ViewModel
@@ -14,6 +16,25 @@ namespace PhanMemBanHang.ViewModel
         public decimal GiaSizeS => _sp.GiaSizeS ?? 0M;
         public decimal GiaSizeM => _sp.GiaSizeM ?? 0M;
         public decimal GiaSizeL => _sp.GiaSizeL ?? 0M;
+
+        // ==== ĐƯỜNG DẪN ẢNH ĐẦY ĐỦ ====
+        public string HinhAnhPath
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_sp.HinhAnh))
+                    return null;
+
+                var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                var relative = _sp.HinhAnh.Trim().Replace('/', '\\');
+                var full = Path.Combine(baseDir, relative);
+
+                // bạn debug thử để chắc chắn
+                // System.Diagnostics.Debug.WriteLine($"IMG: {full} - {File.Exists(full)}");
+
+                return full;
+            }
+        }
 
         // ---- SIZE ĐANG CHỌN TRÊN POS: S / M / L ----
         private string _sizeHienTai = "M";
@@ -31,7 +52,6 @@ namespace PhanMemBanHang.ViewModel
             }
         }
 
-        // Giá theo size hiện tại
         public decimal GiaTheoSize
         {
             get

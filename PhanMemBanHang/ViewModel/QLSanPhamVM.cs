@@ -8,124 +8,56 @@ namespace PhanMemBanHang.ViewModel
 {
     public class QLSanPhamVM : BaseViewModel, IDisposable
     {
-        private readonly HighlandsCoffeeDBEntities _db = new HighlandsCoffeeDBEntities();
+        private readonly HighlandsCoffeeDBEntities db = new HighlandsCoffeeDBEntities();
 
-        // Danh sách
-        private ObservableCollection<SanPham> _danhSachSanPham;
+        // DANH SÁCH SẢN PHẨM
+        private ObservableCollection<SanPham> danhSachSanPham;
         public ObservableCollection<SanPham> DanhSachSanPham
         {
-            get => _danhSachSanPham;
-            set => SetProperty(ref _danhSachSanPham, value);
+            get => danhSachSanPham;
+            set => SetProperty(ref danhSachSanPham, value);
         }
 
-        private ObservableCollection<LoaiSanPham> _danhSachLoaiSP;
+        // DANH SÁCH LOẠI SẢN PHẨM
+        private ObservableCollection<LoaiSanPham> danhSachLoaiSP;
         public ObservableCollection<LoaiSanPham> DanhSachLoaiSP
         {
-            get => _danhSachLoaiSP;
-            set => SetProperty(ref _danhSachLoaiSP, value);
+            get => danhSachLoaiSP;
+            set => SetProperty(ref danhSachLoaiSP, value);
         }
 
-        // Selection
-        private SanPham _sanPhamDangChon;
+        // SẢN PHẨM ĐANG CHỌN — MODEL TRỰC TIẾP
+        private SanPham sanPhamDangChon;
         public SanPham SanPhamDangChon
         {
-            get => _sanPhamDangChon;
-            set => SetProperty(ref _sanPhamDangChon, value);
+            get => sanPhamDangChon;
+            set => SetProperty(ref sanPhamDangChon, value);
         }
 
-        // Filter
-        private string _tuKhoaTimKiem;
+        // LỌC
+        private string tuKhoaTimKiem;
         public string TuKhoaTimKiem
         {
-            get => _tuKhoaTimKiem;
+            get => tuKhoaTimKiem;
             set
             {
-                SetProperty(ref _tuKhoaTimKiem, value);
+                SetProperty(ref tuKhoaTimKiem, value);
                 LocSanPham();
             }
         }
 
-        private int? _loaiSPLoc;
-        public int? LoaiSPLoc
+        private int loaiSPLoc = 0;
+        public int LoaiSPLoc
         {
-            get => _loaiSPLoc;
+            get => loaiSPLoc;
             set
             {
-                SetProperty(ref _loaiSPLoc, value);
+                SetProperty(ref loaiSPLoc, value);
                 LocSanPham();
             }
         }
 
-        private int _tongSoSanPham;
-        public int TongSoSanPham
-        {
-            get => _tongSoSanPham;
-            set => SetProperty(ref _tongSoSanPham, value);
-        }
-
-        // Form fields
-        private int _maSP;
-        public int MaSP
-        {
-            get => _maSP;
-            set => SetProperty(ref _maSP, value);
-        }
-
-        private string _tenSP;
-        public string TenSP
-        {
-            get => _tenSP;
-            set => SetProperty(ref _tenSP, value);
-        }
-
-        private int? _maLoaiSP;
-        public int? MaLoaiSP
-        {
-            get => _maLoaiSP;
-            set => SetProperty(ref _maLoaiSP, value);
-        }
-
-        private decimal? _giaSizeS;
-        public decimal? GiaSizeS
-        {
-            get => _giaSizeS;
-            set => SetProperty(ref _giaSizeS, value);
-        }
-
-        private decimal? _giaSizeM;
-        public decimal? GiaSizeM
-        {
-            get => _giaSizeM;
-            set => SetProperty(ref _giaSizeM, value);
-        }
-
-        private decimal? _giaSizeL;
-        public decimal? GiaSizeL
-        {
-            get => _giaSizeL;
-            set => SetProperty(ref _giaSizeL, value);
-        }
-
-        private int? _soLuongTon;
-        public int? SoLuongTon
-        {
-            get => _soLuongTon;
-            set => SetProperty(ref _soLuongTon, value);
-        }
-
-        private bool _trangThai = true;
-        public bool TrangThai
-        {
-            get => _trangThai;
-            set => SetProperty(ref _trangThai, value);
-        }
-
-        private string _hinhAnh;
-        public string HinhAnh
-        {
-            get => _hinhAnh;
-            set => SetProperty(ref _hinhAnh, value);
-        }
+        public int TongSoSanPham { get; set; }
 
         public QLSanPhamVM()
         {
@@ -133,182 +65,160 @@ namespace PhanMemBanHang.ViewModel
             LoadSanPham();
         }
 
+        // -------------------------------------------------
+        // LOAD LOẠI
+        // -------------------------------------------------
         private void LoadLoaiSP()
         {
-            var list = _db.LoaiSanPham.ToList();
+            var list = db.LoaiSanPham.ToList();
+            list.Insert(0, new LoaiSanPham { MaLoai = 0, TenLoai = "Tất cả loại" });
 
-            // Thêm "Tất cả" cho filter
-            var all = new LoaiSanPham { MaLoai = 0, TenLoai = "Tất cả loại"};
-            list.Insert(0, all);
-            LoaiSPLoc = 0;
             DanhSachLoaiSP = new ObservableCollection<LoaiSanPham>(list);
+            LoaiSPLoc = 0;
         }
 
+        // -------------------------------------------------
+        // LOAD SẢN PHẨM
+        // -------------------------------------------------
         private void LoadSanPham()
         {
-            var list = _db.SanPham
-                .Where(sp => sp.HienThi == true)
-                .OrderByDescending(sp => sp.MaSP)
+            var list = db.SanPham
+                .Where(x => x.HienThi == true)
+                .OrderByDescending(x => x.MaSP)
                 .ToList();
 
             DanhSachSanPham = new ObservableCollection<SanPham>(list);
             TongSoSanPham = DanhSachSanPham.Count;
         }
 
+        // -------------------------------------------------
+        // LỌC
+        // -------------------------------------------------
         private void LocSanPham()
         {
-            var query = _db.SanPham.Where(sp => sp.HienThi == true);
+            var query = db.SanPham.Where(x => x.HienThi == true);
 
-            if (LoaiSPLoc.HasValue && LoaiSPLoc.Value > 0)
-            {
-                int maLoai = LoaiSPLoc.Value;
-                query = query.Where(sp => sp.MaLoai == maLoai);
-            }
+            if (LoaiSPLoc > 0)
+                query = query.Where(x => x.MaLoai == LoaiSPLoc);
 
             if (!string.IsNullOrWhiteSpace(TuKhoaTimKiem))
             {
-                string kw = TuKhoaTimKiem.ToLower();
-                query = query.Where(sp => sp.TenSP.ToLower().Contains(kw));
+                var kw = TuKhoaTimKiem.ToLower();
+                query = query.Where(x => x.TenSP.ToLower().Contains(kw));
             }
 
-            var list = query.OrderByDescending(sp => sp.MaSP).ToList();
-            DanhSachSanPham = new ObservableCollection<SanPham>(list);
+            DanhSachSanPham = new ObservableCollection<SanPham>(
+                query.OrderByDescending(x => x.MaSP).ToList()
+            );
             TongSoSanPham = DanhSachSanPham.Count;
         }
 
-        public void ChonSanPham(SanPham sp)
+        // -------------------------------------------------
+        // THÊM
+        // -------------------------------------------------
+        public bool KiemTraHopLe(out string err)
         {
-            if (sp == null) return;
+            if (SanPhamDangChon == null)
+            {
+                err = "Không có dữ liệu sản phẩm.";
+                return false;
+            }
 
-            MaSP = sp.MaSP;
-            TenSP = sp.TenSP;
-            MaLoaiSP = sp.MaLoai;
-            GiaSizeS = sp.GiaSizeS;
-            GiaSizeM = sp.GiaSizeM;
-            GiaSizeL = sp.GiaSizeL;
-            TrangThai = sp.TrangThai;
-            HinhAnh = sp.HinhAnh;
-            SoLuongTon = 100;
+            if (string.IsNullOrWhiteSpace(SanPhamDangChon.TenSP))
+            {
+                err = "Vui lòng nhập tên sản phẩm!";
+                return false;
+            }
+
+            if (SanPhamDangChon.MaLoai <= 0)
+            {
+                err = "Vui lòng chọn loại sản phẩm!";
+                return false;
+            }
+
+            if (SanPhamDangChon.GiaSizeS == null &&
+                SanPhamDangChon.GiaSizeM == null &&
+                SanPhamDangChon.GiaSizeL == null)
+            {
+                err = "Vui lòng nhập ít nhất một mức giá!";
+                return false;
+            }
+
+            err = "";
+            return true;
         }
 
         public void ThemSanPham()
         {
-            try
+            var sp = new SanPham
             {
-                var sp = new SanPham
-                {
-                    TenSP = TenSP.Trim(),
-                    MaLoai = MaLoaiSP.Value,
-                    GiaSizeS = GiaSizeS,
-                    GiaSizeM = GiaSizeM,
-                    GiaSizeL = GiaSizeL,
-                    TrangThai = TrangThai,
-                    HienThi = true,
-                    HinhAnh = HinhAnh,
-                };
+                TenSP = SanPhamDangChon.TenSP.Trim(),
+                MaLoai = SanPhamDangChon.MaLoai,
+                GiaSizeS = SanPhamDangChon.GiaSizeS,
+                GiaSizeM = SanPhamDangChon.GiaSizeM,
+                GiaSizeL = SanPhamDangChon.GiaSizeL,
+                TrangThai = SanPhamDangChon.TrangThai,
+                HienThi = true,
+                HinhAnh = SanPhamDangChon.HinhAnh
+            };
 
-                _db.SanPham.Add(sp);
-                _db.SaveChanges();
-                LoadSanPham();
-                LamMoi();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            db.SanPham.Add(sp);
+            db.SaveChanges();
+
+            LoadSanPham();
+            LamMoi();
         }
 
+        // -------------------------------------------------
+        // SỬA
+        // -------------------------------------------------
         public void SuaSanPham()
         {
-            try
-            {
-                var sp = _db.SanPham.FirstOrDefault(x => x.MaSP == MaSP);
-                if (sp == null) return;
+            var sp = db.SanPham.FirstOrDefault(x => x.MaSP == SanPhamDangChon.MaSP);
+            if (sp == null) return;
 
-                sp.TenSP = TenSP?.Trim();
-                if (MaLoaiSP.HasValue)
-                    sp.MaLoai = MaLoaiSP.Value;
+            sp.TenSP = SanPhamDangChon.TenSP;
+            sp.MaLoai = SanPhamDangChon.MaLoai;
+            sp.GiaSizeS = SanPhamDangChon.GiaSizeS;
+            sp.GiaSizeM = SanPhamDangChon.GiaSizeM;
+            sp.GiaSizeL = SanPhamDangChon.GiaSizeL;
+            sp.TrangThai = SanPhamDangChon.TrangThai;
+            sp.HinhAnh = SanPhamDangChon.HinhAnh;
 
-                sp.GiaSizeS = GiaSizeS;
-                sp.GiaSizeM = GiaSizeM;
-                sp.GiaSizeL = GiaSizeL;
-                sp.TrangThai = TrangThai;
-                sp.HinhAnh = HinhAnh;
-
-                _db.SaveChanges();
-                LoadSanPham();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            db.SaveChanges();
+            LoadSanPham();
         }
 
+        // -------------------------------------------------
+        // XOÁ (HienThi = false)
+        // -------------------------------------------------
         public void XoaSanPham()
         {
-            try
-            {
-                var sp = _db.SanPham.FirstOrDefault(x => x.MaSP == MaSP);
-                if (sp == null) return;
+            var sp = db.SanPham.FirstOrDefault(x => x.MaSP == SanPhamDangChon.MaSP);
+            if (sp == null) return;
 
-                sp.HienThi = false;
-                _db.SaveChanges();
-                LoadSanPham();
-                LamMoi();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            sp.HienThi = false;
+            db.SaveChanges();
+
+            LoadSanPham();
+            LamMoi();
         }
 
+        // -------------------------------------------------
+        // LÀM MỚI
+        // -------------------------------------------------
         public void LamMoi()
         {
-            MaSP = 0;
-            TenSP = string.Empty;
-            MaLoaiSP = null;
-            GiaSizeS = GiaSizeM = GiaSizeL = null;
-            SoLuongTon = null;
-            TrangThai = true;
-            HinhAnh = string.Empty;
-            SanPhamDangChon = null;
-        }
-
-        public bool KiemTraHopLe(out string thongBao)
-        {
-            if (string.IsNullOrWhiteSpace(TenSP))
+            SanPhamDangChon = new SanPham
             {
-                thongBao = "Vui lòng nhập tên sản phẩm!";
-                return false;
-            }
-
-            if (!MaLoaiSP.HasValue || MaLoaiSP.Value == 0)
-            {
-                thongBao = "Vui lòng chọn loại sản phẩm!";
-                return false;
-            }
-
-            if (!GiaSizeS.HasValue && !GiaSizeM.HasValue && !GiaSizeL.HasValue)
-            {
-                thongBao = "Vui lòng nhập ít nhất một mức giá!";
-                return false;
-            }
-
-            if ((GiaSizeS.HasValue && GiaSizeS.Value < 0) ||
-                (GiaSizeM.HasValue && GiaSizeM.Value < 0) ||
-                (GiaSizeL.HasValue && GiaSizeL.Value < 0))
-            {
-                thongBao = "Giá không được âm!";
-                return false;
-            }
-
-            thongBao = string.Empty;
-            return true;
+                TrangThai = true,
+                HienThi = true
+            };
         }
 
         public void Dispose()
         {
-            _db?.Dispose();
+            db?.Dispose();
         }
     }
 }

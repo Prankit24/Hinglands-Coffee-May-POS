@@ -1,248 +1,292 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using PhanMemBanHang.Model;
 
 namespace PhanMemBanHang.ViewModel
 {
     public class POSVM : BaseViewModel, IDisposable
     {
-        private readonly HighlandsCoffeeDBEntities _db = new HighlandsCoffeeDBEntities();
+        private readonly HighlandsCoffeeDBEntities db;
+        private ObservableCollection<GioHangItem> gioHang;
+        private string tuKhoaTimKiem;
+        private DateTime ngayBan;
+        private string tenNhanVien;
+        private string thongTinDonHang;
+        private string gioHienTai;
+        private decimal tamTinh;
+        private decimal giamGia;
+        private decimal  tongThanhToan;
+        private int maNV;
+        private string chucVu;
 
-        // Thông tin nhân viên
-        private string _tenNhanVien;
+        public int MaNV
+        {
+            get => maNV;
+            set { maNV = value; OnPropertyChanged(nameof(MaNV)); }
+        }
+
         public string TenNhanVien
         {
-            get => _tenNhanVien;
-            set => SetProperty(ref _tenNhanVien, value);
+            get => tenNhanVien;
+            set { tenNhanVien = value; OnPropertyChanged(nameof(TenNhanVien)); }
         }
 
-        private int _maNhanVien;
-        public int MaNhanVien
+        public string ChucVu
         {
-            get => _maNhanVien;
-            set => SetProperty(ref _maNhanVien, value);
+            get => chucVu;
+            set { chucVu = value; OnPropertyChanged(nameof(ChucVu)); }
         }
 
-        // Thông tin đơn hàng
-        private string _thongTinDonHang;
-        public string ThongTinDonHang
-        {
-            get => _thongTinDonHang;
-            set => SetProperty(ref _thongTinDonHang, value);
-        }
 
-        private string _gioHienTai;
-        public string GioHienTai
+        private List<SanPham> danhSachSanPham;
+        public List<SanPham> DanhSachSanPham
         {
-            get => _gioHienTai;
-            set => SetProperty(ref _gioHienTai, value);
-        }
-
-        // Tìm kiếm và lọc
-        private string _tuKhoaTimKiem;
-        public string TuKhoaTimKiem
-        {
-            get => _tuKhoaTimKiem;
+            get => danhSachSanPham;
             set
             {
-                SetProperty(ref _tuKhoaTimKiem, value);
-                LocSanPham();
+                danhSachSanPham = value;
+                OnPropertyChanged(nameof(DanhSachSanPham));
             }
         }
+        private int? maLoaiDangLoc;
 
-        private int? _loaiDangChon;
-        private ObservableCollection<SanPhamViewModel> _danhSachSanPhamGoc;
+     
 
-        private ObservableCollection<SanPhamViewModel> _danhSachSanPham;
-        public ObservableCollection<SanPhamViewModel> DanhSachSanPham
+        public POSVM(int maNv, string hoTen, string chucVu)
         {
-            get => _danhSachSanPham;
-            set => SetProperty(ref _danhSachSanPham, value);
+            db = new HighlandsCoffeeDBEntities();
+            GioHang = new ObservableCollection<GioHangItem>();
+
+            MaNV = maNv;
+            TenNhanVien = hoTen;
+            ChucVu = chucVu;
+
+            HienThiMaDon();
+            HienThiNgayGio();
+            DanhSachSanPham = TimKiemSP();
         }
 
-        // Giỏ hàng
-        private ObservableCollection<MonTrongGio> _gioHang;
-        public ObservableCollection<MonTrongGio> GioHang
+
+        public ObservableCollection<GioHangItem> GioHang
         {
-            get => _gioHang;
-            set => SetProperty(ref _gioHang, value);
-        }
-
-        // Tổng tiền
-        private decimal _tamTinh;
-        public decimal TamTinh
-        {
-            get => _tamTinh;
-            set => SetProperty(ref _tamTinh, value);
-        }
-
-        private decimal _giamGia;
-        public decimal GiamGia
-        {
-            get => _giamGia;
-            set => SetProperty(ref _giamGia, value);
-        }
-
-        private decimal _tongThanhToan;
-        public decimal TongThanhToan
-        {
-            get => _tongThanhToan;
-            set => SetProperty(ref _tongThanhToan, value);
-        }
-
-        // Commands
-        public ICommand LocTheoLoaiCommand { get; set; }
-        public ICommand ChonSanPhamCommand { get; set; }
-        public ICommand TangSoLuongCommand { get; set; }
-        public ICommand GiamSoLuongCommand { get; set; }
-        public ICommand XoaKhoiGioCommand { get; set; }
-        public ICommand ThanhToanCommand { get; set; }
-        public ICommand HuyDonCommand { get; set; }
-        public ICommand LuuTamCommand { get; set; }
-
-        // Constructor
-        public POSVM()
-        {
-            KhoiTaoCommands();
-            TaiDanhSachSanPham();
-            GioHang = new ObservableCollection<MonTrongGio>();
-
-            ThongTinDonHang = $"Đơn hàng mới - {DateTime.Now:dd/MM/yyyy}";
-            GioHienTai = DateTime.Now.ToString("HH:mm");
-
-            // Update thời gian mỗi phút
-            var timer = new System.Windows.Threading.DispatcherTimer();
-            timer.Interval = TimeSpan.FromMinutes(1);
-            timer.Tick += (s, e) => GioHienTai = DateTime.Now.ToString("HH:mm");
-            timer.Start();
-        }
-
-        public POSVM(string tenNV, int maNV) : this()
-        {
-            TenNhanVien = tenNV;
-            MaNhanVien = maNV;
-        }
-
-        private void KhoiTaoCommands()
-        {
-            LocTheoLoaiCommand = new RelayCommand(p => LocTheoLoai(p));
-            ChonSanPhamCommand = new RelayCommand(p => ChonSanPham(p as SanPhamViewModel));
-            TangSoLuongCommand = new RelayCommand(p => TangSoLuong(p as MonTrongGio));
-            GiamSoLuongCommand = new RelayCommand(p => GiamSoLuong(p as MonTrongGio));
-            XoaKhoiGioCommand = new RelayCommand(p => XoaKhoiGio(p as MonTrongGio));
-            ThanhToanCommand = new RelayCommand(p => ThanhToan());
-            HuyDonCommand = new RelayCommand(p => HuyDon());
-            LuuTamCommand = new RelayCommand(p => LuuTam());
-        }
-
-        private void TaiDanhSachSanPham()
-        {
-            var dsSanPham = _db.SanPham
-                .Where(sp => sp.TrangThai == true)
-                .ToList()
-                .Select(sp => new SanPhamViewModel(sp))
-                .ToList();
-
-            _danhSachSanPhamGoc = new ObservableCollection<SanPhamViewModel>(dsSanPham);
-            DanhSachSanPham = new ObservableCollection<SanPhamViewModel>(dsSanPham);
-        }
-
-        private void LocTheoLoai(object maLoai)
-        {
-            if (maLoai == null)
+            get => gioHang;
+            set
             {
-                _loaiDangChon = null;
-            }
-            else
-            {
-                _loaiDangChon = Convert.ToInt32(maLoai);
-            }
-            LocSanPham();
-        }
-
-        private void LocSanPham()
-        {
-            var ketQua = _danhSachSanPhamGoc.AsEnumerable();
-
-            // Lọc theo loại
-            if (_loaiDangChon.HasValue)
-            {
-                ketQua = ketQua.Where(sp => sp.MaLoai == _loaiDangChon.Value);
-            }
-
-            // Lọc theo từ khóa
-            if (!string.IsNullOrWhiteSpace(TuKhoaTimKiem))
-            {
-                var tuKhoa = TuKhoaTimKiem.ToLower().Trim();
-                ketQua = ketQua.Where(sp => sp.TenSP.ToLower().Contains(tuKhoa));
-            }
-
-            DanhSachSanPham = new ObservableCollection<SanPhamViewModel>(ketQua);
-        }
-
-        private void ChonSanPham(SanPhamViewModel sp)
-        {
-            if (sp == null) return;
-
-            // Tìm món trong giỏ với cùng mã SP và size
-            var monTrongGio = GioHang.FirstOrDefault(m =>
-                m.MaSP == sp.MaSP && m.Size == sp.SizeHienTai);
-
-            if (monTrongGio != null)
-            {
-                // Đã có -> tăng số lượng
-                monTrongGio.SoLuong++;
-            }
-            else
-            {
-                // Chưa có -> thêm mới
-                GioHang.Add(new MonTrongGio
-                {
-                    MaSP = sp.MaSP,
-                    TenSP = sp.TenSP,
-                    Size = sp.SizeHienTai,
-                    DonGia = sp.GiaTheoSize,
-                    SoLuong = 1
-                });
-            }
-
-            TinhTongTien();
-        }
-
-        private void TangSoLuong(MonTrongGio mon)
-        {
-            if (mon != null)
-            {
-                mon.SoLuong++;
+                gioHang = value;
+                OnPropertyChanged(nameof(GioHang));
                 TinhTongTien();
             }
         }
 
-        private void GiamSoLuong(MonTrongGio mon)
+        public String caLam { get; set; }
+        public String XacDinhCaLam()
         {
-            if (mon != null)
+            TimeSpan gio = DateTime.Now.TimeOfDay;
+
+            if( gio >= new TimeSpan(6, 0, 0) && gio <= new TimeSpan(11, 30, 00))
+                return "Ca sáng 6:00 - 11:30";
+            if (gio >= new TimeSpan(11, 30, 0) && gio <= new TimeSpan(17, 0, 0))
+                return "Ca chiều 11:30 - 17:00";
+            if (gio >= new TimeSpan(17, 0, 0) && gio <= new TimeSpan(23, 0, 0))
+                return "Ca tối 17:00 - 23:00";
+            return "Bạn đi làm giờ này làm gì ?";
+        }
+        public void HienThiNgayGio()
+        {
+            NgayBan = DateTime.Now;
+            caLam = XacDinhCaLam();
+            OnPropertyChanged(nameof(caLam));
+
+            var timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += (s, e) => GioHienTai = DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy");
+            timer.Start();
+        }
+        public void HienThiMaDon()
+        {
+            var lastHD = db.HoaDon.OrderByDescending(x => x.MaHD).FirstOrDefault();
+            int nextSoHD = lastHD != null ? lastHD.MaHD + 1 : 1;
+
+            ThongTinDonHang = $"Đơn hàng #{nextSoHD}";
+        }
+
+        public string TuKhoaTimKiem
+        {
+            get => tuKhoaTimKiem;
+            set
             {
-                if (mon.SoLuong > 1)
-                {
-                    mon.SoLuong--;
-                    TinhTongTien();
-                }
-                else
-                {
-                    XoaKhoiGio(mon);
-                }
+                tuKhoaTimKiem = value;
+                OnPropertyChanged(nameof(TuKhoaTimKiem));
+                LocSanPham();
             }
         }
 
-        private void XoaKhoiGio(MonTrongGio mon)
+        public DateTime NgayBan
         {
-            if (mon != null)
+            get => ngayBan;
+            set
             {
-                GioHang.Remove(mon);
+                ngayBan = value;
+                OnPropertyChanged(nameof(NgayBan));
+            }
+        }
+
+        public string ThongTinDonHang
+        {
+            get => thongTinDonHang;
+            set
+            {
+                thongTinDonHang = value;
+                OnPropertyChanged(nameof(ThongTinDonHang));
+            }
+        }
+
+        public string GioHienTai
+        {
+            get => gioHienTai;
+            set
+            {
+                gioHienTai = value;
+                OnPropertyChanged(nameof(GioHienTai));
+            }
+        }
+
+        public decimal TamTinh
+        {
+            get => tamTinh;
+            set
+            {
+                tamTinh = value;
+                OnPropertyChanged(nameof(TamTinh));
+            }
+        }
+
+        public decimal GiamGia
+        {
+            get => giamGia;
+            set
+            {
+                giamGia = value;
+                OnPropertyChanged(nameof(GiamGia));
+                TinhTongTien();
+            }
+        }
+
+        public decimal TongThanhToan
+        {
+            get =>  tongThanhToan;
+            set
+            {
+                 tongThanhToan = value;
+                OnPropertyChanged(nameof(TongThanhToan));
+            }
+        }
+
+        public List<string> DSPhuongThucTT()
+        {
+            var list = db.HoaDon.Select(x => x.PhuongThucTT).Distinct().ToList();
+            return list;
+        }
+
+        public List<string> DSLoaiDon()
+        {
+            var list = db.HoaDon.Select(x => x.LoaiDon).Distinct().ToList();
+            return list;
+        }
+        public List<SanPham> TimKiemSP()
+        {
+            return db.SanPham.ToList();
+        }
+
+        public List<SanPham> TimKiemSP(string tuKhoa, int? maLoai)
+        {
+            tuKhoa = tuKhoa?.ToLower() ?? "";
+
+            var query = db.SanPham.Where(x => x.TenSP.ToLower().Contains(tuKhoa));
+
+            if (maLoai != null)
+            {
+                query = query.Where(x => x.MaLoai == maLoai);
+            }
+
+            return query.ToList();
+        }
+
+        private void LocSanPham()
+        {
+            DanhSachSanPham = TimKiemSP(tuKhoaTimKiem, maLoaiDangLoc);
+        }
+
+        public void LocTheoLoai(int? maLoai)
+        {
+            maLoaiDangLoc = maLoai;
+            LocSanPham();
+        }
+
+        public void ThemVaoGioHang(SanPham sp, string size)
+        {
+            if (sp == null) return;
+            decimal donGia = 0; 
+
+            switch (size)
+            {
+                case "S": donGia = sp.GiaSizeS ?? 0; break;
+                case "M": donGia = sp.GiaSizeM ?? 0; break;
+                case "L": donGia = sp.GiaSizeL ?? 0; break;
+            }
+
+            if (donGia == 0)
+            {
+                MessageBox.Show("Size này không có giá!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var item = GioHang.FirstOrDefault(x => x.MaSP == sp.MaSP && x.Size == size);
+
+            if (item != null)
+            {
+                item.SoLuong++;
+            }
+            else
+            {
+                GioHang.Add(new GioHangItem{MaSP = sp.MaSP, TenSP = sp.TenSP,Size = size,SoLuong = 1, DonGia = donGia });
+            }
+            TinhTongTien();
+        }
+
+        public void TangSoLuong(GioHangItem item)
+        {
+            if (item != null)
+            {
+                item.SoLuong++;
+                TinhTongTien();
+            }
+        }
+
+        public void GiamSoLuong(GioHangItem item)
+        {
+            if (item != null)
+            {
+                if (item.SoLuong > 1)
+                {
+                    item.SoLuong--;
+                }
+                else
+                {
+                    GioHang.Remove(item);
+                }
+                TinhTongTien();
+            }
+        }
+
+        public void XoaKhoiGioHang(GioHangItem item)
+        {
+            if (item != null)
+            {
+                GioHang.Remove(item);
                 TinhTongTien();
             }
         }
@@ -250,11 +294,10 @@ namespace PhanMemBanHang.ViewModel
         private void TinhTongTien()
         {
             TamTinh = GioHang.Sum(m => m.ThanhTien);
-            GiamGia = 0;
-            TongThanhToan = TamTinh - GiamGia;
+            tongThanhToan = TamTinh - GiamGia;
         }
 
-        private void ThanhToan()
+        public void ThanhToan(string phuongThucTT, string loaiDon)
         {
             if (!GioHang.Any())
             {
@@ -273,30 +316,29 @@ namespace PhanMemBanHang.ViewModel
 
             try
             {
-                // TODO: sau này lấy MaPager & MaKH thật từ UI
-                int maPagerMacDinh = 1;   // ví dụ
-                int maKhachVangLai = 1;   // ví dụ, phải tồn tại trong bảng KhachHang
+                int maPagerMacDinh = 1;
+                int maKhachVangLai = 1;
 
                 var hoaDon = new HoaDon
                 {
                     NgayLap = DateTime.Now,
                     ThoiGianGoi = DateTime.Now,
-                    MaNV = MaNhanVien,
+                    MaNV = this.MaNV,
                     MaPager = maPagerMacDinh,
                     MaKH = maKhachVangLai,
                     TongTien = TamTinh,
                     ThanhTien = TongThanhToan,
-                    PhuongThucTT = "Tiền mặt",     // phải đúng 1 trong 2: "Tiền mặt" / "Chuyển khoản"
-                    LoaiDon = "TaiCho",       // đúng với CHECK constraint
-                    TrangThai = "HoanThanh"     // hoặc "ChoXuLy" tùy flow của bạn
+                    PhuongThucTT = phuongThucTT,
+                    LoaiDon = loaiDon,
+                    TrangThai = "Hoàn Thành"
                 };
 
-                _db.HoaDon.Add(hoaDon);
-                _db.SaveChanges();
+                db.HoaDon.Add(hoaDon);
+                db.SaveChanges();
 
                 foreach (var mon in GioHang)
                 {
-                    _db.ChiTietHoaDon.Add(new ChiTietHoaDon
+                    db.ChiTietHoaDon.Add(new ChiTietHoaDon
                     {
                         MaHD = hoaDon.MaHD,
                         MaSP = mon.MaSP,
@@ -306,12 +348,14 @@ namespace PhanMemBanHang.ViewModel
                         Size = mon.Size
                     });
                 }
-                _db.SaveChanges();
+                db.SaveChanges();
 
                 MessageBox.Show($"Thanh toán thành công!\nMã hóa đơn: {hoaDon.MaHD}",
                     "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 GioHang.Clear();
+                GiamGia = 0;
+                HienThiMaDon();
                 TinhTongTien();
             }
             catch (Exception ex)
@@ -321,120 +365,39 @@ namespace PhanMemBanHang.ViewModel
             }
         }
 
-
-        private void HuyDon()
+        public void HuyDonHang()
         {
             if (GioHang.Any())
             {
-                var result = MessageBox.Show("Bạn có chắc muốn hủy đơn hàng này?",
-                    "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                var result = MessageBox.Show("Bạn có chắc muốn hủy đơn hàng này?", "Xác nhận",
+                    MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
                     GioHang.Clear();
+                    GiamGia = 0;
                     TinhTongTien();
+                    MessageBox.Show("Đã hủy đơn hàng!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
 
-        private void LuuTam()
+        public bool CheckTaiKhoan()
         {
-            MessageBox.Show("Tính năng đang phát triển!", "Thông báo",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            if (ChucVu != "Quản lý")
+            {
+                MessageBox.Show("Bạn chỉ có thể ở trang Order này !",
+                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
         }
+
 
         public void Dispose()
         {
-            _db?.Dispose();
-        }
-    }
-
-    // ViewModel cho sản phẩm
-    public class SanPhamViewModel : INotifyPropertyChanged
-    {
-        private SanPham _sanPham;
-
-        public int MaSP { get; set; }
-        public string TenSP { get; set; }
-        public int MaLoai { get; set; }
-        public decimal GiaSize_S { get; set; }
-        public decimal GiaSize_M { get; set; }
-        public decimal GiaSize_L { get; set; }
-
-        private string _sizeHienTai = "M";
-        public string SizeHienTai
-        {
-            get => _sizeHienTai;
-            set
-            {
-                _sizeHienTai = value;
-                OnPropertyChanged(nameof(SizeHienTai));
-                OnPropertyChanged(nameof(GiaTheoSize));
-            }
-        }
-
-        public decimal GiaTheoSize
-        {
-            get
-            {
-                switch (SizeHienTai)
-                {
-                    case "S":
-                        return GiaSize_S;
-                    case "L":
-                        return GiaSize_L;
-                    default:
-                        return GiaSize_M;
-                }
-            }
-        }
-
-        public SanPhamViewModel(SanPham sp)
-        {
-            _sanPham = sp;
-            MaSP = sp.MaSP;
-            TenSP = sp.TenSP;
-            MaLoai = sp.MaLoai;
-            GiaSize_S = sp.GiaSizeS ?? 0M;   // dùng 0M cho decimal
-            GiaSize_M = sp.GiaSizeM ?? 0M;
-            GiaSize_L = sp.GiaSizeL ?? 0M;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-    }
-
-    // Model cho món trong giỏ
-    public class MonTrongGio : INotifyPropertyChanged
-    {
-        public int MaSP { get; set; }
-        public string TenSP { get; set; }
-        public string Size { get; set; }
-        public decimal DonGia { get; set; }
-
-        private int _soLuong;
-        public int SoLuong
-        {
-            get => _soLuong;
-            set
-            {
-                _soLuong = value;
-                OnPropertyChanged(nameof(SoLuong));
-                OnPropertyChanged(nameof(ThanhTien));
-            }
-        }
-
-        public decimal ThanhTien => DonGia * SoLuong;
-
-        public string TenHienThi => $"{TenSP} ({Size})";
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            db?.Dispose();
         }
     }
 }

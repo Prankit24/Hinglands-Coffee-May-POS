@@ -1,98 +1,84 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using PhanMemBanHang.Model;
 using PhanMemBanHang.ViewModel;
-using PhanMemBanHang.View;
 
 namespace PhanMemBanHang.View
 {
     public partial class QLSanPhamWindow : Window
     {
-        private QLSanPhamVM _viewModel;
+        QLSanPhamVM spVM = new QLSanPhamVM();
 
         public QLSanPhamWindow()
         {
             InitializeComponent();
-            _viewModel = new QLSanPhamVM();
-            this.DataContext = _viewModel;
+            DataContext = spVM;
         }
 
-        private void BtnQuayLai_Click(object sender, RoutedEventArgs e)
+        private void QuayLai(object sender, RoutedEventArgs e)
         {
             var ql = new AdminWindow();
             ql.Show();
             this.Close();
-            
         }
 
-        private void DgSanPham_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Them(object sender, RoutedEventArgs e)
         {
-            if (dgSanPham.SelectedItem is SanPham sp)
-            {
-                _viewModel.ChonSanPham(sp);
-            }
-        }
-
-        private void BtnThem_Click(object sender, RoutedEventArgs e)
-        {
-            if (!_viewModel.KiemTraHopLe(out string thongBao))
+            if (!spVM.KiemTraHopLe(out string thongBao))
             {
                 MessageBox.Show(thongBao, "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            _viewModel.ThemSanPham();
+            spVM.ThemSanPham();
             MessageBox.Show("Thêm sản phẩm thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void BtnSua_Click(object sender, RoutedEventArgs e)
+        private void Sua(object sender, RoutedEventArgs e)
         {
-            if (_viewModel.MaSP == 0)
+            if (spVM.SanPhamDangChon == null || spVM.SanPhamDangChon.MaSP == 0)
             {
                 MessageBox.Show("Vui lòng chọn sản phẩm cần sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (!_viewModel.KiemTraHopLe(out string thongBao))
+            if (!spVM.KiemTraHopLe(out string thongBao))
             {
                 MessageBox.Show(thongBao, "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            _viewModel.SuaSanPham();
+            spVM.SuaSanPham();
             MessageBox.Show("Cập nhật sản phẩm thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void BtnXoa_Click(object sender, RoutedEventArgs e)
+        private void Xoa(object sender, RoutedEventArgs e)
         {
-            if (_viewModel.MaSP == 0)
+            if (spVM.SanPhamDangChon == null || spVM.SanPhamDangChon.MaSP == 0)
             {
                 MessageBox.Show("Vui lòng chọn sản phẩm cần xóa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             var result = MessageBox.Show(
-                $"Bạn có chắc muốn xóa sản phẩm '{_viewModel.TenSP}'?",
+                $"Bạn có chắc muốn xóa sản phẩm '{spVM.SanPhamDangChon.TenSP}'?",
                 "Xác nhận xóa",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
-                _viewModel.XoaSanPham();
+                spVM.XoaSanPham();
                 MessageBox.Show("Xóa sản phẩm thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void BtnLamMoi_Click(object sender, RoutedEventArgs e)
+        private void LamMoi(object sender, RoutedEventArgs e)
         {
-            _viewModel.LamMoi();
-            dgSanPham.SelectedItem = null;
+            spVM.LamMoi();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            _viewModel?.Dispose();
+            spVM?.Dispose();
             base.OnClosing(e);
         }
     }

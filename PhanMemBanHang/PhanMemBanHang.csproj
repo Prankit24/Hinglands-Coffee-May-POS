@@ -118,10 +118,10 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\DangNhapVM.cs" />
     <Compile Include="ViewModel\AdminVM.cs" />
+    <Compile Include="ViewModel\GioHangItem.cs" />
     <Compile Include="ViewModel\POSVM.cs" />
     <Compile Include="ViewModel\QLDonHangVM.cs" />
     <Compile Include="ViewModel\QLNhanVienVM.cs" />
-    <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\QLSanPhamVM.cs" />
     <Compile Include="ViewModel\SanPhamItemtVM.cs" />
     <Compile Include="View\DangNhap.xaml.cs">
@@ -209,40 +209,108 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\logo.png" />
-    <Resource Include="Image\tea\Trà Sen Vàng %28Củ Năng%29.png" />
-    <Resource Include="Image\tea\Trà Sen Vàng %28Sen%29.png" />
-    <Resource Include="Image\tea\Trà Thanh Đào.png" />
-    <Resource Include="Image\tea\Trà Thạch Vải.png" />
-    <Resource Include="Image\tea\Trà Thạch Đào.png" />
-    <Resource Include="Image\tea\Trà Xanh Đậu Đỏ.png" />
-    <Resource Include="Image\frezee\Caramel_Phin_Socola.png" />
-    <Resource Include="Image\frezee\Classic_Phin_Freeze.png" />
-    <Resource Include="Image\frezee\Cookies &amp; Cream.png" />
-    <Resource Include="Image\frezee\FREEZE_Socola.png" />
-    <Resource Include="Image\frezee\Freeze_Trà_Xanh.png" />
-    <Resource Include="Image\coffee\americano.png" />
-    <Resource Include="Image\coffee\bacxiuda.png" />
-    <Resource Include="Image\coffee\capuchino.png" />
-    <Resource Include="Image\coffee\caramelmachiato.png" />
-    <Resource Include="Image\coffee\expresso.png" />
-    <Resource Include="Image\coffee\late.png" />
-    <Resource Include="Image\coffee\mochamachiato.png" />
-    <Resource Include="Image\coffee\phindenda.png" />
-    <Resource Include="Image\coffee\phindennong.png" />
-    <Resource Include="Image\coffee\phindichoco.png" />
-    <Resource Include="Image\coffee\phindihanhnhan.png" />
-    <Resource Include="Image\coffee\phindikemsua.png" />
-    <Resource Include="Image\coffee\phindiXoaiDua.png" />
-    <Resource Include="Image\coffee\phinsuada.png" />
-    <Resource Include="Image\coffee\phinsuanong.png" />
-    <Resource Include="Image\cake\Bánh Caramel Phô Mai.png" />
-    <Resource Include="Image\cake\Bánh chuối.png" />
-    <Resource Include="Image\cake\Bánh Croissant.png" />
-    <Resource Include="Image\cake\Bánh Mousse Cacao.png" />
-    <Resource Include="Image\cake\Bánh Phô Mai Chanh Dây.png" />
-    <Resource Include="Image\cake\Bánh Phô Mai Cà Phê.png" />
-    <Resource Include="Image\cake\Bánh Phô Mai Trà Xanh.png" />
-    <Resource Include="Image\cake\Bánh Tiramisu.png" />
+    <Content Include="Image\tea\Tra_Sen_Vang_Cu_Nang.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\tea\Tra_Sen_Vang.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\tea\Tra_Thanh_Dao.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\tea\Tra_Thach_Vai.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\tea\Tra_Thach_Dao.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\tea\Tra_Xanh_Dau_Do.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\frezee\Caramel_Phin_Socola.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\frezee\Classic_Phin_Freeze.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\frezee\Cookies_Cream.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\frezee\Freeze_Socola.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\frezee\Freeze_Tra_Xanh.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\americano.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\bacxiuda.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\capuchino.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\caramelmachiato.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\expresso.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\late.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\mochamachiato.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\phindenda.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\phindennong.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\phindichoco.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\phindihanhnhan.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\phindikemsua.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\phindiXoaiDua.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\phinsuada.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\coffee\phinsuanong.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\cake\Banh_Caramel_Pho_Mai.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\cake\Banh_chuoi.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\cake\Banh_Croissant.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\cake\Banh _Mousse_Cacao.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\cake\Banh_Pho_Mai_Chanh_Day.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\cake\Banh_Pho_Mai_Ca_Phe.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\cake\Banh_Pho_Mai_Tra_Xanh.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Image\cake\Banh_Tiramisu.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

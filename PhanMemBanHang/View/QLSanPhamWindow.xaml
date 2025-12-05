@@ -3,48 +3,105 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PhanMemBanHang.View"
         mc:Ignorable="d"
         Title="Quản Lý Sản Phẩm - Highlands Coffee" 
         Height="750" 
         Width="1500"
         WindowStartupLocation="CenterScreen"
-        Background="#F5F5F5">
+        Background="#F8F9FA">
 
     <Window.Resources>
+        <!-- GroupBox Style -->
+        <Style TargetType="GroupBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="16"
+                                Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.06"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Background="#F5F5F5" 
+                                        CornerRadius="10" Padding="14,10" 
+                                        Margin="0,0,0,16">
+                                    <ContentPresenter ContentSource="Header"
+                                                      TextBlock.FontSize="14"
+                                                      TextBlock.FontWeight="Bold"
+                                                      TextBlock.Foreground="#212121"/>
+                                </Border>
+                                <ContentPresenter Grid.Row="1"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- TextBox Style -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
-            <Setter Property="Height" Value="36"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="FontSize" Value="13.5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
-            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          Padding="{TemplateBinding Padding}"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#D32F2F"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#BDBDBD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
-            <Setter Property="Height" Value="36"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="FontSize" Value="13.5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
-            <Setter Property="BorderThickness" Value="1.5"/>
-            <Setter Property="Background" Value="White"/>
         </Style>
 
         <Style x:Key="ActionButton" TargetType="Button">
-            <Setter Property="Height" Value="38"/>
-            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="20,0"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Margin" Value="5,0"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="8">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -52,60 +109,9 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Opacity" Value="0.9"/>
+                    <Setter Property="Opacity" Value="0.85"/>
                 </Trigger>
             </Style.Triggers>
-        </Style>
-
-        <Style TargetType="DataGrid">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="RowBackground" Value="White"/>
-            <Setter Property="AlternatingRowBackground" Value="#FAFAFA"/>
-            <Setter Property="GridLinesVisibility" Value="None"/>
-            <Setter Property="AutoGenerateColumns" Value="False"/>
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="SelectionMode" Value="Single"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="HeadersVisibility" Value="Column"/>
-        </Style>
-
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#F8F9FA"/>
-            <Setter Property="Foreground" Value="#2C3E50"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Height" Value="42"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
-        </Style>
-
-        <Style TargetType="DataGridRow">
-            <Setter Property="Height" Value="42"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FFF8F8"/>
-                </Trigger>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#FFEBEE"/>
-                    <Setter Property="Foreground" Value="#2C3E50"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style TargetType="DataGridCell">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="DataGridCell">
-                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
     </Window.Resources>
 
@@ -115,243 +121,192 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <Border Grid.Row="0" Background="White" Padding="25,18">
+        <!-- HEADER -->
+        <Border Grid.Row="0" Background="White" Padding="28,18">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.08"/>
+                <DropShadowEffect BlurRadius="12" ShadowDepth="1" Opacity="0.08"/>
             </Border.Effect>
             <Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Border Background="#B22222" CornerRadius="10" Width="48" Height="48" Margin="0,0,14,0">
+                    <Border Background="#D32F2F" CornerRadius="12" Width="50" Height="50" Margin="0,0,16,0">
                         <TextBlock Text="📦" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="QUẢN LÝ SẢN PHẨM" 
-                                   FontSize="19" 
-                                   FontWeight="Bold" 
-                                   Foreground="#2C3E50"/>
+                                   FontSize="20" FontWeight="Bold" Foreground="#212121"/>
                         <TextBlock Text="Thêm, sửa, xóa và quản lý sản phẩm Highlands Coffee" 
-                                   FontSize="12" 
-                                   Foreground="#7F8C8D"
-                                   Margin="0,2,0,0"/>
+                                   FontSize="12" Foreground="#757575" Margin="0,2,0,0"/>
                     </StackPanel>
                 </StackPanel>
 
                 <Button Content="← Quay lại" 
                         HorizontalAlignment="Right"
-                        Background="#E0E0E0" 
-                        Foreground="#2C3E50"
+                        Background="#F5F5F5" 
+                        Foreground="#424242"
                         BorderThickness="0"
-                        Padding="18,10"
-                        FontSize="14"
+                        Padding="20,10"
+                        FontSize="13"
                         FontWeight="SemiBold"
                         Cursor="Hand"
-                        Click="BtnQuayLai_Click">
+                        Click="QuayLai">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}" 
-                                    CornerRadius="8" 
+                                    CornerRadius="10" 
                                     Padding="{TemplateBinding Padding}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#EEEEEE"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                 </Button>
             </Grid>
         </Border>
 
-        <!-- Content: Form + DataGrid -->
-        <Grid Grid.Row="1" Margin="20,12,20,20">
+        <!-- CONTENT: CHIA 2 CỘT -->
+        <Grid Grid.Row="1" Margin="12">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="430"/>
-                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="450"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- FORM BÊN TRÁI -->
-            <Border Grid.Column="0"
-                    Background="White" 
-                    CornerRadius="12" 
-                    Padding="22">
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
-                </Border.Effect>
+            <!-- CỘT TRÁI: FORM THÔNG TIN -->
+            <GroupBox Grid.Column="0" Header="📝 Thông tin sản phẩm">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Vui lòng điền đầy đủ thông tin có dấu (*)" 
+                                   FontSize="11" FontStyle="Italic" 
+                                   Foreground="#757575" Margin="0,0,0,16"/>
 
-                <StackPanel>
-                    <TextBlock Text="THÔNG TIN SẢN PHẨM" 
-                               FontSize="15" 
-                               FontWeight="Bold" 
-                               Foreground="#2C3E50"
-                               Margin="0,0,0,18"/>
+                        <TextBlock Text="Mã sản phẩm" FontSize="12" FontWeight="Medium" 
+                                   Foreground="#424242" Margin="0,0,0,6"/>
+                        <TextBox x:Name="txtMaSP" Style="{StaticResource ModernTextBox}"
+                                 IsReadOnly="True" Background="#FAFAFA"
+                                 Text="{Binding SanPhamDangChon.MaSP}"/>
 
-                    <!-- Mã sản phẩm -->
-                    <StackPanel Margin="0,0,0,14">
-                        <TextBlock Text="Mã sản phẩm" FontSize="12" Foreground="#555" Margin="0,0,0,6"/>
-                        <TextBox x:Name="txtMaSP" 
-                                 Style="{StaticResource ModernTextBox}"
-                                 IsReadOnly="True"
-                                 Background="#F5F5F5"
-                                 Text="{Binding MaSP}"/>
-                    </StackPanel>
+                        <TextBlock Text="Tên sản phẩm *" FontSize="12" FontWeight="Medium" 
+                                   Foreground="#424242" Margin="0,12,0,6"/>
+                        <TextBox x:Name="txtTenSP" Style="{StaticResource ModernTextBox}"
+                                 Text="{Binding SanPhamDangChon.TenSP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <!-- Tên sản phẩm -->
-                    <StackPanel Margin="0,0,0,14">
-                        <TextBlock Text="Tên sản phẩm *" FontSize="12" Foreground="#555" Margin="0,0,0,6"/>
-                        <TextBox x:Name="txtTenSP" 
-                                 Style="{StaticResource ModernTextBox}"
-                                 Text="{Binding TenSP, UpdateSourceTrigger=PropertyChanged}"/>
-                    </StackPanel>
-
-                    <!-- Loại sản phẩm -->
-                    <StackPanel Margin="0,0,0,14">
-                        <TextBlock Text="Loại sản phẩm *" FontSize="12" Foreground="#555" Margin="0,0,0,6"/>
-                        <ComboBox x:Name="cboLoaiSP" 
-                                  Style="{StaticResource ModernComboBox}"
+                        <TextBlock Text="Loại sản phẩm *" FontSize="12" FontWeight="Medium" 
+                                   Foreground="#424242" Margin="0,12,0,6"/>
+                        <ComboBox x:Name="cboLoaiSP" Style="{StaticResource ModernComboBox}"
                                   ItemsSource="{Binding DanhSachLoaiSP}"
                                   DisplayMemberPath="TenLoai"
                                   SelectedValuePath="MaLoai"
-                                  SelectedValue="{Binding MaLoaiSP}" />
+                                  SelectedValue="{Binding SanPhamDangChon.MaLoai, Mode=TwoWay}"/>
+
+                        <TextBlock Text="Giá theo size *" FontSize="12" FontWeight="Medium" 
+                                   Foreground="#424242" Margin="0,12,0,6"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Size S" FontSize="11" Foreground="#757575" Margin="0,0,0,4"/>
+                                <TextBox x:Name="txtGiaS" Style="{StaticResource ModernTextBox}"
+                                         Text="{Binding SanPhamDangChon.GiaSizeS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Size M" FontSize="11" Foreground="#757575" Margin="0,0,0,4"/>
+                                <TextBox x:Name="txtGiaM" Style="{StaticResource ModernTextBox}"
+                                         Text="{Binding SanPhamDangChon.GiaSizeM, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="Size L" FontSize="11" Foreground="#757575" Margin="0,0,0,4"/>
+                                <TextBox x:Name="txtGiaL" Style="{StaticResource ModernTextBox}"
+                                         Text="{Binding SanPhamDangChon.GiaSizeL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Số lượng tồn kho" FontSize="12" FontWeight="Medium" 
+                                           Foreground="#424242" Margin="0,0,0,6"/>
+                                <TextBox x:Name="txtSoLuongTon" Style="{StaticResource ModernTextBox}"
+                                         Text="{Binding SoLuongTon, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+
+                            <Border Grid.Column="2" Background="#E8F5E9" CornerRadius="10" 
+                                    Padding="16,12" VerticalAlignment="Bottom" Height="44">
+                                <CheckBox x:Name="chkTrangThai" 
+                                          Content="✓ Đang bán" 
+                                          FontSize="13" FontWeight="SemiBold" Foreground="#2E7D32"
+                                          IsChecked="{Binding SanPhamDangChon.TrangThai, Mode=TwoWay}"
+                                          VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+
+                        <Separator Margin="0,20"/>
+
+                        <UniformGrid Rows="1" Columns="4">
+                            <Button x:Name="btnThem" Content="➕ Thêm" 
+                                    Background="#2E7D32" Style="{StaticResource ActionButton}"
+                                    Click="Them"/>
+                            <Button x:Name="btnSua" Content="✏️ Sửa" 
+                                    Background="#F57C00" Style="{StaticResource ActionButton}"
+                                    Click="Sua"/>
+                            <Button x:Name="btnXoa" Content="🗑️ Xóa" 
+                                    Background="#C62828" Style="{StaticResource ActionButton}"
+                                    Click="Xoa"/>
+                            <Button x:Name="btnLamMoi" Content="🔄 Mới" 
+                                    Background="#1976D2" Style="{StaticResource ActionButton}"
+                                    Click="LamMoi"/>
+                        </UniformGrid>
                     </StackPanel>
+                </ScrollViewer>
+            </GroupBox>
 
-                    <!-- Giá các size -->
-                    <Grid Margin="0,0,0,14">
+            <!-- CỘT PHẢI: CHIA 2 HÀNG -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- HÀNG 1: TÌM KIẾM & LỌC -->
+                <GroupBox Grid.Row="0" Header="🔍 Tìm kiếm và lọc">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="Giá Size S *" FontSize="12" Foreground="#555" Margin="0,0,0,6"/>
-                            <TextBox x:Name="txtGiaS" 
-                                     Style="{StaticResource ModernTextBox}"
-                                     Text="{Binding GiaSizeS, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="2">
-                            <TextBlock Text="Giá Size M *" FontSize="12" Foreground="#555" Margin="0,0,0,6"/>
-                            <TextBox x:Name="txtGiaM" 
-                                     Style="{StaticResource ModernTextBox}"
-                                     Text="{Binding GiaSizeM, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="4">
-                            <TextBlock Text="Giá Size L *" FontSize="12" Foreground="#555" Margin="0,0,0,6"/>
-                            <TextBox x:Name="txtGiaL" 
-                                     Style="{StaticResource ModernTextBox}"
-                                     Text="{Binding GiaSizeL, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- Số lượng tồn và trạng thái -->
-                    <Grid Margin="0,0,0,18">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="15"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="Số lượng tồn" FontSize="12" Foreground="#555" Margin="0,0,0,6"/>
-                            <TextBox x:Name="txtSoLuongTon" 
-                                     Style="{StaticResource ModernTextBox}"
-                                     Text="{Binding SoLuongTon, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="2" VerticalAlignment="Bottom">
-                            <CheckBox x:Name="chkTrangThai" 
-                                      Content="Đang bán" 
-                                      FontSize="14"
-                                      FontWeight="SemiBold"
-                                      Foreground="#2E7D32"
-                                      IsChecked="{Binding TrangThai}"
-                                      VerticalAlignment="Center"
-                                      Padding="6,0,0,0"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <!-- Buttons -->
-                    <UniformGrid Rows="1" Columns="4">
-                        <Button x:Name="btnThem" 
-                                Content="➕ Thêm" 
-                                Background="#2E7D32" 
-                                Style="{StaticResource ActionButton}"
-                                Click="BtnThem_Click"/>
-
-                        <Button x:Name="btnSua" 
-                                Content="✏️ Sửa" 
-                                Background="#F57C00" 
-                                Style="{StaticResource ActionButton}"
-                                Click="BtnSua_Click"/>
-
-                        <Button x:Name="btnXoa" 
-                                Content="🗑️ Xóa" 
-                                Background="#C62828" 
-                                Style="{StaticResource ActionButton}"
-                                Click="BtnXoa_Click"/>
-
-                        <Button x:Name="btnLamMoi" 
-                                Content="🔄 Mới" 
-                                Background="#1976D2" 
-                                Style="{StaticResource ActionButton}"
-                                Click="BtnLamMoi_Click"/>
-                    </UniformGrid>
-                </StackPanel>
-            </Border>
-
-            <!-- DATAGRID BÊN PHẢI -->
-            <Border Grid.Column="2" 
-                    Background="White" 
-                    CornerRadius="12" 
-                    Padding="22">
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="12" ShadowDepth="0" Opacity="0.08"/>
-                </Border.Effect>
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="DANH SÁCH SẢN PHẨM" 
-                               FontSize="15" 
-                               FontWeight="Bold" 
-                               Foreground="#2C3E50"
-                               Margin="0,0,0,16"/>
-
-                    <!-- Tìm kiếm và lọc -->
-                    <Grid Grid.Row="1" Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2.5*"/>
                             <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="200"/>
                             <ColumnDefinition Width="12"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="0" 
-                                BorderBrush="#E0E0E0" 
-                                BorderThickness="1.5" 
-                                CornerRadius="8"
-                                Background="White">
+                        <Border Grid.Column="0" BorderBrush="#E0E0E0" BorderThickness="2" 
+                                CornerRadius="10" Background="#FAFAFA">
                             <Grid>
-                                <TextBox x:Name="txtTimKiem"
-                                         Height="42"
-                                         BorderThickness="0"
-                                         VerticalContentAlignment="Center"
-                                         Padding="16,0"
-                                         FontSize="14"
+                                <TextBox x:Name="txtTimKiem" Height="44" BorderThickness="0"
+                                         Background="Transparent" VerticalContentAlignment="Center"
+                                         Padding="14,0" FontSize="13"
                                          Text="{Binding TuKhoaTimKiem, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="🔍 Tìm kiếm theo tên sản phẩm..." 
-                                           FontSize="14" 
-                                           Foreground="#999"
-                                           IsHitTestVisible="False"
-                                           Padding="16,0"
+                                           FontSize="12" Foreground="#9E9E9E"
+                                           IsHitTestVisible="False" Padding="14,0"
                                            VerticalAlignment="Center">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
@@ -367,68 +322,160 @@
                             </Grid>
                         </Border>
 
-                        <ComboBox Grid.Column="2"
-                                  x:Name="cboLocLoai"
-                                  Height="42"
-                                  FontSize="14"
-                                  Padding="12,0"
-                                  BorderBrush="#E0E0E0"
-                                  BorderThickness="1.5"
+                        <ComboBox Grid.Column="2" x:Name="cboLocLoai"
+                                  Style="{StaticResource ModernComboBox}"
                                   SelectedIndex="0"
                                   ItemsSource="{Binding DanhSachLoaiSP}"
                                   DisplayMemberPath="TenLoai"
                                   SelectedValuePath="MaLoai"
-                                  SelectedValue="{Binding LoaiSPLoc}" />
+                                  SelectedValue="{Binding LoaiSPLoc}"/>
 
-                        <Border Grid.Column="4" 
-                                Background="#E3F2FD" 
-                                CornerRadius="8" 
-                                Padding="18,0" 
-                                Height="42"
-                                VerticalAlignment="Center">
-                            <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="#1976D2" VerticalAlignment="Center">
+                        <Border Grid.Column="4" Background="#E3F2FD" CornerRadius="10" 
+                                Padding="20,0" Height="44" VerticalAlignment="Center">
+                            <TextBlock FontSize="13" FontWeight="SemiBold" 
+                                       Foreground="#1976D2" VerticalAlignment="Center">
                                 <Run Text="📊 Tổng:"/>
-                                <Run Text="{Binding TongSoSanPham}" FontSize="14" FontWeight="Bold"/>
-                                <Run Text="SP"/>
+                                <Run Text="{Binding TongSoSanPham}" FontSize="15" FontWeight="Bold"/>
+                                <Run Text=" SP"/>
                             </TextBlock>
                         </Border>
                     </Grid>
+                </GroupBox>
 
-                    <!-- DataGrid -->
-                    <Border Grid.Row="2" 
-                            BorderBrush="#E0E0E0" 
-                            BorderThickness="1" 
-                            CornerRadius="8">
-                        <DataGrid x:Name="dgSanPham"
-                                  ItemsSource="{Binding DanhSachSanPham}"
-                                  SelectedItem="{Binding SanPhamDangChon, Mode=TwoWay}"
-                                  SelectionChanged="DgSanPham_SelectionChanged">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Mã SP" Width="90" Binding="{Binding MaSP}"/>
-                                <DataGridTextColumn Header="Tên sản phẩm" Width="2*" Binding="{Binding TenSP}"/>
-                                <DataGridTextColumn Header="Loại" Binding="{Binding LoaiSanPham.TenLoai}"/>
-                                <DataGridTextColumn Header="Giá S" Width="100" Binding="{Binding GiaSizeS, StringFormat=N0}"/>
-                                <DataGridTextColumn Header="Giá M" Width="100" Binding="{Binding GiaSizeM, StringFormat=N0}"/>
-                                <DataGridTextColumn Header="Giá L" Width="100" Binding="{Binding GiaSizeL, StringFormat=N0}"/>
-                                <DataGridTextColumn Header="Tồn kho" Width="85" Binding="{Binding SoLuongTon}"/>
-                                <DataGridTextColumn Header="Trạng thái" Width="100" Binding="{Binding TrangThai}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Border>
+                <!-- HÀNG 2: DANH SÁCH SẢN PHẨM -->
+                <GroupBox Grid.Row="1" Header="📦 Danh sách sản phẩm">
+                    <DataGrid ItemsSource="{Binding DanhSachSanPham}"
+                              SelectedItem="{Binding SanPhamDangChon, Mode=TwoWay}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              SelectionMode="Single"
+                              GridLinesVisibility="None"
+                              HeadersVisibility="Column"
+                              BorderThickness="0"
+                              Background="White"
+                              RowBackground="White"
+                              AlternatingRowBackground="#FAFAFA"
+                              FontSize="13"
+                              RowHeight="52">
 
-                    <!-- Ghi chú -->
-                    <Border Grid.Row="3" 
-                            Background="#F8F9FA" 
-                            CornerRadius="8" 
-                            Padding="16,12" 
-                            Margin="0,16,0,0">
-                        <TextBlock FontSize="12" Foreground="#555">
-                            <Run Text="💡"/>
-                            <Run Text="Click vào dòng trong bảng để chọn sản phẩm cần chỉnh sửa hoặc xóa" FontWeight="Medium"/>
-                        </TextBlock>
-                    </Border>
-                </Grid>
-            </Border>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#F5F5F5"/>
+                                <Setter Property="Foreground" Value="#212121"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="Padding" Value="14,12"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="14,0"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#FFF5F5"/>
+                                        <Setter Property="Foreground" Value="#212121"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.CellStyle>
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="BorderBrush" Value="#F0F0F0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FAFAFA"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tên sản phẩm" Binding="{Binding TenSP}" 
+                                                Width="*" MinWidth="200">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="Foreground" Value="#212121"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Loại" Binding="{Binding LoaiSanPham.TenLoai}" Width="130"/>
+
+                            <DataGridTextColumn Header="Giá S" Binding="{Binding GiaSizeS, StringFormat=N0}" Width="95">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Giá M" Binding="{Binding GiaSizeM, StringFormat=N0}" Width="95">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Header="Giá L" Binding="{Binding GiaSizeL, StringFormat=N0}" Width="95">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="Foreground" Value="#D32F2F"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTemplateColumn Header="Trạng thái" Width="105">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="16" Padding="10,4" HorizontalAlignment="Center">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="#E8F5E9"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TrangThai}" Value="False">
+                                                            <Setter Property="Background" Value="#FFEBEE"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock FontSize="11" FontWeight="SemiBold">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="✓ Bán"/>
+                                                        <Setter Property="Foreground" Value="#2E7D32"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding TrangThai}" Value="False">
+                                                                <Setter Property="Text" Value="✕ Ngừng"/>
+                                                                <Setter Property="Foreground" Value="#C62828"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </GroupBox>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

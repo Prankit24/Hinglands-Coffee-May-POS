@@ -6,67 +6,75 @@ namespace PhanMemBanHang.View
 {
     public partial class AdminWindow : Window
     {
-        private readonly AdminVM _viewModel;
+        AdminVM qlVM = new AdminVM();
 
         public AdminWindow()
         {
             InitializeComponent();
-
-            _viewModel = new AdminVM();
-            DataContext = _viewModel;
+            DataContext = qlVM;
         }
-
-        // ================== HEADER BUTTONS ==================
-
-        private void Btn_DangXuat(object sender, RoutedEventArgs e)
+        private void DangXuat(object sender, RoutedEventArgs e)
         {
-            // Quay về màn đăng nhập
             var login = new DangNhap();
             login.Show();
             Close();
         }
-
-        // ================== MENU BUTTONS ==================
-
-        private void BtnBanHang_Click(object sender, RoutedEventArgs e)
+        private void BanHang(object sender, RoutedEventArgs e)
         {
             var posWindow = new POSWindow();
             posWindow.Show();
             Close();
         }
 
-        private void BtnSanPham_Click(object sender, RoutedEventArgs e)
+        private void QuanLySanPham(object sender, RoutedEventArgs e)
         {
-            var qlSanPhamWindow = new QLSanPhamWindow();
+            QLSanPhamWindow qlSanPhamWindow = new QLSanPhamWindow();
             qlSanPhamWindow.Show();
             Close();
         }
 
-        private void BtnNhanVien_Click(object sender, RoutedEventArgs e)
+        private void QuanLyNhanVien(object sender, RoutedEventArgs e)
         {
-            var main = new QLNhanVienWindow();
+            QLNhanVienWindow main = new QLNhanVienWindow();
             main.Show();
             Close();
         }
 
-        private void BtnBaoCao_Click(object sender, RoutedEventArgs e)
+        private void QuanLyBaoCao(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Chức năng báo cáo đang được cập nhật.",
                             "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void BtnDonHang_Click(object sender, RoutedEventArgs e)
+        private void QuanLyDonHang(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Danh sách đơn hàng sẽ được bổ sung sau.",
-                            "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            QLDonHangWindow main = new QLDonHangWindow();
+            main.Show();
+            this.Close();
         }
 
-        // ================== WINDOW EVENTS ==================
+
+        private void QuanLyKhoHang(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Chức năng đang được phát triển",
+                           "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void QuanLyKhachHang(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Chức năng đang được phát triển",
+                           "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void CaiDat(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Chức năng đang được phát triển",
+                           "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Giải phóng DbContext
-            _viewModel.Dispose();
+            qlVM.Dispose();
         }
     }
 }
