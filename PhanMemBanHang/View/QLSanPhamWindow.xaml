@@ -11,7 +11,6 @@
         Background="#F8F9FA">
 
     <Window.Resources>
-        <!-- GroupBox Style -->
         <Style TargetType="GroupBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
@@ -50,7 +49,6 @@
             </Setter>
         </Style>
 
-        <!-- TextBox Style -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="Height" Value="44"/>
             <Setter Property="Padding" Value="14,0"/>
@@ -121,7 +119,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- HEADER -->
         <Border Grid.Row="0" Background="White" Padding="28,18">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="12" ShadowDepth="1" Opacity="0.08"/>
@@ -134,15 +131,15 @@
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="QUẢN LÝ SẢN PHẨM" 
                                    FontSize="20" FontWeight="Bold" Foreground="#212121"/>
-                        <TextBlock Text="Thêm, sửa, xóa và quản lý sản phẩm Highlands Coffee" 
+                        <TextBlock Text="HIGHLANDS COFFE - QUẢN LÝ" FontStyle="Italic"
                                    FontSize="12" Foreground="#757575" Margin="0,2,0,0"/>
                     </StackPanel>
                 </StackPanel>
 
-                <Button Content="← Quay lại" 
+                <Button Content="Quay lại" 
                         HorizontalAlignment="Right"
-                        Background="#F5F5F5" 
-                        Foreground="#424242"
+                        Background="#FFEBEE" 
+                        Foreground="#C62828"
                         BorderThickness="0"
                         Padding="20,10"
                         FontSize="13"
@@ -171,42 +168,53 @@
             </Grid>
         </Border>
 
-        <!-- CONTENT: CHIA 2 CỘT -->
         <Grid Grid.Row="1" Margin="12">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- CỘT TRÁI: FORM THÔNG TIN -->
-            <GroupBox Grid.Column="0" Header="📝 Thông tin sản phẩm">
+            <!-- CỘT TRÁI: THÔNG TIN SP -->
+            <Border Grid.Column="0"
+        Background="White"
+        CornerRadius="16"
+        Padding="16"
+        Margin="8"
+        BorderBrush="#E0E0E0"
+        BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.06"/>
+                </Border.Effect>
+
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel>
+                        <TextBlock Text="Thông tin sản phẩm"
+                       FontSize="14"
+                       FontWeight="Bold"
+                       Foreground="#212121"
+                       Margin="0,0,0,8"/>
+
                         <TextBlock Text="Vui lòng điền đầy đủ thông tin có dấu (*)" 
-                                   FontSize="11" FontStyle="Italic" 
-                                   Foreground="#757575" Margin="0,0,0,16"/>
-
+                       FontSize="11" FontStyle="Italic" 
+                       Foreground="#757575" Margin="0,0,0,16"/>
                         <TextBlock Text="Mã sản phẩm" FontSize="12" FontWeight="Medium" 
-                                   Foreground="#424242" Margin="0,0,0,6"/>
+                       Foreground="#424242" Margin="0,0,0,6"/>
                         <TextBox x:Name="txtMaSP" Style="{StaticResource ModernTextBox}"
-                                 IsReadOnly="True" Background="#FAFAFA"
-                                 Text="{Binding SanPhamDangChon.MaSP}"/>
-
+                     IsReadOnly="True" Background="#FAFAFA"
+                     Text="{Binding SanPhamDangChon.MaSP}"/>
                         <TextBlock Text="Tên sản phẩm *" FontSize="12" FontWeight="Medium" 
-                                   Foreground="#424242" Margin="0,12,0,6"/>
+                       Foreground="#424242" Margin="0,12,0,6"/>
                         <TextBox x:Name="txtTenSP" Style="{StaticResource ModernTextBox}"
-                                 Text="{Binding SanPhamDangChon.TenSP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
+                     Text="{Binding SanPhamDangChon.TenSP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="Loại sản phẩm *" FontSize="12" FontWeight="Medium" 
-                                   Foreground="#424242" Margin="0,12,0,6"/>
+                       Foreground="#424242" Margin="0,12,0,6"/>
                         <ComboBox x:Name="cboLoaiSP" Style="{StaticResource ModernComboBox}"
-                                  ItemsSource="{Binding DanhSachLoaiSP}"
-                                  DisplayMemberPath="TenLoai"
-                                  SelectedValuePath="MaLoai"
-                                  SelectedValue="{Binding SanPhamDangChon.MaLoai, Mode=TwoWay}"/>
-
+                      ItemsSource="{Binding DanhSachLoaiSP}"
+                      DisplayMemberPath="TenLoai"
+                      SelectedValuePath="MaLoai"
+                      SelectedValue="{Binding SanPhamDangChon.MaLoai, Mode=TwoWay}"/>
                         <TextBlock Text="Giá theo size *" FontSize="12" FontWeight="Medium" 
-                                   Foreground="#424242" Margin="0,12,0,6"/>
+                       Foreground="#424242" Margin="0,12,0,6"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -219,19 +227,19 @@
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Size S" FontSize="11" Foreground="#757575" Margin="0,0,0,4"/>
                                 <TextBox x:Name="txtGiaS" Style="{StaticResource ModernTextBox}"
-                                         Text="{Binding SanPhamDangChon.GiaSizeS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding SanPhamDangChon.GiaSizeS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="Size M" FontSize="11" Foreground="#757575" Margin="0,0,0,4"/>
                                 <TextBox x:Name="txtGiaM" Style="{StaticResource ModernTextBox}"
-                                         Text="{Binding SanPhamDangChon.GiaSizeM, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding SanPhamDangChon.GiaSizeM, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="4">
                                 <TextBlock Text="Size L" FontSize="11" Foreground="#757575" Margin="0,0,0,4"/>
                                 <TextBox x:Name="txtGiaL" Style="{StaticResource ModernTextBox}"
-                                         Text="{Binding SanPhamDangChon.GiaSizeL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding SanPhamDangChon.GiaSizeL, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </Grid>
 
@@ -244,106 +252,102 @@
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Số lượng tồn kho" FontSize="12" FontWeight="Medium" 
-                                           Foreground="#424242" Margin="0,0,0,6"/>
+                               Foreground="#424242" Margin="0,0,0,6"/>
                                 <TextBox x:Name="txtSoLuongTon" Style="{StaticResource ModernTextBox}"
-                                         Text="{Binding SoLuongTon, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding SanPhamDangChon.SoLuongTon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
 
                             <Border Grid.Column="2" Background="#E8F5E9" CornerRadius="10" 
-                                    Padding="16,12" VerticalAlignment="Bottom" Height="44">
+                        Padding="16,12" VerticalAlignment="Bottom" Height="44">
                                 <CheckBox x:Name="chkTrangThai" 
-                                          Content="✓ Đang bán" 
-                                          FontSize="13" FontWeight="SemiBold" Foreground="#2E7D32"
-                                          IsChecked="{Binding SanPhamDangChon.TrangThai, Mode=TwoWay}"
-                                          VerticalAlignment="Center"/>
+                              Content="✓ Đang bán" 
+                              FontSize="13" FontWeight="SemiBold" Foreground="#2E7D32"
+                              IsChecked="{Binding SanPhamDangChon.TrangThai, Mode=TwoWay}"
+                              VerticalAlignment="Center"/>
                             </Border>
                         </Grid>
 
-                        <Separator Margin="0,20"/>
+                        <Separator Margin="0,16"/>
 
                         <UniformGrid Rows="1" Columns="4">
-                            <Button x:Name="btnThem" Content="➕ Thêm" 
-                                    Background="#2E7D32" Style="{StaticResource ActionButton}"
-                                    Click="Them"/>
-                            <Button x:Name="btnSua" Content="✏️ Sửa" 
-                                    Background="#F57C00" Style="{StaticResource ActionButton}"
-                                    Click="Sua"/>
-                            <Button x:Name="btnXoa" Content="🗑️ Xóa" 
-                                    Background="#C62828" Style="{StaticResource ActionButton}"
-                                    Click="Xoa"/>
-                            <Button x:Name="btnLamMoi" Content="🔄 Mới" 
-                                    Background="#1976D2" Style="{StaticResource ActionButton}"
-                                    Click="LamMoi"/>
+                            <Button x:Name="btnThem" Content="Thêm" 
+                        Background="#2E7D32" Style="{StaticResource ActionButton}"
+                        Click="Them"/>
+                            <Button x:Name="btnSua" Content="Sửa" 
+                        Background="#F57C00" Style="{StaticResource ActionButton}"
+                        Click="Sua"/>
+                            <Button x:Name="btnXoa" Content="Xóa" 
+                        Background="#C62828" Style="{StaticResource ActionButton}"
+                        Click="Xoa"/>
+                            <Button x:Name="btnLamMoi" Content="Làm Mới" 
+                        Background="#1976D2" Style="{StaticResource ActionButton}"
+                        Click="LamMoi"/>
                         </UniformGrid>
+
                     </StackPanel>
                 </ScrollViewer>
-            </GroupBox>
+            </Border>
 
-            <!-- CỘT PHẢI: CHIA 2 HÀNG -->
+
+            <!-- CỘT PHẢI -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- HÀNG 1: TÌM KIẾM & LỌC -->
-                <GroupBox Grid.Row="0" Header="🔍 Tìm kiếm và lọc">
+                <GroupBox Grid.Row="0" Header="Tìm kiếm và lọc">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="12"/>
-                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="27.2"/>
+                            <ColumnDefinition Width="184"/>
                             <ColumnDefinition Width="12"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <Border Grid.Column="0" BorderBrush="#E0E0E0" BorderThickness="2" 
-                                CornerRadius="10" Background="#FAFAFA">
-                            <Grid>
-                                <TextBox x:Name="txtTimKiem" Height="44" BorderThickness="0"
-                                         Background="Transparent" VerticalContentAlignment="Center"
-                                         Padding="14,0" FontSize="13"
-                                         Text="{Binding TuKhoaTimKiem, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="🔍 Tìm kiếm theo tên sản phẩm..." 
-                                           FontSize="12" Foreground="#9E9E9E"
-                                           IsHitTestVisible="False" Padding="14,0"
-                                           VerticalAlignment="Center">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Text, ElementName=txtTimKiem}" Value="">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </Grid>
-                        </Border>
+                        <Grid Margin="0,0,3.8,0">
+                            <TextBox x:Name="txtTimKiem" Height="44" BorderThickness="0"
+                                     Background="Transparent" VerticalContentAlignment="Center"
+                                     Padding="14,0" FontSize="13"
+                                     Text="{Binding TuKhoaTimKiem, UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="0,0,90,0"/>
+                            <TextBlock Text="🔍 Tìm theo tên sản phẩm..." 
+                                       FontSize="12" Foreground="#9E9E9E"
+                                       IsHitTestVisible="False" Padding="14,0"
+                                       VerticalAlignment="Center" Margin="0,10,158,10" Height="24">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Text, ElementName=txtTimKiem}" Value="">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
 
-                        <ComboBox Grid.Column="2" x:Name="cboLocLoai"
+                        <ComboBox x:Name="cboLocLoai"
+                                  Grid.Column="2"
                                   Style="{StaticResource ModernComboBox}"
-                                  SelectedIndex="0"
-                                  ItemsSource="{Binding DanhSachLoaiSP}"
+                                  ItemsSource="{Binding DanhSachLoaiLoc}"
                                   DisplayMemberPath="TenLoai"
                                   SelectedValuePath="MaLoai"
-                                  SelectedValue="{Binding LoaiSPLoc}"/>
+                                  SelectedValue="{Binding LoaiSPLoc, Mode=TwoWay}"/>
 
-                        <Border Grid.Column="4" Background="#E3F2FD" CornerRadius="10" 
-                                Padding="20,0" Height="44" VerticalAlignment="Center">
-                            <TextBlock FontSize="13" FontWeight="SemiBold" 
-                                       Foreground="#1976D2" VerticalAlignment="Center">
-                                <Run Text="📊 Tổng:"/>
-                                <Run Text="{Binding TongSoSanPham}" FontSize="15" FontWeight="Bold"/>
-                                <Run Text=" SP"/>
-                            </TextBlock>
-                        </Border>
+                        <TextBlock Grid.Column="4"
+                                   FontSize="13" FontWeight="SemiBold" 
+                                   Foreground="#1976D2" VerticalAlignment="Center" Margin="10,10,10,14">
+                            <Run Text="Tổng Sản Phẩm: "/>
+                            <Run Text="{Binding TongSoSanPham}" FontSize="15" FontWeight="Bold"/>
+                            <Run Text=" SP"/>
+                        </TextBlock>
                     </Grid>
                 </GroupBox>
 
-                <!-- HÀNG 2: DANH SÁCH SẢN PHẨM -->
-                <GroupBox Grid.Row="1" Header="📦 Danh sách sản phẩm">
+                <GroupBox Grid.Row="1" Header="Danh sách sản phẩm">
                     <DataGrid ItemsSource="{Binding DanhSachSanPham}"
                               SelectedItem="{Binding SanPhamDangChon, Mode=TwoWay}"
                               AutoGenerateColumns="False"

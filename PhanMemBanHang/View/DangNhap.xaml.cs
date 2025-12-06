@@ -1,12 +1,11 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using PhanMemBanHang.ViewModel;
 
 namespace PhanMemBanHang.View
 {
     public partial class DangNhap : Window
     {
-        DangNhapVM dnVM = new DangNhapVM();
+        private readonly DangNhapVM dnVM = new DangNhapVM();
 
         public DangNhap()
         {
@@ -14,24 +13,25 @@ namespace PhanMemBanHang.View
             DataContext = dnVM;
         }
 
-
-        private void Btn_DangNhap_Click(object sender, RoutedEventArgs e)
+        private void btnDangNhap(object sender, RoutedEventArgs e)
         {
             dnVM.DangNhap();
         }
 
-        private void Btn_RefreshCaptcha_Click(object sender, RoutedEventArgs e)
+        private void LamMoiCaptCha(object sender, RoutedEventArgs e)
         {
-            dnVM.TaoCaptcha();
+            dnVM.LamMoi();     
+            dnVM.TaoCaptcha();  
         }
 
-        private void Btn_Close(object sender, RoutedEventArgs e)
+        private void Thoat(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Thoát ứng dụng?", "Xác nhận",
-                MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
+            MessageBoxResult result = MessageBox.Show(
+                "Bạn muốn thoát khỏi màn hình đăng nhập chứ ?",
+                "Thông báo", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
                 Application.Current.Shutdown();
-            }
         }
 
         private void QuenMatKhau(object sender, System.Windows.Input.MouseButtonEventArgs e)

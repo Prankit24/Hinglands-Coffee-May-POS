@@ -8,75 +8,81 @@ namespace PhanMemBanHang.ViewModel
 {
     public class AdminVM : BaseViewModel, IDisposable
     {
-        private readonly HighlandsCoffeeDBEntities db = new HighlandsCoffeeDBEntities();
-
-        // ================== PROPERTIES ==================
-
-        private int _soLuongNhanVien;
+        private readonly HighlandsCoffeeDBEntities db;
+        private int soLuongNhanVien;
         public int SoLuongNhanVien
         {
-            get => _soLuongNhanVien;
-            set => SetProperty(ref _soLuongNhanVien, value);
+            get => soLuongNhanVien;
+            set => SetProperty(ref soLuongNhanVien, value);
         }
 
-        private string _taiKhoan;
-        public string TaiKhoan
+        private string hoTen;
+        public string HoTen
         {
-            get => _taiKhoan;
-            set => SetProperty(ref _taiKhoan, value);
+            get => hoTen;
+            set => SetProperty(ref hoTen, value);
         }
 
-        private int _soLuongDonHang;
+        private string chucVu;
+        public string ChucVu
+        {
+            get => chucVu;
+            set => SetProperty(ref chucVu, value);
+        }
+
+
+        private int soLuongDonHang;
         public int SoLuongDonHang
         {
-            get => _soLuongDonHang;
-            set => SetProperty(ref _soLuongDonHang, value);
+            get => soLuongDonHang;
+            set => SetProperty(ref soLuongDonHang, value);
         }
 
-        private decimal _doanhThu;
+        private decimal doanhThu;
         public decimal DoanhThu
         {
-            get => _doanhThu;
-            set => SetProperty(ref _doanhThu, value);
+            get => doanhThu;
+            set => SetProperty(ref doanhThu, value);
         }
 
-        private int _soLuongSanPham;
+        private int soLuongSanPham;
         public int SoLuongSanPham
         {
-            get => _soLuongSanPham;
-            set => SetProperty(ref _soLuongSanPham, value);
+            get => soLuongSanPham;
+            set => SetProperty(ref soLuongSanPham, value);
         }
 
-        private int _sanPhamSapHet;
+        private int sanPhamSapHet;
         public int SanPhamSapHet
         {
-            get => _sanPhamSapHet;
-            set => SetProperty(ref _sanPhamSapHet, value);
+            get => sanPhamSapHet;
+            set => SetProperty(ref sanPhamSapHet, value);
         }
 
-        private int _tongNhanVien;
+        private int tongNhanVien;
         public int TongNhanVien
         {
-            get => _tongNhanVien;
-            set => SetProperty(ref _tongNhanVien, value);
+            get => tongNhanVien;
+            set => SetProperty(ref tongNhanVien, value);
         }
 
-        private ObservableCollection<HoaDon> _danhSachDonHang;
+        private ObservableCollection<HoaDon> danhSachDonHang;
         public ObservableCollection<HoaDon> DanhSachDonHang
         {
-            get => _danhSachDonHang;
-            set => SetProperty(ref _danhSachDonHang, value);
+            get => danhSachDonHang;
+            set => SetProperty(ref danhSachDonHang, value);
         }
 
-        private bool _isLoading;
+        private bool isLoading;
         public bool IsLoading
         {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
+            get => isLoading;
+            set => SetProperty(ref isLoading, value);
         }
 
         public AdminVM()
         {
+            db = new HighlandsCoffeeDBEntities();
             LoadThongTin();
             LoadDanhSachDonHang();
         }
@@ -87,15 +93,23 @@ namespace PhanMemBanHang.ViewModel
             {
                 IsLoading = true;
 
-                var nhanVien = db.NhanVien.FirstOrDefault(x => x.ChucVu == "QuanLy" && x.TrangThai == true);
+                var nhanVien = db.NhanVien.FirstOrDefault(x => x.ChucVu == "Quản lý" && x.TrangThai == true);
+                if (nhanVien != null)
+                {
+                    HoTen = nhanVien.HoTen;
+                    ChucVu = nhanVien.ChucVu;  
+                }
+                else
+                {
+                    HoTen = "Quản lý";
+                    ChucVu = string.Empty;
+                }
 
-                TaiKhoan = nhanVien != null ? nhanVien.HoTen : "Quản lý";
-
-                SoLuongNhanVien = db.NhanVien.Count(x => x.ChucVu == "NhanVien");
+                SoLuongNhanVien = db.NhanVien.Count(x => x.TrangThai == true);
                 TongNhanVien = db.NhanVien.Count();
 
                 SoLuongSanPham = db.SanPham.Count();
-                SanPhamSapHet = 0; // TODO
+                SanPhamSapHet = 0; 
 
                 var today = DateTime.Today;
                 var tomorrow = today.AddDays(1);

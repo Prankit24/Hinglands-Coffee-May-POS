@@ -258,7 +258,7 @@
                             <Run Text="{Binding caLam}"/>
                         </TextBlock>
                     </Border>
-                    <Button Content="← Quay lại" 
+                    <Button Content="Quay lại" 
                             Background="#FFEBEE" 
                             Foreground="#C62828"
                             BorderThickness="0"

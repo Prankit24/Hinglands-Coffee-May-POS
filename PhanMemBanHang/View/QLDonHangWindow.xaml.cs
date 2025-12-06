@@ -1,14 +1,12 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using PhanMemBanHang.Model;
 using PhanMemBanHang.ViewModel;
 
 namespace PhanMemBanHang.View
 {
     public partial class QLDonHangWindow : Window
     {
-        QLDonHangVM donhangVM = new QLDonHangVM();
+        private readonly QLDonHangVM donhangVM = new QLDonHangVM();
 
         public QLDonHangWindow()
         {
@@ -16,91 +14,91 @@ namespace PhanMemBanHang.View
             DataContext = donhangVM;
         }
 
+        // Quay lại Admin
         private void BtnQuayLai_Click(object sender, RoutedEventArgs e)
         {
-            // Nếu muốn quay lại AdminWindow thì mở thêm:
-            // var admin = new AdminWindow();
-            // admin.Show();
-            // rồi Close();
-            this.Close();
+            var admin = new AdminWindow();
+            admin.Show();
+            Close();
         }
 
-        // ========== DATA GRID ĐƠN HÀNG ==========
-
-        private void DgDonHang_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // ItemsSource đang là DanhSachDonHang (DonHangDTO), 
-            // nên SelectedItem là DonHangDTO, không phải HoaDon
-            if (sender is DataGrid grid && grid.SelectedItem is DonHangDTO dto)
-            {
-                donhangVM.DonHangDangChon = dto;
-            }
-        }
-
-        // ========== BỘ LỌC (DATE / COMBO) – GỌI LỌC LẠI ==========
-
-        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            donhangVM.LocDonHang();
-        }
-
-        private void ComboBox_TrangThai_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            donhangVM.LocDonHang();
-        }
-
-        private void ComboBox_PhuongThuc_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            donhangVM.LocDonHang();
-        }
-
-        private void ComboBox_LoaiDon_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            donhangVM.LocDonHang();
-        }
-
-        private void ComboBox_NhanVien_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            donhangVM.LocDonHang();
-        }
-
-        private void ComboBox_SapXep_Changed(object sender, SelectionChangedEventArgs e)
-        {
-            donhangVM.ApDungSapXep();
-        }
-
-        // ========== CÁC NÚT BÊN BỘ LỌC (TÌM KIẾM / LÀM MỚI / EXCEL) ==========
-
+        // Tìm kiếm (optional – vì VM đã tự lọc khi thay đổi filter)
         private void BtnTimKiem_Click(object sender, RoutedEventArgs e)
         {
             donhangVM.LocDonHang();
         }
 
+        // Làm mới bộ lọc + thống kê
         private void BtnLamMoi_Click(object sender, RoutedEventArgs e)
         {
-            donhangVM.LamMoi();
+            donhangVM.TuKhoaTimKiem = string.Empty;
+            donhangVM.TuNgay = null;
+            donhangVM.DenNgay = null;
+            donhangVM.TrangThaiLoc = "Tất cả";
+            donhangVM.TrangThaiThanhToanLoc = "Tất cả";
+            donhangVM.PhuongThucTTLoc = "Tất cả";
+            donhangVM.LoaiDonLoc = "Tất cả";
+            donhangVM.NhanVienLoc = null;
+            donhangVM.SapXepTheo = "Mới nhất";
+
+            donhangVM.LocDonHang();
+            donhangVM.TinhThongKe();
         }
 
+        // Xuất Excel (demo – bạn có thể sửa để ghi ra file thật)
         private void BtnXuatExcel_Click(object sender, RoutedEventArgs e)
         {
-            donhangVM.XuatExcel();
+            MessageBox.Show("Chức năng xuất Excel đang được demo. Bạn có thể cài thêm EPPlus / ClosedXML để export thật.",
+                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        // ========== NÚT Ở KHU CHI TIẾT ĐƠN HÀNG ==========
-
-        private void BtnCapNhatTrangThai_Click(object sender, RoutedEventArgs e)
+        // Xuất hóa đơn VAT (demo)
+        private void BtnXuatHoaDonVAT_Click(object sender, RoutedEventArgs e)
         {
-            donhangVM.CapNhatTrangThai();
+            if (donhangVM.DonHangDangChon == null)
+            {
+                MessageBox.Show("Vui lòng chọn đơn hàng!", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            MessageBox.Show($"Xuất hóa đơn VAT cho đơn #{donhangVM.DonHangDangChon.MaHD}",
+                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        // Hoàn trả (demo)
+        private void BtnHoanTra_Click(object sender, RoutedEventArgs e)
+        {
+            if (donhangVM.DonHangDangChon == null)
+            {
+                MessageBox.Show("Vui lòng chọn đơn hàng!", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            MessageBox.Show($"Hoàn trả đơn #{donhangVM.DonHangDangChon.MaHD} (demo).",
+                "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        // In phiếu
         private void BtnInPhieu_Click(object sender, RoutedEventArgs e)
         {
-            donhangVM.InPhieu();
+            if (donhangVM.DonHangDangChon == null)
+            {
+                MessageBox.Show("Vui lòng chọn đơn hàng!", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            MessageBox.Show(
+                $"In phiếu đơn #{donhangVM.DonHangDangChon.MaHD}",
+                "In phiếu",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
         }
 
-        // ========== DISPOSE VM KHI ĐÓNG WINDOW ==========
-
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
             donhangVM?.Dispose();
             base.OnClosing(e);

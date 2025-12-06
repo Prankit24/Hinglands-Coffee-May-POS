@@ -109,42 +109,27 @@ namespace PhanMemBanHang.ViewModel
         public ObservableCollection<string> DanhSachLocVaiTro { get; set; }
         public ObservableCollection<string> DanhSachLocChucVu { get; set; }
 
-        public int _tongSoNhanVien;
+        public int tongSoNhanVien;
         public int TongSoNhanVien
         {
-            get => _tongSoNhanVien;
-            set { _tongSoNhanVien = value; OnPropertyChanged(); }
+            get => tongSoNhanVien;
+            set { tongSoNhanVien = value; OnPropertyChanged(); }
         }
 
-        public int _soNVDangHoatDong;
+        public int soNVDangHoatDong;
         public int SoNVDangHoatDong
         {
-            get => _soNVDangHoatDong;
-            set { _soNVDangHoatDong = value; OnPropertyChanged(); }
+            get => soNVDangHoatDong;
+            set { soNVDangHoatDong = value; OnPropertyChanged(); }
         }
 
-        public int _soNVNgungHoatDong;
+        public int soNVNgungHoatDong;
         public int SoNVNgungHoatDong
         {
-            get => _soNVNgungHoatDong;
-            set { _soNVNgungHoatDong = value; OnPropertyChanged(); }
+            get => soNVNgungHoatDong;
+            set { soNVNgungHoatDong = value; OnPropertyChanged(); }
         }
 
-        public void LoadDanhSachNhanVien()
-        {
-            try
-            {
-                var list = db.NhanVien.ToList();
-                danhSachNhanVienGoc = new ObservableCollection<NhanVien>(list);
-                DanhSachNhanVien = new ObservableCollection<NhanVien>(list);
-                CapNhatThongKe();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi khi tải danh sách nhân viên: {ex.Message}",
-                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
 
         public void TimKiem()
         {
@@ -172,18 +157,31 @@ namespace PhanMemBanHang.ViewModel
             {
                 ketQua = ketQua.Where(nv => nv.ChucVu == ChucVuLoc);
             }
-
             DanhSachNhanVien = new ObservableCollection<NhanVien>(ketQua);
         }
-
         public void LocTheoVaiTro()
         {
             TimKiem();
         }
-
         public void LocTheoChucVu()
         {
             TimKiem();
+        }
+
+        public void LoadDanhSachNhanVien()
+        {
+            try
+            {
+                var list = db.NhanVien.ToList();
+                danhSachNhanVienGoc = new ObservableCollection<NhanVien>(list);
+                DanhSachNhanVien = new ObservableCollection<NhanVien>(list);
+                CapNhatThongKe();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tải danh sách nhân viên: {ex.Message}",
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void CapNhatThongKe()
@@ -213,7 +211,6 @@ namespace PhanMemBanHang.ViewModel
                     return;
                 }
 
-                // Nếu bạn dùng TextBox binding trực tiếp vào NhanVienDangChon.MatKhau
                 if (string.IsNullOrWhiteSpace(NhanVienDangChon?.MatKhau))
                 {
                     MessageBox.Show("Vui lòng nhập mật khẩu!", "Thông báo",
