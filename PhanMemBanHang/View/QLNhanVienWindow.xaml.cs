@@ -55,6 +55,5 @@ namespace PhanMemBanHang.View
         {
             nvVM.LocTheoVaiTro();
         }
-
     }
 }

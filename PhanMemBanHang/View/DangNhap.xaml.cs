@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Input;         
-using System.Windows.Threading;    
+using System.Windows.Input;          // NHỚ THÊM
+using System.Windows.Threading;     // NHỚ THÊM
 using PhanMemBanHang.ViewModel;
 
 namespace PhanMemBanHang.View
