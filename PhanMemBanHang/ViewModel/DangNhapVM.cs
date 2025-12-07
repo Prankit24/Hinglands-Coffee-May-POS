@@ -128,24 +128,35 @@ namespace PhanMemBanHang.ViewModel
                 TaoCaptcha();
                 return;
             }
+
+            if (!string.Equals(MaXacNhan?.Trim(), CurrentCaptcha?.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                SoLanSai++;
+                MessageBox.Show("Mã xác nhận không đúng!",
+                                "Sai mã xác nhận", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                MaXacNhan = string.Empty;
+                LamMoi();
+                TaoCaptcha();         
+                return;
+            }
+
             try
             {
-                NhanVien nv = db.NhanVien
-                    .FirstOrDefault(t => t.TaiKhoan == TaiKhoan && t.TrangThai == true);
+                string tkNhap = TaiKhoan.Trim();
+                string mkNhap = MatKhau;
+                
+                var nv = db.NhanVien
+                    .Where(t => t.TrangThai == true)
+                    .AsEnumerable() 
+                    .FirstOrDefault(t =>
+                        string.Equals(t.TaiKhoan, tkNhap, StringComparison.Ordinal) &&
+                        string.Equals(t.MatKhau, mkNhap, StringComparison.Ordinal));
 
                 if (nv == null)
                 {
                     SoLanSai++;
-                    MessageBox.Show($"Tài khoản không tồn tại!\nBạn đã nhập sai {SoLanSai}/5 lần.");
-                    LamMoi();
-                    TaoCaptcha();
-                    return;
-                }
-
-                if (nv.MatKhau != MatKhau)
-                {
-                    SoLanSai++;
-                    MessageBox.Show($"Sai mật khẩu!\nBạn đã nhập sai {SoLanSai}/5 lần.");
+                    MessageBox.Show($"Tên đăng nhập hoặc mật khẩu không đúng!\nBạn đã nhập sai {SoLanSai}/5 lần.");
                     LamMoi();
                     TaoCaptcha();
                     return;

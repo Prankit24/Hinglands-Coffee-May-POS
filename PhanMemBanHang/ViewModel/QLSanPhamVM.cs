@@ -82,7 +82,7 @@ namespace PhanMemBanHang.ViewModel
 
             LoadLoaiSP();
             LoadSanPham();
-            LamMoi();   
+            LamMoi();
         }
         private void LoadLoaiSP()
         {
@@ -189,14 +189,14 @@ namespace PhanMemBanHang.ViewModel
 
                 var sp = new SanPham
                 {
-                    TenSP    = SanPhamDangChon.TenSP?.Trim(),
-                    MaLoai   = SanPhamDangChon.MaLoai,
+                    TenSP = SanPhamDangChon.TenSP?.Trim(),
+                    MaLoai = SanPhamDangChon.MaLoai,
                     GiaSizeS = SanPhamDangChon.GiaSizeS,
                     GiaSizeM = SanPhamDangChon.GiaSizeM,
                     GiaSizeL = SanPhamDangChon.GiaSizeL,
                     TrangThai = SanPhamDangChon.TrangThai,
-                    HienThi   = SanPhamDangChon.HienThi,
-                    HinhAnh   = SanPhamDangChon.HinhAnh ?? string.Empty,
+                    HienThi = SanPhamDangChon.HienThi,
+                    HinhAnh = SanPhamDangChon.HinhAnh ?? string.Empty,
                 };
 
                 db.SanPham.Add(sp);
@@ -208,7 +208,7 @@ namespace PhanMemBanHang.ViewModel
                         MessageBoxButton.OK, MessageBoxImage.Information);
 
                     LoadSanPham();
-                    LamMoi(); 
+                    LamMoi();
                 }
                 else
                 {
@@ -249,14 +249,14 @@ namespace PhanMemBanHang.ViewModel
                     return;
                 }
 
-                sp.TenSP    = SanPhamDangChon.TenSP?.Trim();
-                sp.MaLoai   = SanPhamDangChon.MaLoai;
+                sp.TenSP = SanPhamDangChon.TenSP?.Trim();
+                sp.MaLoai = SanPhamDangChon.MaLoai;
                 sp.GiaSizeS = SanPhamDangChon.GiaSizeS;
                 sp.GiaSizeM = SanPhamDangChon.GiaSizeM;
                 sp.GiaSizeL = SanPhamDangChon.GiaSizeL;
                 sp.TrangThai = SanPhamDangChon.TrangThai;
-                sp.HienThi   = SanPhamDangChon.HienThi;
-                sp.HinhAnh   = SanPhamDangChon.HinhAnh ?? string.Empty;
+                sp.HienThi = SanPhamDangChon.HienThi;
+                sp.HinhAnh = SanPhamDangChon.HinhAnh ?? string.Empty;
 
                 var result = db.SaveChanges();
 
@@ -343,11 +343,12 @@ namespace PhanMemBanHang.ViewModel
             SanPhamDangChon = new SanPham
             {
                 TrangThai = true,
-                HienThi = true,
+                HienThi = true
             };
 
             LocSanPham();
         }
+
 
         public void Dispose()
         {

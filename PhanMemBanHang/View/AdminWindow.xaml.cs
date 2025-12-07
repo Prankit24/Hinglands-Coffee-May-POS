@@ -8,6 +8,7 @@ namespace PhanMemBanHang.View
     {
         AdminVM qlVM = new AdminVM();
         private bool checkOut = false;
+
         public AdminWindow()
         {
             InitializeComponent();

@@ -8,7 +8,9 @@
         WindowStartupLocation="CenterScreen"
         Height="800" Width="1600"
         MinHeight="700" MinWidth="1400"
-        Background="#F8F9FA">
+        Background="#F8F9FA"
+        WindowState="Maximized"
+        ResizeMode="CanResize">
 
     <Window.Resources>
         <!-- GroupBox Style -->
@@ -162,10 +164,20 @@
             </Border.Effect>
             <Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Border Background="#D32F2F" CornerRadius="8" Width="40" Height="40" Margin="0,0,12,0">
-                        <TextBlock Text="📋" FontSize="20" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border Width="50"
+        Height="50"
+        CornerRadius="25"
+        Background="#D32F2F"
+        Margin="0,0,16,0"
+        Padding="3">
+
+                        <Ellipse>
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Image/logo.png" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
                     </Border>
+
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="QUẢN LÝ ĐƠN HÀNG ĐÃ BÁN" 
                                    FontSize="16" FontWeight="Bold" Foreground="#212121"/>

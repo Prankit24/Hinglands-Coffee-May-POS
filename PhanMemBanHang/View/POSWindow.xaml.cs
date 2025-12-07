@@ -122,5 +122,7 @@ namespace PhanMemBanHang.View
             vm?.Dispose();
             base.OnClosed(e);
         }
+
+    
     }
 }

@@ -14,7 +14,6 @@ namespace PhanMemBanHang.View
             DataContext = donhangVM;
         }
 
-        // Quay lại Admin
         private void BtnQuayLai_Click(object sender, RoutedEventArgs e)
         {
             var admin = new AdminWindow();
@@ -22,13 +21,11 @@ namespace PhanMemBanHang.View
             Close();
         }
 
-        // Tìm kiếm (optional – vì VM đã tự lọc khi thay đổi filter)
         private void BtnTimKiem_Click(object sender, RoutedEventArgs e)
         {
             donhangVM.LocDonHang();
         }
 
-        // Làm mới bộ lọc + thống kê
         private void BtnLamMoi_Click(object sender, RoutedEventArgs e)
         {
             donhangVM.TuKhoaTimKiem = string.Empty;
@@ -45,14 +42,12 @@ namespace PhanMemBanHang.View
             donhangVM.TinhThongKe();
         }
 
-        // Xuất Excel (demo – bạn có thể sửa để ghi ra file thật)
         private void BtnXuatExcel_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Chức năng xuất Excel đang được demo. Bạn có thể cài thêm EPPlus / ClosedXML để export thật.",
                 "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        // Xuất hóa đơn VAT (demo)
         private void BtnXuatHoaDonVAT_Click(object sender, RoutedEventArgs e)
         {
             if (donhangVM.DonHangDangChon == null)
@@ -66,7 +61,6 @@ namespace PhanMemBanHang.View
                 "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        // Hoàn trả (demo)
         private void BtnHoanTra_Click(object sender, RoutedEventArgs e)
         {
             if (donhangVM.DonHangDangChon == null)
@@ -80,7 +74,6 @@ namespace PhanMemBanHang.View
                 "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        // In phiếu
         private void BtnInPhieu_Click(object sender, RoutedEventArgs e)
         {
             if (donhangVM.DonHangDangChon == null)
@@ -103,5 +96,7 @@ namespace PhanMemBanHang.View
             donhangVM?.Dispose();
             base.OnClosing(e);
         }
+
+      
     }
 }

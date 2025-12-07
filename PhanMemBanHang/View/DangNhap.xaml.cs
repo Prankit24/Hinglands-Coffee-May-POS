@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Input;         
+using System.Windows.Threading;    
 using PhanMemBanHang.ViewModel;
 
 namespace PhanMemBanHang.View
@@ -11,6 +14,16 @@ namespace PhanMemBanHang.View
         {
             InitializeComponent();
             DataContext = dnVM;
+            Loaded += DangNhap_Loaded;
+        }
+
+        private void DangNhap_Loaded(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                txtTenDangNhap.Focus();
+                Keyboard.Focus(txtTenDangNhap);
+            }), DispatcherPriority.Background);
         }
 
         private void btnDangNhap(object sender, RoutedEventArgs e)
@@ -20,8 +33,14 @@ namespace PhanMemBanHang.View
 
         private void LamMoiCaptCha(object sender, RoutedEventArgs e)
         {
-            dnVM.LamMoi();     
-            dnVM.TaoCaptcha();  
+            dnVM.LamMoi();
+            dnVM.TaoCaptcha();
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                txtMaXacNhan.Focus();
+                Keyboard.Focus(txtMaXacNhan);
+            }), DispatcherPriority.Background);
         }
 
         private void Thoat(object sender, RoutedEventArgs e)

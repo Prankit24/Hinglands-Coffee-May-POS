@@ -10,7 +10,6 @@ namespace PhanMemBanHang.ViewModel
     {
         private readonly HighlandsCoffeeDBEntities db = new HighlandsCoffeeDBEntities();
 
-
         private ObservableCollection<DonHangDTO> danhSachDonHang;
         public ObservableCollection<DonHangDTO> DanhSachDonHang
         {
@@ -32,8 +31,6 @@ namespace PhanMemBanHang.ViewModel
         public ObservableCollection<string> DanhSachPhuongThucTT { get; set; }
         public ObservableCollection<string> DanhSachLoaiDon { get; set; }
         public ObservableCollection<string> DanhSachSapXep { get; set; }
-
-   
 
         private DonHangDTO donHangDangChon;
         public DonHangDTO DonHangDangChon
@@ -63,8 +60,6 @@ namespace PhanMemBanHang.ViewModel
             get => coTheHoanTra;
             set => SetProperty(ref coTheHoanTra, value);
         }
-
-       
 
         private string tuKhoaTimKiem;
         public string TuKhoaTimKiem
@@ -183,8 +178,6 @@ namespace PhanMemBanHang.ViewModel
             }
         }
 
-      
-
         private decimal doanhThuHomNay;
         public decimal DoanhThuHomNay
         {
@@ -248,10 +241,8 @@ namespace PhanMemBanHang.ViewModel
             set => SetProperty(ref tongThucThuHienThi, value);
         }
 
-
         public QLDonHangVM()
         {
-  
             DanhSachTrangThai = new ObservableCollection<string>
             {
                 "Tất cả", "Hoàn Thành", "Đã Huỷ", "Đang xử lý"
@@ -277,11 +268,11 @@ namespace PhanMemBanHang.ViewModel
                 "Mới nhất", "Cũ nhất", "Tổng tiền cao", "Tổng tiền thấp"
             };
 
+            DenNgay = DateTime.Today;
             LoadNhanVien();
             LoadDonHang();
             TinhThongKe();
         }
-        
 
         private void LoadNhanVien()
         {
@@ -301,7 +292,9 @@ namespace PhanMemBanHang.ViewModel
                 {
                     MaHD = hd.MaHD,
                     NgayLap = hd.NgayLap,
-                    TenKhachHang = kh != null ? kh.TenKH : "Khách lẻ",
+                    TenKhachHang = kh != null
+                        ? (kh.MaKH == 1 ? "Khách lẻ #" + hd.MaHD : kh.TenKH)
+                        : "Khách lẻ #" + hd.MaHD,
                     SDTKhachHang = kh != null ? kh.SDT : "",
                     NhanVien = nv.HoTen,
                     TongTien = hd.TongTien,
@@ -312,7 +305,6 @@ namespace PhanMemBanHang.ViewModel
                     TongSoLuong = db.ChiTietHoaDon
                                     .Where(ct => ct.MaHD == hd.MaHD)
                                     .Sum(ct => (int?)ct.SoLuong) ?? 0,
-         
                     GhiChu = string.Empty,
                     DiaChiGiaoHang = string.Empty,
                     NguoiTao = nv.HoTen,
@@ -337,7 +329,9 @@ namespace PhanMemBanHang.ViewModel
                 {
                     MaHD = hd.MaHD,
                     NgayLap = hd.NgayLap,
-                    TenKhachHang = kh != null ? kh.TenKH : "Khách lẻ",
+                    TenKhachHang = kh != null
+                        ? (kh.MaKH == 1 ? "Khách lẻ #" + hd.MaHD : kh.TenKH)
+                        : "Khách lẻ #" + hd.MaHD,
                     SDTKhachHang = kh != null ? kh.SDT : "",
                     NhanVien = nv.HoTen,
                     TongTien = hd.TongTien,
@@ -354,6 +348,7 @@ namespace PhanMemBanHang.ViewModel
                     NgayCapNhatCuoi = hd.NgayLap
                 };
 
+
             if (!string.IsNullOrWhiteSpace(TuKhoaTimKiem))
             {
                 string key = TuKhoaTimKiem.ToLower();
@@ -363,20 +358,25 @@ namespace PhanMemBanHang.ViewModel
                     x.SDTKhachHang.Contains(key));
             }
 
+
             if (TuNgay.HasValue)
-                query = query.Where(x => x.NgayLap >= TuNgay.Value);
+            {
+                var tu = TuNgay.Value.Date;
+                query = query.Where(x => x.NgayLap >= tu);
+            }
 
             if (DenNgay.HasValue)
-                query = query.Where(x => x.NgayLap <= DenNgay.Value.AddDays(1));
-            
+            {
+                var denNgayToiDa = DenNgay.Value.Date.AddDays(1);
+                query = query.Where(x => x.NgayLap < denNgayToiDa);
+            }
+
             if (TrangThaiLoc != "Tất cả")
                 query = query.Where(x => x.TrangThai == TrangThaiLoc);
 
-        
             if (PhuongThucTTLoc != "Tất cả")
                 query = query.Where(x => x.PhuongThucTT == PhuongThucTTLoc);
-        
-            
+
             if (LoaiDonLoc != "Tất cả")
                 query = query.Where(x => x.LoaiDon == LoaiDonLoc);
 
@@ -389,7 +389,6 @@ namespace PhanMemBanHang.ViewModel
 
             var list = query.ToList();
 
-   
             switch (SapXepTheo)
             {
                 case "Cũ nhất":
@@ -401,14 +400,14 @@ namespace PhanMemBanHang.ViewModel
                 case "Tổng tiền thấp":
                     list = list.OrderBy(x => x.ThanhTien).ToList();
                     break;
-                default: 
+                default: // Mới nhất
                     list = list.OrderByDescending(x => x.NgayLap).ToList();
                     break;
             }
 
             DanhSachDonHang = new ObservableCollection<DonHangDTO>(list);
 
-            TongGiamGiaHienThi = 0; 
+            TongGiamGiaHienThi = 0;
             TongThucThuHienThi = list.Sum(x => x.ThanhTien);
         }
 
@@ -462,7 +461,6 @@ namespace PhanMemBanHang.ViewModel
             db?.Dispose();
         }
     }
-
 
     public class DonHangDTO
     {

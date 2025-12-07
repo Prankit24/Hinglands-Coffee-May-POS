@@ -12,6 +12,8 @@
         MinWidth="1150"
         WindowStartupLocation="CenterScreen"
         Background="#F8F9FA"
+        WindowState="Maximized"
+        ResizeMode="CanResize"
         Closing="Window_Closing">
 
     <Window.Resources>
@@ -95,9 +97,21 @@
             </Border.Effect>
             <Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Border Background="#D32F2F" CornerRadius="12" Width="52" Height="52" Margin="0,0,16,0">
-                        <TextBlock Text="☕" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    <Border Width="50"
+        Height="50"
+        CornerRadius="25"
+        Background="#D32F2F"
+        Margin="0,0,16,0"
+        Padding="3">
+
+                        <Ellipse>
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Image/logo.png" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
                     </Border>
+
+
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="HIGHLANDS COFFEE" 
                                    FontSize="20" FontWeight="Bold" Foreground="#212121"/>

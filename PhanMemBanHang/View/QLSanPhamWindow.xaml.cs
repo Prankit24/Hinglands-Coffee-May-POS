@@ -46,5 +46,7 @@ namespace PhanMemBanHang.View
             spVM?.Dispose();
             base.OnClosing(e);
         }
+
+       
     }
 }
