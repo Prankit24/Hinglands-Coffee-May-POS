@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhanMemBanHang.View"
         mc:Ignorable="d"
+        Icon="/Image/MayPOS.ico"
         Title="Highlands Coffee - Quản Lý" 
         Height="720" 
         Width="1200"
@@ -12,10 +13,11 @@
         MinWidth="1150"
         WindowStartupLocation="CenterScreen"
         Background="#F8F9FA"
+        WindowState="Maximized"
+        ResizeMode="CanResize"
         Closing="Window_Closing">
 
     <Window.Resources>
-        <!-- GroupBox Style -->
         <Style TargetType="GroupBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
@@ -54,7 +56,6 @@
             </Setter>
         </Style>
 
-        <!-- Menu Button Style -->
         <Style x:Key="MenuButton" TargetType="Button">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="#212121"/>
@@ -91,29 +92,42 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- HEADER -->
         <Border Grid.Row="0" Background="White" Padding="28,18">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="12" ShadowDepth="1" Opacity="0.08"/>
             </Border.Effect>
             <Grid>
                 <StackPanel Orientation="Horizontal">
-                    <Border Background="#D32F2F" CornerRadius="12" Width="52" Height="52" Margin="0,0,16,0">
-                        <TextBlock Text="☕" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                    <Border Width="50"
+        Height="50"
+        CornerRadius="25"
+        Background="#D32F2F"
+        Margin="0,0,16,0"
+        Padding="3">
+
+                        <Ellipse>
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Image/logo.png" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
                     </Border>
+
+
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="HIGHLANDS COFFEE" 
                                    FontSize="20" FontWeight="Bold" Foreground="#212121"/>
-                        <TextBlock Text="Hệ thống quản lý toàn diện" 
+                        <TextBlock Text="Hệ thống quản lý" 
                                    FontSize="12" Foreground="#757575" Margin="0,2,0,0"/>
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Border Background="#E8F5E9" CornerRadius="10" Padding="16,10" Margin="0,0,12,0">
+                    <Border Background="#E8F5E9" CornerRadius="10" Padding="16,10" Margin="0,0,12,-0.4" Width="202">
                         <TextBlock FontSize="13" FontWeight="SemiBold" Foreground="#2E7D32">
-                            <Run Text="👤"/>
-                            <Run Text="{Binding TaiKhoan}"/>
+                        <Run Text="👤 "/>
+                        <Run Text="{Binding HoTen}"/>
+                        <LineBreak/>
+                        <Run Text="{Binding ChucVu}" FontSize="12" Foreground="#4CAF50"/>
                         </TextBlock>
                     </Border>
                     <Button Content="🚪 Đăng xuất" 
@@ -149,15 +163,13 @@
             </Grid>
         </Border>
 
-        <!-- CONTENT: CHIA 2 HÀNG -->
         <Grid Grid.Row="1" Margin="12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- HÀNG 1: THỐNG KÊ -->
-            <GroupBox Grid.Row="0" Header="📊 Thống kê nhanh">
+            <GroupBox Grid.Row="0" Header="Thống kê nhanh">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -166,7 +178,6 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Doanh thu -->
                     <Border Grid.Column="0" Background="#FFEBEE" CornerRadius="12" 
                             Padding="16" Margin="0,0,8,0">
                         <Grid>
@@ -187,7 +198,6 @@
                         </Grid>
                     </Border>
 
-                    <!-- Đơn hàng -->
                     <Border Grid.Column="1" Background="#E8F5E9" CornerRadius="12" 
                             Padding="16" Margin="4,0">
                         <Grid>
@@ -208,7 +218,6 @@
                         </Grid>
                     </Border>
 
-                    <!-- Sản phẩm -->
                     <Border Grid.Column="2" Background="#FFF3E0" CornerRadius="12" 
                             Padding="16" Margin="4,0">
                         <Grid>
@@ -229,7 +238,6 @@
                         </Grid>
                     </Border>
 
-                    <!-- Nhân viên -->
                     <Border Grid.Column="3" Background="#E3F2FD" CornerRadius="12" 
                             Padding="16" Margin="8,0,0,0">
                         <Grid>
@@ -252,8 +260,7 @@
                 </Grid>
             </GroupBox>
 
-            <!-- HÀNG 2: MENU CHỨC NĂNG -->
-            <GroupBox Grid.Row="1" Header="⚙️ Chức năng quản lý">
+            <GroupBox Grid.Row="1" Header="Chức năng quản lý">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -266,14 +273,13 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Row 1 -->
                     <Button Grid.Row="0" Grid.Column="0" 
                             x:Name="btnBanHang"
                             Style="{StaticResource MenuButton}"
                             Click="BanHang">
                         <StackPanel>
-                            <TextBlock Text="🛍️" FontSize="36" Margin="0,0,0,8"/>
-                            <TextBlock Text="BÁN HÀNG" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="🛍️" FontSize="36" Margin="0,0,0,8" TextAlignment="Center" />
+                            <TextBlock Text="BÁN HÀNG" FontSize="14" FontWeight="Bold" TextAlignment="Center" />
                             <TextBlock Text="Quản lý bán hàng" 
                                        FontSize="11" Foreground="#757575" 
                                        Margin="0,4,0,0" TextAlignment="Center"/>
@@ -284,9 +290,9 @@
                             x:Name="btnSanPham"
                             Style="{StaticResource MenuButton}"
                             Click="QuanLySanPham">
-                        <StackPanel>
-                            <TextBlock Text="📦" FontSize="36" Margin="0,0,0,8"/>
-                            <TextBlock Text="SẢN PHẨM" FontSize="14" FontWeight="Bold"/>
+                        <StackPanel >
+                            <TextBlock Text="🥤" FontSize="36" Margin="0,0,0,8" TextAlignment="Center"  />
+                            <TextBlock Text="SẢN PHẨM" FontSize="14" FontWeight="Bold" TextAlignment="Center" />
                             <TextBlock Text="Quản lý kho sản phẩm" 
                                        FontSize="11" Foreground="#757575" 
                                        Margin="0,4,0,0" TextAlignment="Center"/>
@@ -298,8 +304,8 @@
                             Style="{StaticResource MenuButton}"
                             Click="QuanLyNhanVien">
                         <StackPanel>
-                            <TextBlock Text="👥" FontSize="36" Margin="0,0,0,8"/>
-                            <TextBlock Text="NHÂN VIÊN" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="👥" FontSize="36" Margin="0,0,0,8" TextAlignment="Center" />
+                            <TextBlock Text="NHÂN VIÊN" FontSize="14" FontWeight="Bold" TextAlignment="Center" />
                             <TextBlock Text="Quản lý nhân sự" 
                                        FontSize="11" Foreground="#757575" 
                                        Margin="0,4,0,0" TextAlignment="Center"/>
@@ -311,22 +317,21 @@
                             Style="{StaticResource MenuButton}"
                             Click="QuanLyBaoCao">
                         <StackPanel>
-                            <TextBlock Text="📊" FontSize="36" Margin="0,0,0,8"/>
-                            <TextBlock Text="BÁO CÁO" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="📊" FontSize="36" Margin="0,0,0,8" TextAlignment="Center" />
+                            <TextBlock Text="BÁO CÁO" FontSize="14" FontWeight="Bold" TextAlignment="Center" />
                             <TextBlock Text="Thống kê" 
                                        FontSize="11" Foreground="#757575" 
                                        Margin="0,4,0,0" TextAlignment="Center"/>
                         </StackPanel>
                     </Button>
 
-                    <!-- Row 2 -->
                     <Button Grid.Row="1" Grid.Column="0" 
                             x:Name="btnDonHang"
                             Style="{StaticResource MenuButton}"
                             Click="QuanLyDonHang">
                         <StackPanel>
-                            <TextBlock Text="💳" FontSize="36" Margin="0,0,0,8"/>
-                            <TextBlock Text="ĐƠN HÀNG" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="📦" FontSize="36" Margin="0,0,0,8" TextAlignment="Center" />
+                            <TextBlock Text="ĐƠN HÀNG" FontSize="14" FontWeight="Bold" TextAlignment="Center" />
                             <TextBlock Text="Lịch sử đơn hàng" 
                                        FontSize="11" Foreground="#757575" 
                                        Margin="0,4,0,0" TextAlignment="Center"/>
@@ -336,8 +341,8 @@
                     <Button Grid.Row="1" Grid.Column="1" Click="QuanLyKhoHang"
                             Style="{StaticResource MenuButton}">
                         <StackPanel>
-                            <TextBlock Text="🏪" FontSize="36" Margin="0,0,0,8"/>
-                            <TextBlock Text="KHO HÀNG" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="🏪" FontSize="36" Margin="0,0,0,8" TextAlignment="Center" />
+                            <TextBlock Text="KHO HÀNG" FontSize="14" FontWeight="Bold" TextAlignment="Center" />
                             <TextBlock Text="Quản lý tồn kho" 
                                        FontSize="11" Foreground="#757575" 
                                        Margin="0,4,0,0" TextAlignment="Center"/>
@@ -347,8 +352,8 @@
                     <Button Grid.Row="1" Grid.Column="2" Click="QuanLyKhachHang"
                             Style="{StaticResource MenuButton}">
                         <StackPanel>
-                            <TextBlock Text="👤" FontSize="36" Margin="0,0,0,8"/>
-                            <TextBlock Text="KHÁCH HÀNG" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="👤" FontSize="36" Margin="0,0,0,8" TextAlignment="Center" />
+                            <TextBlock Text="KHÁCH HÀNG" FontSize="14" FontWeight="Bold" TextAlignment="Center" />
                             <TextBlock Text="Quản lý khách hàng" 
                                        FontSize="11" Foreground="#757575" 
                                        Margin="0,4,0,0" TextAlignment="Center"/>
@@ -358,8 +363,8 @@
                     <Button Grid.Row="1" Grid.Column="3" Click="CaiDat"
                             Style="{StaticResource MenuButton}">
                         <StackPanel>
-                            <TextBlock Text="⚙️" FontSize="36" Margin="0,0,0,8"/>
-                            <TextBlock Text="CÀI ĐẶT" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text="⚙️" FontSize="36" Margin="0,0,0,8" TextAlignment="Center" />
+                            <TextBlock Text="CÀI ĐẶT" FontSize="14" FontWeight="Bold" TextAlignment="Center" />
                             <TextBlock Text="Cấu hình hệ thống" 
                                        FontSize="11" Foreground="#757575" 
                                        Margin="0,4,0,0" TextAlignment="Center"/>

@@ -28,15 +28,12 @@ namespace PhanMemBanHang.ViewModel
                 var baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 var relative = _sp.HinhAnh.Trim().Replace('/', '\\');
                 var full = Path.Combine(baseDir, relative);
-
-                // bạn debug thử để chắc chắn
                 // System.Diagnostics.Debug.WriteLine($"IMG: {full} - {File.Exists(full)}");
 
                 return full;
             }
         }
 
-        // ---- SIZE ĐANG CHỌN TRÊN POS: S / M / L ----
         private string _sizeHienTai = "M";
         public string SizeHienTai
         {

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:PhanMemBanHang.ViewModel"
         mc:Ignorable="d"
+        Icon="/Image/MayPOS.ico"
         Title="Highlands Coffee - Đăng nhập"
         Height="600" Width="1000"
         WindowStartupLocation="CenterScreen"
@@ -13,7 +14,6 @@
         AllowsTransparency="True"
         Background="Transparent">
     <Window.Resources>
-        <!-- TextBox hiện đại với animation -->
         <Style x:Key="ModernTextBox" TargetType="TextBox">
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -47,7 +47,6 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Button hiện đại với gradient và animation -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Background">
                 <Setter.Value>
@@ -99,7 +98,6 @@
             </Setter>
         </Style>
 
-        <!-- Close Button -->
         <Style x:Key="CloseButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#888"/>
@@ -126,7 +124,6 @@
             </Style.Triggers>
         </Style>
 
-        <!-- Refresh Button Style -->
         <Style x:Key="RefreshButton" TargetType="Button">
             <Setter Property="Background" Value="#F8F9FA"/>
             <Setter Property="BorderBrush" Value="#E0E0E0"/>
@@ -165,7 +162,6 @@
                 <ColumnDefinition Width="1.5*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Panel trái với gradient -->
             <Border Grid.Column="0" CornerRadius="25,0,0,25">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -176,7 +172,6 @@
 
                 <Grid>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <!-- Logo với border -->
                         <Border Background="White" 
                                 CornerRadius="80" 
                                 Width="160" 
@@ -228,24 +223,21 @@
                 </Grid>
             </Border>
 
-            <!-- Panel phải -->
             <Grid Grid.Column="1" Margin="60,20,60,20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Close Button -->
                 <Button x:Name="btn_Close"
                         Style="{StaticResource CloseButton}"
                         Content="✕"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
                         Margin="0,-10,-10,0"
-                        Click="Btn_Close"/>
+                        Click="Thoat"/>
 
                 <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                    <!-- Header -->
                     <TextBlock Text="Đăng nhập"
                                FontSize="32"
                                FontWeight="Bold"
@@ -259,7 +251,6 @@
                                Foreground="#7F8C8D"
                                Margin="0,0,0,40"/>
 
-                    <!-- Tên đăng nhập -->
                     <TextBlock Text="TÊN ĐĂNG NHẬP"
                                FontSize="12"
                                FontWeight="SemiBold"
@@ -272,7 +263,6 @@
                              Style="{StaticResource ModernTextBox}"
                              Margin="0,0,0,25"/>
 
-                    <!-- Mật khẩu -->
                     <TextBlock Text="MẬT KHẨU"
                                FontSize="12"
                                FontWeight="SemiBold"
@@ -280,14 +270,12 @@
                                Foreground="#5D6D7E"
                                Margin="0,0,0,10"/>
 
-                    <!-- Nếu muốn dùng PasswordBox thì thay TextBox này -->
                     <TextBox x:Name="txtMatKhau"
                          Text="{Binding MatKhau, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource ModernTextBox}"
                          Margin="0,0,0,25"/>
 
 
-                    <!-- CAPTCHA -->
                     <TextBlock Text="MÃ XÁC NHẬN"
                                FontSize="12"
                                FontWeight="SemiBold"
@@ -302,7 +290,6 @@
                             <ColumnDefinition Width="55"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- CAPTCHA Display -->
                         <Border Grid.Column="0"
                                 BorderBrush="#E0E0E0"
                                 BorderThickness="2"
@@ -317,7 +304,6 @@
                                        Foreground="#2C3E50"/>
                         </Border>
 
-                        <!-- CAPTCHA Input -->
                         <TextBox x:Name="txtMaXacNhan"
                                  Text="{Binding MaXacNhan, UpdateSourceTrigger=PropertyChanged}"
                                  Grid.Column="1"
@@ -328,14 +314,13 @@
                                  FontWeight="SemiBold"
                                  FontFamily="Courier New"/>
 
-                        <!-- Refresh Button (KHÔNG dùng Command nữa) -->
                         <Button Grid.Column="2"
                                 x:Name="btnRefreshCaptcha"
                                 Width="55"
                                 Height="50"
                                 Style="{StaticResource RefreshButton}"
                                 ToolTip="Tạo mã mới"
-                                Click="Btn_RefreshCaptcha_Click">
+                                Click="LamMoiCaptCha">
                             <Viewbox Width="26" Height="26">
                                 <Canvas Width="24" Height="24">
                                     <Path Data="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
@@ -345,16 +330,14 @@
                         </Button>
                     </Grid>
 
-                    <!-- Login Button -->
                     <Button Content="ĐĂNG NHẬP"
                             Style="{StaticResource ModernButton}"
                             Height="55"
                             FontSize="15"
                             Margin="0,0,0,25"
                             IsDefault="True"
-                            Click="Btn_DangNhap_Click"/>
+                            Click="btnDangNhap"/>
 
-                    <!-- Forgot Password -->
                     <Label MouseDoubleClick="QuenMatKhau">
                         <Hyperlink TextDecorations="None"
                                    Foreground="#B22222"

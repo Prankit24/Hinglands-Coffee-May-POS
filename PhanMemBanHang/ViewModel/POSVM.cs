@@ -18,9 +18,15 @@ namespace PhanMemBanHang.ViewModel
         private string gioHienTai;
         private decimal tamTinh;
         private decimal giamGia;
-        private decimal  tongThanhToan;
+        private decimal tongThanhToan;
         private int maNV;
         private string chucVu;
+        private int? maLoaiDangLoc;
+        private List<SanPham> danhSachSanPham;
+
+        private KhachHang khachHangDangChon;
+        private string soDienThoaiKhach;
+        private string thongTinKhachHang = "Khách vãng lai";
 
         public int MaNV
         {
@@ -40,8 +46,6 @@ namespace PhanMemBanHang.ViewModel
             set { chucVu = value; OnPropertyChanged(nameof(ChucVu)); }
         }
 
-
-        private List<SanPham> danhSachSanPham;
         public List<SanPham> DanhSachSanPham
         {
             get => danhSachSanPham;
@@ -51,9 +55,39 @@ namespace PhanMemBanHang.ViewModel
                 OnPropertyChanged(nameof(DanhSachSanPham));
             }
         }
-        private int? maLoaiDangLoc;
 
-     
+        public KhachHang KhachHangDangChon
+        {
+            get => khachHangDangChon;
+            private set
+            {
+                khachHangDangChon = value;
+                OnPropertyChanged(nameof(KhachHangDangChon));
+                OnPropertyChanged(nameof(DiemKhachHang));
+            }
+        }
+
+        public string SoDienThoaiKhach
+        {
+            get => soDienThoaiKhach;
+            set
+            {
+                soDienThoaiKhach = value;
+                OnPropertyChanged(nameof(SoDienThoaiKhach));
+            }
+        }
+
+        public string ThongTinKhachHang
+        {
+            get => thongTinKhachHang;
+            private set
+            {
+                thongTinKhachHang = value;
+                OnPropertyChanged(nameof(ThongTinKhachHang));
+            }
+        }
+
+        public int DiemKhachHang => KhachHangDangChon?.DiemTichLuy ?? 0;
 
         public POSVM(int maNv, string hoTen, string chucVu)
         {
@@ -69,7 +103,6 @@ namespace PhanMemBanHang.ViewModel
             DanhSachSanPham = TimKiemSP();
         }
 
-
         public ObservableCollection<GioHangItem> GioHang
         {
             get => gioHang;
@@ -81,35 +114,39 @@ namespace PhanMemBanHang.ViewModel
             }
         }
 
-        public String caLam { get; set; }
-        public String XacDinhCaLam()
+        public string caLam { get; set; }
+
+        public string XacDinhCaLam()
         {
             TimeSpan gio = DateTime.Now.TimeOfDay;
 
-            if( gio >= new TimeSpan(6, 0, 0) && gio <= new TimeSpan(11, 30, 00))
+            if (gio >= new TimeSpan(6, 0, 0) && gio <= new TimeSpan(11, 30, 0))
                 return "Ca sáng 6:00 - 11:30";
             if (gio >= new TimeSpan(11, 30, 0) && gio <= new TimeSpan(17, 0, 0))
                 return "Ca chiều 11:30 - 17:00";
             if (gio >= new TimeSpan(17, 0, 0) && gio <= new TimeSpan(23, 0, 0))
                 return "Ca tối 17:00 - 23:00";
-            return "Bạn đi làm giờ này làm gì ?";
+            return "Ngoài giờ làm việc";
         }
+
         public void HienThiNgayGio()
         {
             NgayBan = DateTime.Now;
             caLam = XacDinhCaLam();
             OnPropertyChanged(nameof(caLam));
 
-            var timer = new System.Windows.Threading.DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            var timer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
             timer.Tick += (s, e) => GioHienTai = DateTime.Now.ToString("HH:mm:ss dd/MM/yyyy");
             timer.Start();
         }
+
         public void HienThiMaDon()
         {
             var lastHD = db.HoaDon.OrderByDescending(x => x.MaHD).FirstOrDefault();
             int nextSoHD = lastHD != null ? lastHD.MaHD + 1 : 1;
-
             ThongTinDonHang = $"Đơn hàng #{nextSoHD}";
         }
 
@@ -177,40 +214,38 @@ namespace PhanMemBanHang.ViewModel
 
         public decimal TongThanhToan
         {
-            get =>  tongThanhToan;
+            get => tongThanhToan;
             set
             {
-                 tongThanhToan = value;
+                tongThanhToan = value;
                 OnPropertyChanged(nameof(TongThanhToan));
             }
         }
 
+        // Không phụ thuộc dữ liệu hóa đơn cũ nữa. Database mới vẫn có lựa chọn thanh toán.
         public List<string> DSPhuongThucTT()
         {
-            var list = db.HoaDon.Select(x => x.PhuongThucTT).Distinct().ToList();
-            return list;
+            return new List<string> { "Tiền mặt", "Chuyển khoản", "Thẻ" };
         }
 
         public List<string> DSLoaiDon()
         {
-            var list = db.HoaDon.Select(x => x.LoaiDon).Distinct().ToList();
-            return list;
+            return new List<string> { "Tại quán", "Mang về" };
         }
+
         public List<SanPham> TimKiemSP()
         {
-            return db.SanPham.ToList();
+            return db.SanPham.Where(x => x.HienThi).ToList();
         }
 
         public List<SanPham> TimKiemSP(string tuKhoa, int? maLoai)
         {
             tuKhoa = tuKhoa?.ToLower() ?? "";
 
-            var query = db.SanPham.Where(x => x.TenSP.ToLower().Contains(tuKhoa));
+            var query = db.SanPham.Where(x => x.HienThi && x.TenSP.ToLower().Contains(tuKhoa));
 
             if (maLoai != null)
-            {
                 query = query.Where(x => x.MaLoai == maLoai);
-            }
 
             return query.ToList();
         }
@@ -226,10 +261,95 @@ namespace PhanMemBanHang.ViewModel
             LocSanPham();
         }
 
+        public bool TimKhachHangTheoSDT(string soDienThoai)
+        {
+            var sdt = (soDienThoai ?? string.Empty).Trim();
+            SoDienThoaiKhach = sdt;
+
+            if (string.IsNullOrWhiteSpace(sdt))
+            {
+                BoChonKhachHang();
+                return false;
+            }
+
+            var kh = db.KhachHang.FirstOrDefault(x => x.SDT == sdt);
+            if (kh == null)
+            {
+                KhachHangDangChon = null;
+                ThongTinKhachHang = "Chưa có khách hàng - có thể thêm nhanh";
+                return false;
+            }
+
+            KhachHangDangChon = kh;
+            ThongTinKhachHang = $"{kh.TenKH} • {kh.DiemTichLuy} điểm";
+            return true;
+        }
+
+        public bool ThemKhachHangNhanh(string tenKhach, string soDienThoai, out string message)
+        {
+            var ten = (tenKhach ?? string.Empty).Trim();
+            var sdt = (soDienThoai ?? string.Empty).Trim();
+
+            if (string.IsNullOrWhiteSpace(ten))
+            {
+                message = "Vui lòng nhập tên khách hàng.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(sdt) || sdt.Length < 9)
+            {
+                message = "Số điện thoại không hợp lệ.";
+                return false;
+            }
+
+            var khCu = db.KhachHang.FirstOrDefault(x => x.SDT == sdt);
+            if (khCu != null)
+            {
+                KhachHangDangChon = khCu;
+                SoDienThoaiKhach = khCu.SDT;
+                ThongTinKhachHang = $"{khCu.TenKH} • {khCu.DiemTichLuy} điểm";
+                message = "Số điện thoại đã tồn tại. Đã chọn khách hàng này.";
+                return true;
+            }
+
+            try
+            {
+                var kh = new KhachHang
+                {
+                    TenKH = ten,
+                    SDT = sdt,
+                    Email = string.Empty,
+                    DiaChi = string.Empty,
+                    DiemTichLuy = 0
+                };
+
+                db.KhachHang.Add(kh);
+                db.SaveChanges();
+
+                KhachHangDangChon = kh;
+                SoDienThoaiKhach = kh.SDT;
+                ThongTinKhachHang = $"{kh.TenKH} • 0 điểm";
+                message = "Thêm khách hàng thành công.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                message = "Không thể thêm khách hàng: " + ex.Message;
+                return false;
+            }
+        }
+
+        public void BoChonKhachHang()
+        {
+            KhachHangDangChon = null;
+            SoDienThoaiKhach = string.Empty;
+            ThongTinKhachHang = "Khách vãng lai";
+        }
+
         public void ThemVaoGioHang(SanPham sp, string size)
         {
             if (sp == null) return;
-            decimal donGia = 0; 
+            decimal donGia = 0;
 
             switch (size)
             {
@@ -247,13 +367,10 @@ namespace PhanMemBanHang.ViewModel
             var item = GioHang.FirstOrDefault(x => x.MaSP == sp.MaSP && x.Size == size);
 
             if (item != null)
-            {
                 item.SoLuong++;
-            }
             else
-            {
-                GioHang.Add(new GioHangItem{MaSP = sp.MaSP, TenSP = sp.TenSP,Size = size,SoLuong = 1, DonGia = donGia });
-            }
+                GioHang.Add(new GioHangItem { MaSP = sp.MaSP, TenSP = sp.TenSP, Size = size, SoLuong = 1, DonGia = donGia });
+
             TinhTongTien();
         }
 
@@ -268,18 +385,14 @@ namespace PhanMemBanHang.ViewModel
 
         public void GiamSoLuong(GioHangItem item)
         {
-            if (item != null)
-            {
-                if (item.SoLuong > 1)
-                {
-                    item.SoLuong--;
-                }
-                else
-                {
-                    GioHang.Remove(item);
-                }
-                TinhTongTien();
-            }
+            if (item == null) return;
+
+            if (item.SoLuong > 1)
+                item.SoLuong--;
+            else
+                GioHang.Remove(item);
+
+            TinhTongTien();
         }
 
         public void XoaKhoiGioHang(GioHangItem item)
@@ -293,39 +406,81 @@ namespace PhanMemBanHang.ViewModel
 
         private void TinhTongTien()
         {
-            TamTinh = GioHang.Sum(m => m.ThanhTien);
-            tongThanhToan = TamTinh - GiamGia;
+            TamTinh = GioHang?.Sum(m => m.ThanhTien) ?? 0;
+            TongThanhToan = Math.Max(0, TamTinh - GiamGia);
         }
 
-        public void ThanhToan(string phuongThucTT, string loaiDon)
+        private int LayMaKhachHangChoDon()
+        {
+            if (KhachHangDangChon != null)
+                return KhachHangDangChon.MaKH;
+
+            // Ưu tiên khách mã 1 nếu dữ liệu demo đã có.
+            var khachVangLai = db.KhachHang.FirstOrDefault(x => x.MaKH == 1)
+                              ?? db.KhachHang.FirstOrDefault(x => x.SDT == "0000000000");
+
+            if (khachVangLai != null)
+                return khachVangLai.MaKH;
+
+            khachVangLai = new KhachHang
+            {
+                TenKH = "Khách vãng lai",
+                SDT = "0000000000",
+                Email = string.Empty,
+                DiaChi = string.Empty,
+                DiemTichLuy = 0
+            };
+            db.KhachHang.Add(khachVangLai);
+            db.SaveChanges();
+            return khachVangLai.MaKH;
+        }
+
+        private int LayMaPagerMacDinh()
+        {
+            var pager = db.Pager.FirstOrDefault();
+            if (pager == null)
+                throw new InvalidOperationException("Chưa có Pager trong cơ sở dữ liệu. Hãy chạy script dữ liệu demo trước.");
+            return pager.MaPager;
+        }
+
+        public HoaDon ThanhToan(string phuongThucTT, string loaiDon)
         {
             if (!GioHang.Any())
             {
                 MessageBox.Show("Chưa có sản phẩm trong giỏ hàng!", "Thông báo",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(phuongThucTT) || string.IsNullOrWhiteSpace(loaiDon))
+            {
+                MessageBox.Show("Vui lòng chọn phương thức thanh toán và loại đơn.", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return null;
             }
 
             var result = MessageBox.Show(
-                $"Tổng thanh toán: {TongThanhToan:N0} ₫\n\nXác nhận thanh toán?",
+                $"Tổng thanh toán: {TongThanhToan:N0} ₫\n" +
+                $"Khách hàng: {(KhachHangDangChon?.TenKH ?? "Khách vãng lai")}\n\n" +
+                "Xác nhận thanh toán?",
                 "Thanh toán",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
-            if (result != MessageBoxResult.Yes) return;
+            if (result != MessageBoxResult.Yes) return null;
 
             try
             {
-                int maPagerMacDinh = 1;
-                int maKhachVangLai = 1;
+                int maPagerMacDinh = LayMaPagerMacDinh();
+                int maKhach = LayMaKhachHangChoDon();
 
                 var hoaDon = new HoaDon
                 {
                     NgayLap = DateTime.Now,
                     ThoiGianGoi = DateTime.Now,
-                    MaNV = this.MaNV,
+                    MaNV = MaNV,
                     MaPager = maPagerMacDinh,
-                    MaKH = maKhachVangLai,
+                    MaKH = maKhach,
                     TongTien = TamTinh,
                     ThanhTien = TongThanhToan,
                     PhuongThucTT = phuongThucTT,
@@ -348,37 +503,56 @@ namespace PhanMemBanHang.ViewModel
                         Size = mon.Size
                     });
                 }
+
+                // Thành viên nhận 1 điểm cho mỗi 10.000đ thanh toán.
+                if (KhachHangDangChon != null)
+                {
+                    int diemCong = (int)Math.Floor(TongThanhToan / 10000m);
+                    KhachHangDangChon.DiemTichLuy += diemCong;
+                    ThongTinKhachHang = $"{KhachHangDangChon.TenKH} • {KhachHangDangChon.DiemTichLuy} điểm";
+                    OnPropertyChanged(nameof(DiemKhachHang));
+                }
+
                 db.SaveChanges();
 
-                MessageBox.Show($"Thanh toán thành công!\nMã hóa đơn: {hoaDon.MaHD}",
+                MessageBox.Show(
+                    $"Thanh toán thành công!\nMã hóa đơn: {hoaDon.MaHD}" +
+                    (KhachHangDangChon != null ? $"\nĐiểm hiện tại: {KhachHangDangChon.DiemTichLuy}" : string.Empty),
                     "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                GioHang.Clear();
-                GiamGia = 0;
-                HienThiMaDon();
-                TinhTongTien();
+                return hoaDon;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi thanh toán: {ex.Message}", "Lỗi",
+                MessageBox.Show($"Lỗi thanh toán: {ex.Message}\n\nChi tiết: {ex.InnerException?.Message}", "Lỗi",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
             }
+        }
+
+        public void HoanTatDonHang()
+        {
+            GioHang.Clear();
+            GiamGia = 0;
+            BoChonKhachHang();
+            HienThiMaDon();
+            TinhTongTien();
         }
 
         public void HuyDonHang()
         {
-            if (GioHang.Any())
-            {
-                var result = MessageBox.Show("Bạn có chắc muốn hủy đơn hàng này?", "Xác nhận",
-                    MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (!GioHang.Any()) return;
 
-                if (result == MessageBoxResult.Yes)
-                {
-                    GioHang.Clear();
-                    GiamGia = 0;
-                    TinhTongTien();
-                    MessageBox.Show("Đã hủy đơn hàng!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+            var result = MessageBox.Show("Bạn có chắc muốn hủy đơn hàng này?", "Xác nhận",
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                GioHang.Clear();
+                GiamGia = 0;
+                BoChonKhachHang();
+                TinhTongTien();
+                MessageBox.Show("Đã hủy đơn hàng!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -393,7 +567,6 @@ namespace PhanMemBanHang.ViewModel
 
             return true;
         }
-
 
         public void Dispose()
         {
