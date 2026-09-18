@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:PhanMemBanHang.ViewModel"
         mc:Ignorable="d"
+        Icon="/Image/MayPOS.ico"
         Title="Highlands Coffee - Đăng nhập"
         Height="600" Width="1000"
         WindowStartupLocation="CenterScreen"
