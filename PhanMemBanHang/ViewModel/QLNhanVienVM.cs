@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -321,7 +320,6 @@ namespace PhanMemBanHang.ViewModel
                     "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    db.Entry(NhanVienDangChon).State = EntityState.Modified;
                     int saveResult = db.SaveChanges();
 
                     if (saveResult > 0)
