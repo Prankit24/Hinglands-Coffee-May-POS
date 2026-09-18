@@ -1,17 +1,10 @@
-# SQL Server database files
-*.mdf
-*.ldf
-
 # Visual Studio
-*.suo
+.vs/
 *.user
-*.userosscache
-*.sln.docstates
+*.suo
 
 # Build output
 bin/
 obj/
-
-# Temp files
-*.log
-*.tmp
+**/bin/
+**/obj/
